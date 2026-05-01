@@ -1624,6 +1624,100 @@ Reporting applies assigned price book per entity/account level</div>
           </div>
         </div>
 
+        <h3 class="subsection-heading">Google vs ION implementation boundary</h3>
+        <div class="source-chip-row">
+          <span class="source-chip">Full Transcript</span>
+          <span class="source-chip">Transcript</span>
+          <span class="source-chip">FRD 959443</span>
+          <span class="source-chip">FRD 959440</span>
+        </div>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-5);">Google's platform controls eligibility, entitlement identity, and provider-side pricing. ION's price-book layer controls how that pricing is stored, rated, and reported. These are separate concerns — a change in one does not automatically propagate to the other, and most of the GWS-specific problems arise precisely at this handoff boundary.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-5);">
+          <div class="card" style="margin-bottom:0;">
+            <div class="source-chip-row"><span class="source-chip">Full Transcript</span></div>
+            <div class="card-title" style="margin-bottom:var(--space-2);">A — Google-side facts</div>
+            <ul class="styled" style="margin:0;">
+              <li>Eligibility is fetched dynamically per domain; no static catalog.</li>
+              <li>Each purchased subscription has a unique entitlement ID tied to the customer.</li>
+              <li>Special offers (RABF) may be absent from eligibility but present in billing once the customer is linked.</li>
+              <li>Provider pricing is expressed as <code>pricePhases</code> with <code>discountPercentage</code> and <code>effectivePrice</code> per phase.</li>
+            </ul>
+          </div>
+          <div class="card" style="margin-bottom:0;">
+            <div class="source-chip-row"><span class="source-chip">Transcript</span></div>
+            <div class="card-title" style="margin-bottom:var(--space-2);">B — ION-side facts</div>
+            <ul class="styled" style="margin:0;">
+              <li>Price books are assigned to members/accounts, not to individual entitlements in the original model.</li>
+              <li>Child price books are layered configurations — not isolated per-reseller copies of the full dataset.</li>
+              <li>Billing/reporting runs from price-book assignment plus imported provider data, independent of which channel was used to purchase.</li>
+            </ul>
+          </div>
+          <div class="card" style="margin-bottom:0;">
+            <div class="source-chip-row"><span class="source-chip">Full Transcript</span><span class="source-chip">Original Spec</span></div>
+            <div class="card-title" style="margin-bottom:var(--space-2);">C — Mismatch</div>
+            <ul class="styled" style="margin:0;">
+              <li>Google pricing can differ for the same offer by customer and commercial arrangement; ION's fixed <code>offer + period phase</code> key cannot distinguish these cases.</li>
+              <li>Alternate email ownership: Google requires a provisioning-target email; ION historically used a generic account contact email.</li>
+              <li>Cancel-line charge type (<code>COMMITMENT_CANCEL_ITEM</code>) requires a reverse-rating formula that ION's current engine does not apply.</li>
+            </ul>
+          </div>
+          <div class="card" style="margin-bottom:0;">
+            <div class="source-chip-row"><span class="source-chip">FRD 959443</span><span class="source-chip">FRD 959440</span></div>
+            <div class="card-title" style="margin-bottom:var(--space-2);">D — Implementation consequence</div>
+            <ul class="styled" style="margin:0;">
+              <li>Any pricing fix must account for entitlement context without breaking ION's existing price-book visibility and inheritance model.</li>
+              <li>The <code>alternateEmail</code> field must be treated as a distinct provisioning field, not a copy of an existing contact record.</li>
+              <li>Cancel credit correction may require changes to both rating logic and source-data end-date derivation from the BigQuery import.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+        <table class="stakeholder-table">
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Google behavior</th>
+              <th>ION behavior</th>
+              <th>Gap / risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Eligibility</td>
+              <td>Fetched dynamically per domain via single-tile model; static catalog was removed.</td>
+              <td>Marketplace presents offers based on eligibility response; does not own the eligibility truth.</td>
+              <td>RABF offers can be absent at eligibility time but appear later through SIM or billing — marketplace screens alone are not a complete picture. <span class="source-chip" style="vertical-align:middle;">Transcript</span></td>
+            </tr>
+            <tr>
+              <td>Price identity</td>
+              <td>Pricing is scoped to a specific entitlement and customer arrangement; the same offer can have a different price per customer.</td>
+              <td>Current price-book key is <code>offer ID + period phase</code> — no customer or entitlement dimension.</td>
+              <td>Fixed key returns wrong price when the same offer covers customers with different discount arrangements. Proposed fix (add entitlement to key) creates downstream visibility risk. <span class="source-chip" style="vertical-align:middle;">Full Transcript</span></td>
+            </tr>
+            <tr>
+              <td>Visibility</td>
+              <td>Each entitlement is customer-scoped; a reseller should not see another reseller's pricing context.</td>
+              <td>Price books can be assigned to multiple partners; one master book plus layered child configs, not isolated per-reseller copies.</td>
+              <td>Introducing entitlement-level rows into price-book data without a new access model risks exposing one customer's pricing context to another reseller. <span class="source-chip" style="vertical-align:middle;">Transcript</span></td>
+            </tr>
+            <tr>
+              <td>Billing scope</td>
+              <td>Provider billing data includes all linked subscriptions, regardless of which channel was used to purchase them.</td>
+              <td>SaaS report ingests provider data and applies price-book assignments; independent of marketplace purchase flow.</td>
+              <td>Teams designing fixes in the marketplace UI may not realize billing already includes out-of-marketplace purchases — fixes scoped to marketplace will be incomplete. <span class="source-chip" style="vertical-align:middle;">Full Transcript</span></td>
+            </tr>
+            <tr>
+              <td>Purchase-time lookup</td>
+              <td>Entitlement and final pricing are only confirmed after purchase is registered with the provider.</td>
+              <td>Buy-flow UI attempts to display pricing before entitlement exists; current model shows best-available offer-level price.</td>
+              <td>No entitlement means no entitlement-key lookup is possible at purchase time — any UI price shown before registration is provisional and requires post-creation reconciliation. <span class="source-chip" style="vertical-align:middle;">Transcript</span><span class="source-chip" style="vertical-align:middle;">Original Spec</span></td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
       </section>
 
       <section id="section-conflicts" class="section">
@@ -1734,6 +1828,90 @@ Reporting applies assigned price book per entity/account level</div>
           </div>
           <div class="conflict-implication"><strong>Implication for design:</strong> both rating logic and source-data logic may need changes.</div>
         </div>
+
+        <h3 class="subsection-heading">Email-chain conflicts</h3>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-5);">The following conflicts were surfaced through the email thread following the April 29 architecture call. Each reflects a proposal that was raised but not yet resolved against the platform model.</p>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Unique ID solves lookup vs breaks visibility model</div>
+            <span class="decision-status in-conflict">in conflict</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Email chain</span><span class="source-chip">FRD 959113</span></div>
+              <div class="conflict-col-label">Proposal</div>
+              <p>Add entitlement as a dimension to the pricing key (<code>offer + entitlement + period phase</code>) to solve lookup uniqueness for customer-specific pricing arrangements.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Transcript</span><span class="source-chip">Email chain</span></div>
+              <div class="conflict-col-label">Objection / constraint</div>
+              <p>The composite key introduces entitlement or customer data into price-book rows that are visible across reseller boundaries, creating a privacy leakage risk without a new access model.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> uniqueness fix and privacy boundaries must be solved together, not sequentially — one cannot ship without the other.</div>
+        </div>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Filter on reseller load vs PB independent of partner-customer association</div>
+            <span class="decision-status open">open</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Email chain</span></div>
+              <div class="conflict-col-label">Proposal</div>
+              <p>Filter irrelevant partner entries at reseller price-book load time so each reseller sees only the rows that apply to their accounts.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Transcript</span><span class="source-chip">Email chain</span></div>
+              <div class="conflict-col-label">Objection / constraint</div>
+              <p>Price books in the current model are not inherently scoped per partner. The same price book can be assigned to multiple partners, so filtering is an added layer on top of a shared structure rather than a native capability.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> filtering may require architectural guardrails — ownership rules, scoping metadata, or a new visibility model — before it is safe to implement.</div>
+        </div>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Group by discount type / percent vs pricing variability not yet normalized</div>
+            <span class="decision-status open">open</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Email chain</span><span class="source-chip">Transcript</span></div>
+              <div class="conflict-col-label">Proposal</div>
+              <p>Group price-book rows by discount type and percentage to improve display ergonomics and reduce duplication when multiple offers share the same discount structure.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Transcript</span></div>
+              <div class="conflict-col-label">Objection / constraint</div>
+              <p>Discount variability across the dataset is not yet fully normalized. Grouping on a partially normalized field may collapse rows that look identical but carry different effective pricing, masking real differences.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> grouping helps display ergonomics but does not resolve pricing identity — both problems need separate solutions and must not be conflated.</div>
+        </div>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Show customer / domain details for operations vs downstream exposure risk</div>
+            <span class="decision-status in-conflict">in conflict</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Email chain</span></div>
+              <div class="conflict-col-label">Proposal</div>
+              <p>Surface customer or domain-level detail in the price-book view to support operational tasks such as diagnosing billing discrepancies or validating linked-account pricing.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Transcript</span><span class="source-chip">Email chain</span></div>
+              <div class="conflict-col-label">Objection / constraint</div>
+              <p>Surfacing customer or domain details in a shared price-book view risks downstream exposure or privacy leakage for linked customer hierarchies that include multiple resellers.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> any operational visibility feature that surfaces customer or domain data must be explicitly scoped to prevent unintended data exposure to other resellers in the hierarchy.</div>
+        </div>
+
       </section>
 
       <section id="section-risks" class="section">
@@ -1947,6 +2125,16 @@ Reporting applies assigned price book per entity/account level</div>
           <div class="reflection-hint">Useful for separating approved direction from ideas raised during architecture review.</div>
         </div>
 
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">13</span><span id="srilatha-q4">If the price-book model is not designed for entitlement-level association, what is the intended path for achieving pricing uniqueness without breaking visibility boundaries?</span><button class="copy-question-btn" onclick="copyQuestion('srilatha-q4')" aria-label="Copy question for Srilatha 4">Copy</button></div>
+          <div class="reflection-hint">Use this to push past the problem statement toward an architectural direction. <span class="source-chip" style="vertical-align:middle;margin-left:var(--space-2);">Email chain · April 21</span></div>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">14</span><span id="srilatha-q5">Is the reseller filtering approach a short-term workaround or a proposed architectural direction, and which team owns that decision?</span><button class="copy-question-btn" onclick="copyQuestion('srilatha-q5')" aria-label="Copy question for Srilatha 5">Copy</button></div>
+          <div class="reflection-hint">Use this to clarify whether filtering is a design commitment or an exploratory idea before engineering invests in it. <span class="source-chip" style="vertical-align:middle;margin-left:var(--space-2);">Email chain · April 21</span></div>
+        </div>
+
         <h2 class="section-heading">Questions for Varun</h2>
         <div class="reflection-card">
           <div class="reflection-q"><span class="q-num">9</span><span id="varun-q1">What has actually been implemented already for alternateEmail and cancel-line correction versus what is still on paper?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q1')" aria-label="Copy question for Varun 1">Copy</button></div>
@@ -1966,6 +2154,16 @@ Reporting applies assigned price book per entity/account level</div>
         <div class="reflection-card">
           <div class="reflection-q"><span class="q-num">12</span><span id="varun-q4">What is the lowest-risk way to expose special pricing without breaking current price-book inheritance?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q4')" aria-label="Copy question for Varun 4">Copy</button></div>
           <div class="reflection-hint">Use this when discussing implementation options around RABF and customer-specific pricing.</div>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">15</span><span id="varun-q5">Is the BigQuery end-date correction for cancel lines being tracked as a separate deliverable, and what is its current status relative to the formula fix?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q5')" aria-label="Copy question for Varun 5">Copy</button></div>
+          <div class="reflection-hint">Use this to determine whether the rating fix and the source-data fix are co-dependent or sequenced separately. <span class="source-chip" style="vertical-align:middle;margin-left:var(--space-2);">Email chain · April 21</span></div>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">16</span><span id="varun-q6">Which team owns the decision on the entitlement-key privacy risk, and what is the expected timeline for a resolution?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q6')" aria-label="Copy question for Varun 6">Copy</button></div>
+          <div class="reflection-hint">Use this to surface whether the privacy risk is actively being tracked or still undecided and unassigned. <span class="source-chip" style="vertical-align:middle;margin-left:var(--space-2);">Email chain · April 21</span></div>
         </div>
         <div id="copy-question-status" aria-live="polite" style="font-size:var(--text-sm);color:var(--color-success);min-height:1.4em;margin-top:calc(-1 * var(--space-2));margin-bottom:var(--space-4);"></div>
 
@@ -2087,6 +2285,36 @@ Reporting applies assigned price book per entity/account level</div>
                   <li><strong>Open issue:</strong> filtering per reseller may not fit the one-master-price-book plus layered child configuration model.</li>
                 </ul>
               </div>
+              <div class="story-section-label">Proposed solutions</div>
+              <div class="story-body-text">
+                <div class="source-chip-row"><span class="source-chip">Email chain</span><span class="source-chip">Full Transcript</span><span class="source-chip">FRD 959113</span></div>
+                <ul>
+                  <li><strong>Entitlement-aware composite key</strong> — expand pricing identity to <code>offer + entitlement + period phase</code> to resolve uniqueness for customer-specific pricing arrangements.</li>
+                  <li><strong>Filtering on reseller load</strong> — filter unrelated partner entries when a reseller loads price-book data, so each reseller sees only rows relevant to their accounts.</li>
+                  <li><strong>Grouping by discount type and percentage</strong> — consolidate price-book rows that share the same discount structure to reduce duplication and improve display ergonomics.</li>
+                  <li><strong>Row-wise bulk adjustment</strong> — allow bulk price adjustments across matching price-book rows as an operational shortcut, without changing the underlying identity model.</li>
+                  <li><strong>Reseller-limited derived view</strong> — introduce a scoped view layer that limits what a reseller sees without altering the master price book structure.</li>
+                  <li><strong>MSRP fallback</strong> — when an entitlement is absent at buy-flow time, show MSRP with a disclaimer and resolve to actual pricing post-entitlement creation.</li>
+                </ul>
+              </div>
+
+              <div class="story-section-label">Conflicts surfaced in email and transcript</div>
+              <div class="story-body-text">
+                <div class="source-chip-row"><span class="source-chip">Email chain</span><span class="source-chip">Transcript</span></div>
+                <ul>
+                  <li>The same price book can be assigned to multiple partners — partner-scoped filtering is not a native capability and would require additional ownership or scoping metadata to be structurally safe.</li>
+                  <li>Entitlement rows do not fit naturally into the current price-book architecture; price books were designed to associate with members/accounts, not individual entitlements.</li>
+                  <li>Privacy and visibility consequences of entitlement-level keying remain unresolved — introducing entitlement IDs into shared price-book data creates a cross-reseller leakage risk without a new access model.</li>
+                  <li>Grouping improves UX but does not solve pricing identity — rows that look identical under a grouping key may carry meaningfully different effective prices.</li>
+                </ul>
+              </div>
+
+              <div class="story-section-label">Implication for live implementation</div>
+              <div class="story-body-text">
+                <div class="source-chip-row"><span class="source-chip">Full Transcript</span><span class="source-chip">Email chain</span></div>
+                <p>This story represents an architecture conflict, not only a UI or display defect. The pricing problem exists at the boundary between Google's entitlement model and ION's price-book model, and no proposed solution has been approved or finalized. Any change — whether composite keying, filtering, grouping, or a derived view — requires engineering validation against the full price-book model and its visibility, inheritance, and partner-assignment rules, not just the buy-flow surface.</p>
+              </div>
+
               <div class="story-section-label">Acceptance Criteria</div>
               <div class="ac-item">Identification of discountPercentage and easy Price Book price adjustment for each discount value</div>
               <div class="ac-item">In same calendar month, platform tracks end customer subscription from start date through each pricePhase with day granularity</div>
@@ -2160,6 +2388,13 @@ Reporting applies assigned price book per entity/account level</div>
                 <div class="story-version-row"><span>3.0</span><span>Based on Final Feedback</span><span>B. Young</span><span>14 Apr 2026</span></div>
                 <div class="story-version-row"><span>4.0</span><span>BRD Light</span><span>B. Young</span><span>17 Apr 2026</span></div>
               </div>
+              <div class="callout callout-green" style="margin-top:var(--space-5);margin-bottom:0;">
+                <div class="callout-icon">📧</div>
+                <div class="callout-body">
+                  <div class="callout-title">Email chain · April 21 <span class="source-chip" style="vertical-align:middle;margin-left:var(--space-2);">Email chain</span></div>
+                  <div class="callout-text">Email chain surfaces urgency and cross-team alignment on the alternate email requirement. This is the most actionable story in the current scope.</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2216,10 +2451,130 @@ Reporting applies assigned price book per entity/account level</div>
                 <div class="story-version-row"><span>1.0</span><span>Draft</span><span>B. Young</span><span>15 Apr 2026</span></div>
                 <div class="story-version-row"><span>2.0</span><span>Logic update</span><span>B. Young</span><span>20 Apr 2026</span></div>
               </div>
+              <div class="callout callout-blue" style="margin-top:var(--space-5);margin-bottom:0;">
+                <div class="callout-icon">📧</div>
+                <div class="callout-body">
+                  <div class="callout-title">Email chain · April 21 <span class="source-chip" style="vertical-align:middle;margin-left:var(--space-2);">Email chain</span></div>
+                  <div class="callout-text">Email chain frames the cancel-credit correction as more tractable than the price-book refactor. Formula and affected use cases are clearly scoped.</div>
+                </div>
+              </div>
             </div>
           </div>
 
         </div><!-- end story-list -->
+
+        <h3 class="subsection-heading" style="margin-top:var(--space-10);">April 21 Checklist &amp; Source Links</h3>
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>April 21 Checklist &amp; Source Links</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p style="color:var(--color-text-muted);margin-bottom:var(--space-3);">This panel lists the artifacts and references cited in the April 21 email chain and in this site. Use it to trace which claims come from which source before a meeting or review.</p>
+            <div class="callout callout-orange" style="margin-bottom:var(--space-4);">
+              <div class="callout-icon">⚠️</div>
+              <div class="callout-body">
+                <div class="callout-title">SharePoint access unavailable</div>
+                <div class="callout-text">Access to the linked SharePoint documents (BRD 959113, FRD 959443, FRD 959440 updates) was reported as unavailable in the email chain. Rows marked <span class="decision-status open" style="font-size:var(--text-xs);vertical-align:middle;">Unavailable</span> could not be verified at the time of writing.</div>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="stakeholder-table">
+                <thead>
+                  <tr><th>Date</th><th>Artifact / Reference</th><th>Why it matters</th><th>Access / Notes</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Apr 21</td>
+                    <td>Srilatha email chain <span class="source-chip" style="vertical-align:middle;">Email chain</span></td>
+                    <td>Primary source for proposed solutions and open conflicts surfaced in this modification pass</td>
+                    <td>Available in email thread</td>
+                  </tr>
+                  <tr>
+                    <td>Apr 21</td>
+                    <td>SharePoint reference — BRD 959113 update</td>
+                    <td>Updated BRD scope for the price-book refactor workstream</td>
+                    <td><span class="decision-status open">Unavailable</span> — not provided in source set</td>
+                  </tr>
+                  <tr>
+                    <td>Apr 21</td>
+                    <td>SharePoint reference — FRD 959443 update</td>
+                    <td>Alternate email flow update including register and transfer flow requirements</td>
+                    <td><span class="decision-status open">Unavailable</span> — not provided in source set</td>
+                  </tr>
+                  <tr>
+                    <td>Apr 21</td>
+                    <td>SharePoint reference — FRD 959440 update</td>
+                    <td>Cancel-credit formula and BigQuery end-date appendix</td>
+                    <td><span class="decision-status open">Unavailable</span> — not provided in source set</td>
+                  </tr>
+                  <tr>
+                    <td>Apr 21</td>
+                    <td>Transcript reference <span class="source-chip" style="vertical-align:middle;">Full Transcript</span></td>
+                    <td>Architecture clarification source used throughout this site for platform-model claims</td>
+                    <td>Referenced in site — see Architecture and Technical sections</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-heading" style="margin-top:var(--space-8);">Email-chain solution map</h3>
+        <div class="source-chip-row">
+          <span class="source-chip">Email chain</span>
+          <span class="source-chip">Transcript</span>
+          <span class="source-chip">FRD 959113</span>
+          <span class="source-chip">FRD 959443</span>
+          <span class="source-chip">FRD 959440</span>
+        </div>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);">Maps each area raised in the email chain to its proposed solution, the known conflict or caveat, and the expected implementation layer. No row represents an approved direction.</p>
+        <div style="overflow-x:auto;">
+          <table class="stakeholder-table">
+            <thead>
+              <tr><th>Area</th><th>Proposed solution</th><th>Conflict / caveat</th><th>Likely implementation location</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Price book identity</td>
+                <td>Entitlement-aware composite key (<code>offer + entitlement + period phase</code>)</td>
+                <td>May break price-book visibility model; not approved — both entitlement-key and grouping paths remain open <span class="decision-status in-conflict" style="font-size:var(--text-xs);vertical-align:middle;">in conflict</span></td>
+                <td>ION price-book layer</td>
+              </tr>
+              <tr>
+                <td>Reseller filtering</td>
+                <td>Filter partner entries on reseller price-book load</td>
+                <td>Price book is not inherently partner-scoped; same book can be assigned to multiple partners <span class="decision-status open" style="font-size:var(--text-xs);vertical-align:middle;">open</span></td>
+                <td>ION price-book layer</td>
+              </tr>
+              <tr>
+                <td>Discount grouping</td>
+                <td>Group price-book rows by discount type and percentage</td>
+                <td>Improves display ergonomics but does not solve pricing identity; may mask real price differences <span class="decision-status open" style="font-size:var(--text-xs);vertical-align:middle;">open</span></td>
+                <td>UI / reporting layer</td>
+              </tr>
+              <tr>
+                <td>Buy-flow MSRP fallback</td>
+                <td>Use MSRP with disclaimer when entitlement is absent at purchase time</td>
+                <td>Requires eligibility-layer support; post-creation reconciliation path not yet documented <span class="decision-status open" style="font-size:var(--text-xs);vertical-align:middle;">open</span></td>
+                <td>Marketplace / buy flow</td>
+              </tr>
+              <tr>
+                <td>Alternate email capture</td>
+                <td>Capture and persist <code>alternateEmail</code> in Register and Transfer flows</td>
+                <td>ION Admin Contact email must not be used as source; <code>cloudIdentityInfo.alternateEmail</code> patch behavior needs verification <span class="decision-status clarified" style="font-size:var(--text-xs);vertical-align:middle;">clarified</span></td>
+                <td>ION customer profile</td>
+              </tr>
+              <tr>
+                <td>Cancel-credit correction</td>
+                <td>Apply correct discount-factor formula: Customer Cost = Seller Cost / (1 − Price Adjust Value)</td>
+                <td>BigQuery end-date derivation for cancel lines is still incomplete; formula fix alone may be insufficient <span class="decision-status open" style="font-size:var(--text-xs);vertical-align:middle;">open</span></td>
+                <td>Billing / reporting layer</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </section>
 
       <section id="section-study" class="section">
@@ -2539,7 +2894,7 @@ Reporting applies assigned price book per entity/account level</div>
     }
 
     // ===== CUSTOM QUESTIONS =====
-    const baseQuestionCount=12;
+    const baseQuestionCount=16;
     let customQCount=baseQuestionCount;
     function copyQuestion(id){
       const el=document.getElementById(id);
