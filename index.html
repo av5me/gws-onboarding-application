@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GWS Vendor Onboarding — Interactive Learning Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* ─── Design Tokens — Light Mode ────────────────────────────────────────── */
+    :root,
+    [data-theme="light"] {
+      /* Surfaces */
+      --color-bg:              #f6f5f1;
+      --color-surface:         #f9f8f5;
+      --color-surface-2:       #ffffff;
+      --color-surface-offset:  #eeece7;
+      --color-surface-dynamic: #e5e2db;
+
+      /* Borders & dividers */
+      --color-divider: #dbd8d1;
+      --color-border:  #d0cdc5;
+
+      /* Text */
+      --color-text:       #26231b;
+      --color-text-muted: #716f69;
+      --color-text-faint: #b5b4ae;
+
+      /* Brand */
+      --color-primary:       #005c7a;
+      --color-primary-hover: #004460;
+      --color-primary-light: #cde4ed;
+
+      /* Accent / semantic */
+      --color-accent:        #b8690a;
+      --color-accent-light:  #fde8cc;
+      --color-success:       #2d6a1e;
+      --color-success-light: #d4e9cc;
+      --color-warning:       #8a5500;
+      --color-warning-light: #fef0cc;
+      --color-error:         #8a1f3a;
+      --color-error-light:   #f5d5de;
+      --color-purple:        #5c3a8a;
+      --color-purple-light:  #e6daf5;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px  oklch(0.2 0.01 80 / 0.07);
+      --shadow-md: 0 4px 14px oklch(0.2 0.01 80 / 0.09);
+      --shadow-lg: 0 12px 36px oklch(0.2 0.01 80 / 0.13);
+    }
+
+    /* ─── Design Tokens — Dark Mode ─────────────────────────────────────────── */
+    [data-theme="dark"] {
+      /* Surfaces */
+      --color-bg:              #141210;
+      --color-surface:         #1a1917;
+      --color-surface-2:       #1f1e1c;
+      --color-surface-offset:  #1d1c1a;
+      --color-surface-dynamic: #2a2927;
+
+      /* Borders & dividers */
+      --color-divider: #252422;
+      --color-border:  #363431;
+
+      /* Text */
+      --color-text:       #cccac5;
+      --color-text-muted: #7a7873;
+      --color-text-faint: #575552;
+
+      /* Brand */
+      --color-primary:       #5ab8d4;
+      --color-primary-hover: #3aa3c2;
+      --color-primary-light: #1a3540;
+
+      /* Accent / semantic */
+      --color-accent:        #e8943a;
+      --color-accent-light:  #3a2510;
+      --color-success:       #6db848;
+      --color-success-light: #1e3515;
+      --color-warning:       #e8b545;
+      --color-warning-light: #352a10;
+      --color-error:         #e05070;
+      --color-error-light:   #3a1520;
+      --color-purple:        #a882e0;
+      --color-purple-light:  #2a1e3a;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px  oklch(0 0 0 / 0.25);
+      --shadow-md: 0 4px 14px oklch(0 0 0 / 0.35);
+      --shadow-lg: 0 12px 36px oklch(0 0 0 / 0.45);
+    }
+
+    /* Honour OS dark preference unless the user has toggled a theme explicitly */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --color-bg:              #141210;
+        --color-surface:         #1a1917;
+        --color-surface-2:       #1f1e1c;
+        --color-surface-offset:  #1d1c1a;
+        --color-surface-dynamic: #2a2927;
+        --color-divider:         #252422;
+        --color-border:          #363431;
+        --color-text:            #cccac5;
+        --color-text-muted:      #7a7873;
+        --color-text-faint:      #575552;
+        --color-primary:         #5ab8d4;
+        --color-primary-hover:   #3aa3c2;
+        --color-primary-light:   #1a3540;
+        --color-accent:          #e8943a;
+        --color-accent-light:    #3a2510;
+        --color-success:         #6db848;
+        --color-success-light:   #1e3515;
+        --color-warning:         #e8b545;
+        --color-warning-light:   #352a10;
+        --color-error:           #e05070;
+        --color-error-light:     #3a1520;
+        --color-purple:          #a882e0;
+        --color-purple-light:    #2a1e3a;
+        --shadow-sm: 0 1px 3px  oklch(0 0 0 / 0.25);
+        --shadow-md: 0 4px 14px oklch(0 0 0 / 0.35);
+        --shadow-lg: 0 12px 36px oklch(0 0 0 / 0.45);
+      }
+    }
+
+    /* ─── Scale Tokens ───────────────────────────────────────────────────────── */
+    :root {
+      /* Spacing */
+      --space-1:  0.25rem;
+      --space-2:  0.5rem;
+      --space-3:  0.75rem;
+      --space-4:  1rem;
+      --space-5:  1.25rem;
+      --space-6:  1.5rem;
+      --space-8:  2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+
+      /* Fluid typography */
+      --text-xs:   clamp(0.75rem,   0.7rem  + 0.25vw, 0.875rem);
+      --text-sm:   clamp(0.875rem,  0.82rem + 0.28vw, 1rem);
+      --text-base: clamp(1rem,      0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem,  1rem    + 0.6vw,  1.375rem);
+      --text-xl:   clamp(1.375rem,  1.1rem  + 1.2vw,  2rem);
+      --text-2xl:  clamp(1.75rem,   1.2rem  + 2vw,    2.75rem);
+      --text-hero: clamp(2.25rem,   1rem    + 4.5vw,  4rem);
+
+      /* Border radius */
+      --radius-sm:   0.375rem;
+      --radius-md:   0.5rem;
+      --radius-lg:   0.75rem;
+      --radius-xl:   1rem;
+      --radius-pill: 9999px;
+
+      /* Fonts */
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --font-mono:    'DM Mono', 'Courier New', monospace;
+
+      /* Motion */
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ─── Base Reset ─────────────────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5rem;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.6;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* Headings */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-body);
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--color-text);
+    }
+
+    /* Links */
+    a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      transition: color var(--transition), text-decoration-color var(--transition);
+    }
+
+    a:hover {
+      color: var(--color-primary-hover);
+      text-decoration-color: currentColor;
+    }
+
+    /* Code */
+    code,
+    pre,
+    kbd,
+    samp {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+    }
+
+    pre {
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Images */
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* Lists */
+    ul,
+    ol {
+      list-style: none;
+    }
+
+    /* Buttons */
+    button {
+      font-family: inherit;
+      font-size: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    /* Inputs */
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    /* Focus ring — applies to keyboard navigation only */
+    :focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Selection highlight */
+    ::selection {
+      background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+      color: var(--color-text);
+    }
+
+    /* Horizontal rule */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-divider);
+    }
+
+    /* Tables */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    /* ─── Section Fade-in Animation ─────────────────────────────────────────── */
+    @keyframes sectionFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ─── Sticky Header ──────────────────────────────────────────────────────── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-divider);
+      padding: var(--space-2) var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      flex-wrap: nowrap;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-display);
+      font-size: 15px;
+      color: var(--color-text);
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .header-logo:hover {
+      color: var(--color-text);
+      text-decoration-color: transparent;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      overflow-x: auto;
+      flex: 1;
+      min-width: 0;
+      scrollbar-width: none;
+    }
+
+    .header-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-btn {
+      font-size: 12px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      background: none;
+      border: none;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .nav-btn:hover {
+      background: var(--color-surface-offset);
+      color: var(--color-text);
+    }
+
+    .nav-btn.active {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .theme-toggle {
+      flex-shrink: 0;
+    }
+
+    .theme-toggle button {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface-offset);
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-text-muted);
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    .theme-toggle button:hover {
+      background: var(--color-surface-dynamic);
+      color: var(--color-text);
+    }
+
+    /* ─── Main Layout ────────────────────────────────────────────────────────── */
+    .main-layout {
+      max-width: 1200px;
+      margin-inline: auto;
+      padding: var(--space-8) var(--space-6);
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    /* ─── Sidebar ────────────────────────────────────────────────────────────── */
+    .sidebar {
+      position: sticky;
+      top: 5rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .sidebar-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-faint);
+      padding: var(--space-2) var(--space-3);
+      margin-top: var(--space-3);
+    }
+
+    .sidebar-label:first-child {
+      margin-top: 0;
+    }
+
+    .sidebar-link {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      border: none;
+      background: none;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .sidebar-link:hover {
+      background: var(--color-surface-offset);
+      color: var(--color-text);
+    }
+
+    .sidebar-link.active {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .sidebar-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: var(--radius-pill);
+      background: currentColor;
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+
+    .sidebar-link.active .sidebar-dot {
+      opacity: 1;
+    }
+
+    /* ─── Content Area ───────────────────────────────────────────────────────── */
+    .content-area {
+      min-width: 0;
+    }
+
+    /* ─── Sections ───────────────────────────────────────────────────────────── */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+      animation: sectionFadeIn 0.3s ease both;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────────────────── */
+    @media (max-width: 767px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main-layout {
+        grid-template-columns: 1fr;
+        padding: var(--space-6) var(--space-4);
+        gap: var(--space-6);
+      }
+
+      .header-nav {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       COMPONENT LIBRARY
+       ═══════════════════════════════════════════════════════════════════════════ */
+
+    /* PAGE HERO */
+    .page-hero { background:linear-gradient(135deg,var(--color-primary-light) 0%,var(--color-surface-2) 60%); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-10) var(--space-12); margin-bottom:var(--space-8); position:relative; overflow:hidden; }
+    .page-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 80% 50%,color-mix(in srgb,var(--color-primary) 7%,transparent) 0%,transparent 70%); pointer-events:none; }
+    .hero-eyebrow { font-size:var(--text-xs); font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-primary); margin-bottom:var(--space-3); }
+    .hero-title { font-family:var(--font-display); font-size:var(--text-2xl); line-height:1.15; color:var(--color-text); margin-bottom:var(--space-4); }
+    .hero-subtitle { font-size:var(--text-base); color:var(--color-text-muted); max-width:60ch; margin-bottom:var(--space-6); }
+    .hero-tags { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+    .tag { font-size:var(--text-xs); font-weight:600; padding:var(--space-1) var(--space-3); border-radius:var(--radius-pill); }
+    .tag-blue { background:var(--color-primary-light); color:var(--color-primary); } .tag-orange { background:var(--color-accent-light); color:var(--color-accent); } .tag-green { background:var(--color-success-light); color:var(--color-success); } .tag-red { background:var(--color-error-light); color:var(--color-error); } .tag-purple { background:var(--color-purple-light); color:var(--color-purple); }
+    /* HEADINGS */
+    .section-heading { font-family:var(--font-display); font-size:var(--text-xl); color:var(--color-text); margin-bottom:var(--space-5); padding-bottom:var(--space-3); border-bottom:2px solid var(--color-divider); }
+    .subsection-heading { font-size:var(--text-lg); font-weight:700; color:var(--color-text); margin-bottom:var(--space-3); margin-top:var(--space-6); }
+    /* CARDS */
+    .card { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-6); margin-bottom:var(--space-4); box-shadow:var(--shadow-sm); }
+    .card-header { display:flex; align-items:flex-start; gap:var(--space-4); margin-bottom:var(--space-4); }
+    .card-icon { width:2.5rem; height:2.5rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.25rem; flex-shrink:0; }
+    .icon-blue { background:var(--color-primary-light); } .icon-orange { background:var(--color-accent-light); } .icon-green { background:var(--color-success-light); } .icon-red { background:var(--color-error-light); } .icon-purple { background:var(--color-purple-light); }
+    .card-title { font-size:var(--text-base); font-weight:700; color:var(--color-text); margin-bottom:2px; }
+    .card-subtitle { font-size:var(--text-sm); color:var(--color-text-muted); }
+    /* CALLOUTS */
+    .callout { border-radius:var(--radius-lg); padding:var(--space-4) var(--space-5); margin-bottom:var(--space-4); display:flex; gap:var(--space-3); align-items:flex-start; }
+    .callout-icon { font-size:1.2rem; flex-shrink:0; line-height:1.5; }
+    .callout-body { flex:1; }
+    .callout-title { font-weight:700; font-size:var(--text-sm); margin-bottom:var(--space-1); }
+    .callout-text { font-size:var(--text-sm); color:var(--color-text-muted); line-height:1.6; }
+    .callout-blue { background:var(--color-primary-light); border-left:3px solid var(--color-primary); } .callout-blue .callout-title { color:var(--color-primary); }
+    .callout-orange { background:var(--color-accent-light); border-left:3px solid var(--color-accent); } .callout-orange .callout-title { color:var(--color-accent); }
+    .callout-red { background:var(--color-error-light); border-left:3px solid var(--color-error); } .callout-red .callout-title { color:var(--color-error); }
+    .callout-green { background:var(--color-success-light); border-left:3px solid var(--color-success); } .callout-green .callout-title { color:var(--color-success); }
+    .callout-purple { background:var(--color-purple-light); border-left:3px solid var(--color-purple); } .callout-purple .callout-title { color:var(--color-purple); }
+    /* EXPAND BLOCKS */
+    .expand-block { border:1px solid var(--color-border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:var(--space-3); }
+    .expand-trigger { width:100%; display:flex; justify-content:space-between; align-items:center; padding:var(--space-4) var(--space-5); background:var(--color-surface-2); font-size:var(--text-base); font-weight:600; color:var(--color-text); cursor:pointer; text-align:left; transition:background var(--transition); font-family:var(--font-body); gap:var(--space-3); }
+    .expand-trigger:hover { background:var(--color-surface-offset); }
+    .expand-trigger[aria-expanded="true"] { background:var(--color-primary-light); color:var(--color-primary); }
+    .expand-trigger[aria-expanded="true"] .expand-arrow { transform:rotate(180deg); color:var(--color-primary); }
+    .expand-arrow { width:20px; height:20px; color:var(--color-text-muted); transition:transform 0.2s; flex-shrink:0; }
+    .expand-body { max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.16,1,0.3,1),padding 0.3s ease; padding:0 var(--space-5); background:var(--color-surface-2); }
+    .expand-body.open { max-height:2000px; padding:var(--space-5); }
+    .expand-body p, .expand-body li { color:var(--color-text-muted); }
+    /* LISTS */
+    ul.styled, ol.styled { padding-left:var(--space-5); display:flex; flex-direction:column; gap:var(--space-2); color:var(--color-text-muted); }
+    ol.styled { list-style-type:decimal; } ul.styled { list-style-type:disc; }
+    ul.styled li::marker, ol.styled li::marker { color:var(--color-primary); }
+    /* FORMULA BOX */
+    .formula-box { background:var(--color-surface-offset); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-4) var(--space-5); margin:var(--space-4) 0; font-family:var(--font-mono); font-size:var(--text-sm); color:var(--color-text); white-space:pre-wrap; }
+    .formula-label { font-family:var(--font-body); font-size:var(--text-xs); color:var(--color-text-faint); margin-bottom:var(--space-2); font-weight:600; letter-spacing:0.05em; text-transform:uppercase; display:block; }
+    /* WORKSTREAMS */
+    .ws-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:var(--space-4); margin-bottom:var(--space-6); }
+    .ws-card { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-5); cursor:pointer; transition:box-shadow var(--transition),border-color var(--transition),transform var(--transition); }
+    .ws-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--color-primary); }
+    .ws-number { font-size:var(--text-xs); font-weight:700; color:var(--color-text-faint); letter-spacing:0.08em; margin-bottom:var(--space-2); }
+    .ws-name { font-weight:700; font-size:var(--text-base); color:var(--color-text); margin-bottom:var(--space-1); }
+    .ws-desc { font-size:var(--text-sm); color:var(--color-text-muted); }
+    .ws-status { display:inline-flex; align-items:center; gap:5px; margin-top:var(--space-2); font-size:var(--text-xs); font-weight:600; padding:2px 8px; border-radius:var(--radius-pill); }
+    .status-progress { background:var(--color-warning-light); color:var(--color-warning); }
+    .status-complete { background:var(--color-success-light); color:var(--color-success); }
+    .status-hold { background:var(--color-error-light); color:var(--color-error); }
+    .story-link-btn { font-size:var(--text-xs); font-family:var(--font-body); font-weight:600; color:var(--color-primary); background:var(--color-primary-light); border-radius:var(--radius-pill); padding:3px 10px; cursor:pointer; transition:background var(--transition),color var(--transition); white-space:nowrap; }
+    .story-link-btn:hover { background:var(--color-primary); color:white; }
+    /* STAKEHOLDER TABLE */
+    .stakeholder-table { width:100%; border-collapse:collapse; font-size:var(--text-sm); margin-bottom:var(--space-6); }
+    .stakeholder-table th { text-align:left; padding:var(--space-3) var(--space-4); background:var(--color-surface-offset); color:var(--color-text-faint); font-size:var(--text-xs); font-weight:700; letter-spacing:0.08em; text-transform:uppercase; border-bottom:1px solid var(--color-divider); }
+    .stakeholder-table td { padding:var(--space-3) var(--space-4); border-bottom:1px solid var(--color-divider); color:var(--color-text-muted); vertical-align:top; }
+    .stakeholder-table td:first-child { font-weight:600; color:var(--color-text); white-space:nowrap; }
+    .stakeholder-table tr:last-child td { border-bottom:none; }
+    .org-badge { font-size:var(--text-xs); font-weight:700; padding:2px 7px; border-radius:var(--radius-pill); white-space:nowrap; }
+    .org-tdsynnex { background:var(--color-primary-light); color:var(--color-primary); }
+    .org-apptium { background:var(--color-accent-light); color:var(--color-accent); }
+    /* RISK GRID */
+    .risk-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-bottom:var(--space-6); }
+    .risk-card { border-radius:var(--radius-lg); padding:var(--space-4); }
+    .risk-card.high { background:var(--color-error-light); border:1px solid var(--color-error); }
+    .risk-card.medium { background:var(--color-warning-light); border:1px solid var(--color-warning); }
+    .risk-card.low { background:var(--color-success-light); border:1px solid var(--color-success); }
+    .risk-label { font-size:var(--text-xs); font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:var(--space-2); }
+    .risk-card.high .risk-label { color:var(--color-error); } .risk-card.medium .risk-label { color:var(--color-warning); } .risk-card.low .risk-label { color:var(--color-success); }
+    .risk-title { font-weight:700; font-size:var(--text-sm); color:var(--color-text); margin-bottom:var(--space-1); }
+    .risk-desc { font-size:var(--text-sm); color:var(--color-text-muted); }
+    /* QUIZ */
+    .quiz-card { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-6); margin-bottom:var(--space-5); }
+    .quiz-q { font-weight:700; color:var(--color-text); margin-bottom:var(--space-4); font-size:var(--text-base); }
+    .quiz-options { display:flex; flex-direction:column; gap:var(--space-2); }
+    .quiz-opt { display:flex; align-items:center; gap:var(--space-3); background:var(--color-surface); border:2px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-3) var(--space-4); cursor:pointer; font-size:var(--text-sm); color:var(--color-text-muted); transition:border-color var(--transition),background var(--transition); }
+    .quiz-opt:hover { border-color:var(--color-primary); background:var(--color-primary-light); color:var(--color-text); }
+    .quiz-opt.correct { border-color:var(--color-success); background:var(--color-success-light); color:var(--color-success); font-weight:600; }
+    .quiz-opt.wrong { border-color:var(--color-error); background:var(--color-error-light); color:var(--color-error); }
+    .quiz-opt.disabled { pointer-events:none; }
+    .quiz-opt .opt-letter { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--color-surface-offset); font-size:var(--text-xs); font-weight:700; flex-shrink:0; }
+    .quiz-feedback { margin-top:var(--space-3); padding:var(--space-3) var(--space-4); border-radius:var(--radius-lg); font-size:var(--text-sm); display:none; }
+    .quiz-feedback.show { display:block; }
+    .feedback-correct { background:var(--color-success-light); color:var(--color-success); }
+    .feedback-wrong { background:var(--color-error-light); color:var(--color-error); }
+    /* CHECKPOINTS */
+    .progress-section { margin-bottom:var(--space-6); }
+    .progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-2); }
+    .progress-label { font-size:var(--text-sm); font-weight:600; color:var(--color-text); }
+    .progress-count { font-size:var(--text-sm); color:var(--color-text-muted); }
+    .checkpoint-list { display:flex; flex-direction:column; gap:var(--space-2); margin-top:var(--space-4); }
+    .checkpoint-item { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-3) var(--space-4); background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); cursor:pointer; transition:background var(--transition),border-color var(--transition); }
+    .checkpoint-item:hover { background:var(--color-surface-offset); }
+    .checkpoint-item.checked { background:var(--color-success-light); border-color:var(--color-success); }
+    .checkpoint-cb { width:20px; height:20px; border-radius:4px; border:2px solid var(--color-border); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; transition:background var(--transition),border-color var(--transition); }
+    .checkpoint-item.checked .checkpoint-cb { background:var(--color-success); border-color:var(--color-success); }
+    .checkpoint-text { font-size:var(--text-sm); color:var(--color-text-muted); }
+    .checkpoint-item.checked .checkpoint-text { color:var(--color-success); text-decoration:line-through; opacity:0.8; }
+    .phase-label { font-size:var(--text-xs); font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--color-text-faint); margin-top:var(--space-5); margin-bottom:var(--space-2); }
+    /* REFLECTION CARDS */
+    .reflection-card { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-6); margin-bottom:var(--space-4); }
+    .reflection-q { font-weight:700; font-size:var(--text-base); color:var(--color-text); margin-bottom:var(--space-3); display:flex; gap:var(--space-3); }
+    .q-num { background:var(--color-primary-light); color:var(--color-primary); font-size:var(--text-xs); font-weight:700; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .reflection-hint { font-size:var(--text-sm); color:var(--color-text-muted); margin-bottom:var(--space-3); padding-left:calc(24px + var(--space-3)); }
+    .reflection-textarea { width:100%; min-height:90px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:var(--space-3) var(--space-4); font-family:var(--font-body); font-size:var(--text-sm); color:var(--color-text); resize:vertical; transition:border-color var(--transition); outline:none; }
+    .reflection-textarea:focus { border-color:var(--color-primary); }
+    .reflection-textarea::placeholder { color:var(--color-text-faint); }
+    /* FLOW DIAGRAM */
+    .flow-diagram { display:flex; align-items:flex-start; gap:var(--space-2); flex-wrap:wrap; margin:var(--space-4) 0; }
+    .flow-step { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-3) var(--space-4); font-size:var(--text-sm); font-weight:600; color:var(--color-text); display:flex; align-items:center; gap:var(--space-2); }
+    .flow-arrow { color:var(--color-text-faint); font-size:1.2rem; align-self:center; }
+    .flow-step.highlight { background:var(--color-primary-light); border-color:var(--color-primary); color:var(--color-primary); }
+    .flow-step.warn { background:var(--color-error-light); border-color:var(--color-error); color:var(--color-error); }
+    /* HOW-TO-USE */
+    .how-step { display:flex; gap:var(--space-4); margin-bottom:var(--space-5); }
+    .how-num { width:36px; height:36px; border-radius:50%; background:var(--color-primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:var(--text-sm); flex-shrink:0; }
+    .how-body { flex:1; padding-top:0.2rem; }
+    .how-title { font-weight:700; color:var(--color-text); margin-bottom:var(--space-1); }
+    .how-desc { font-size:var(--text-sm); color:var(--color-text-muted); }
+    /* STORY TRACKER */
+    .stories-summary-bar { display:flex; gap:var(--space-4); flex-wrap:wrap; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-4) var(--space-5); margin-bottom:var(--space-6); }
+    .stat-item { display:flex; flex-direction:column; align-items:center; gap:2px; }
+    .stat-num { font-size:var(--text-xl); font-family:var(--font-display); font-weight:700; color:var(--color-text); line-height:1; }
+    .stat-lbl { font-size:var(--text-xs); color:var(--color-text-muted); }
+    .stat-divider { width:1px; background:var(--color-divider); align-self:stretch; margin:0 var(--space-2); }
+    .story-filter-row { display:flex; gap:var(--space-2); flex-wrap:wrap; margin-bottom:var(--space-5); align-items:center; }
+    .story-filter-btn { font-size:var(--text-xs); font-family:var(--font-body); font-weight:600; background:var(--color-surface-offset); color:var(--color-text-muted); border:1px solid var(--color-border); border-radius:var(--radius-pill); padding:var(--space-1) var(--space-4); cursor:pointer; transition:all var(--transition); }
+    .story-filter-btn.active, .story-filter-btn:hover { background:var(--color-primary); color:white; border-color:var(--color-primary); }
+    .story-list { display:flex; flex-direction:column; gap:var(--space-3); }
+    .story-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); overflow:hidden; transition:box-shadow var(--transition),border-color var(--transition); cursor:pointer; }
+    .story-card:hover { box-shadow:var(--shadow-md); border-color:var(--color-primary); }
+    .story-card.expanded { box-shadow:var(--shadow-lg); border-color:var(--color-primary); }
+    .story-card-header { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-4) var(--space-5); }
+    .story-type-badge { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:3px 8px; border-radius:var(--radius-pill); flex-shrink:0; margin-top:2px; }
+    .badge-brd { background:var(--color-primary-light); color:var(--color-primary); }
+    .badge-frd { background:var(--color-purple-light); color:var(--color-purple); }
+    .story-card-meta { flex:1; min-width:0; }
+    .story-card-id { font-size:var(--text-xs); color:var(--color-text-faint); font-family:monospace; margin-bottom:2px; }
+    .story-card-title { font-size:var(--text-base); font-weight:700; color:var(--color-text); line-height:1.3; margin-bottom:var(--space-2); }
+    .story-card-tags { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+    .story-tag { font-size:11px; font-weight:600; padding:2px 8px; border-radius:var(--radius-pill); background:var(--color-surface-offset); color:var(--color-text-muted); }
+    .story-card-right { display:flex; flex-direction:column; align-items:flex-end; gap:var(--space-2); flex-shrink:0; }
+    .story-chevron { color:var(--color-text-faint); font-size:0.9rem; transition:transform 0.2s; }
+    .story-card.expanded .story-chevron { transform:rotate(180deg); }
+    .story-detail-panel { display:none; border-top:1px solid var(--color-divider); padding:var(--space-5); background:var(--color-surface-2); }
+    .story-card.expanded .story-detail-panel { display:block; }
+    .story-detail-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:var(--space-4); margin-bottom:var(--space-5); }
+    .story-detail-field { display:flex; flex-direction:column; gap:4px; }
+    .story-detail-label { font-size:var(--text-xs); font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--color-text-faint); }
+    .story-detail-value { font-size:var(--text-sm); color:var(--color-text); }
+    .story-section-label { font-size:var(--text-sm); font-weight:700; color:var(--color-text); margin-bottom:var(--space-2); margin-top:var(--space-4); border-bottom:1px solid var(--color-divider); padding-bottom:var(--space-1); }
+    .story-body-text { font-size:var(--text-sm); color:var(--color-text-muted); line-height:1.65; }
+    .story-body-text p { margin-bottom:var(--space-3); }
+    .story-body-text ul { padding-left:var(--space-5); }
+    .story-body-text li { margin-bottom:var(--space-1); }
+    .story-body-text code { background:var(--color-surface-offset); padding:1px 5px; border-radius:4px; font-size:0.9em; color:var(--color-text); }
+    .ac-item { display:flex; gap:var(--space-3); padding:var(--space-3); border-radius:var(--radius-md); background:var(--color-surface); border:1px solid var(--color-divider); margin-bottom:var(--space-2); font-size:var(--text-sm); color:var(--color-text-muted); }
+    .ac-item::before { content:"✓"; color:var(--color-success); font-weight:700; flex-shrink:0; }
+    .people-chips { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-top:var(--space-2); }
+    .person-chip { display:flex; align-items:center; gap:var(--space-2); padding:var(--space-1) var(--space-3); background:var(--color-surface-offset); border-radius:var(--radius-pill); font-size:var(--text-xs); color:var(--color-text); }
+    .person-chip .avatar { width:22px; height:22px; border-radius:50%; background:var(--color-primary-light); color:var(--color-primary); font-weight:700; font-size:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .person-chip .role-label { color:var(--color-text-muted); font-size:10px; }
+    .story-external-link { display:inline-flex; align-items:center; font-size:var(--text-xs); font-weight:600; color:var(--color-primary); background:var(--color-primary-light); border-radius:var(--radius-pill); padding:var(--space-1) var(--space-3); text-decoration:none; transition:background var(--transition); }
+    .story-external-link:hover { background:var(--color-primary); color:white; }
+    .story-version-history { border:1px solid var(--color-divider); border-radius:var(--radius-md); overflow:hidden; margin-top:var(--space-3); }
+    .story-version-row { display:grid; grid-template-columns:60px 1fr 130px 100px; gap:var(--space-3); padding:var(--space-2) var(--space-3); font-size:var(--text-xs); color:var(--color-text-muted); border-bottom:1px solid var(--color-divider); }
+    .story-version-row:last-child { border-bottom:none; }
+    .story-version-row.header { background:var(--color-surface-offset); font-weight:700; color:var(--color-text-faint); text-transform:uppercase; letter-spacing:0.05em; }
+    /* FOCUS-VISIBLE — clickable non-button elements */
+    .ws-card:focus-visible, .story-card:focus-visible, .checkpoint-item:focus-visible, .quiz-opt:focus-visible { outline:2px solid var(--color-primary); outline-offset:2px; border-radius:var(--radius-xl); }
+    /* PRINT */
+    @media print { .site-header, .sidebar, .theme-toggle, .story-filter-row, .story-external-link { display:none !important; } .main-layout { display:block; padding:0; } .section { display:block !important; margin-bottom:2rem; } .story-detail-panel { display:block !important; } .expand-body { max-height:none !important; padding:var(--space-4) var(--space-5) !important; } body { font-size:12px; color:#000; background:#fff; } }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Sticky Header ──────────────────────────────────────────────────────── -->
+  <header class="site-header">
+
+    <a href="#" class="header-logo">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"
+           xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 2.5A1.5 1.5 0 0 1 6.5 1h9A1.5 1.5 0 0 1 17 2.5v14a.5.5 0 0 1-.8.4L13 14.333l-3.2 2.567A.5.5 0 0 1 9 16.5V4H6.5A1.5 1.5 0 0 0 5 5.5v12a.5.5 0 0 1-.8.4l-.2-.16V2.5Z"
+              stroke="var(--color-primary)" stroke-width="1.25" stroke-linejoin="round" fill="none"/>
+        <path d="M9 4h6v9.5l-2.5-2-2.5 2V4Z"
+              fill="var(--color-primary)" opacity="0.15"/>
+      </svg>
+      GWS Onboarding Guide
+    </a>
+
+    <nav class="header-nav" aria-label="Primary navigation">
+      <button class="nav-btn active" data-section="overview">Overview</button>
+      <button class="nav-btn" data-section="concepts">Concepts</button>
+      <button class="nav-btn" data-section="workstreams">Workstreams</button>
+      <button class="nav-btn" data-section="technical">Technical</button>
+      <button class="nav-btn" data-section="risks">Risks</button>
+      <button class="nav-btn" data-section="questions">Questions</button>
+      <button class="nav-btn" data-section="stories">Stories</button>
+      <button class="nav-btn" data-section="study">Study Guide</button>
+    </nav>
+
+    <div class="theme-toggle">
+      <button data-theme-toggle aria-label="Switch to dark mode">
+        <!-- Moon icon (default — shown in light mode) -->
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.5 10.5A7 7 0 1 1 7.5 2.5a5.5 5.5 0 0 0 8 8Z"
+                stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </button>
+    </div>
+
+  </header>
+
+  <!-- ─── Main Layout ────────────────────────────────────────────────────────── -->
+  <main class="main-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Section navigation">
+      <span class="sidebar-label">Sections</span>
+
+      <button class="sidebar-link active" data-section="overview">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Overview
+      </button>
+      <button class="sidebar-link" data-section="concepts">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Key Concepts
+      </button>
+      <button class="sidebar-link" data-section="workstreams">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Workstreams
+      </button>
+      <button class="sidebar-link" data-section="technical">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Technical Logic
+      </button>
+      <button class="sidebar-link" data-section="risks">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Risks &amp; Decisions
+      </button>
+      <button class="sidebar-link" data-section="questions">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Deep Questions
+      </button>
+      <button class="sidebar-link" data-section="stories">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Story Tracker
+      </button>
+      <button class="sidebar-link" data-section="study">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Study Guide
+      </button>
+
+      <div style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--color-divider);">
+        <div style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:var(--space-2);">Study Progress</div>
+        <div id="sidebar-progress-label" style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2);">0 of 12 checkpoints</div>
+        <div style="height:4px;background:var(--color-surface-dynamic);border-radius:var(--radius-pill);overflow:hidden;">
+          <div id="sidebar-progress" style="height:100%;width:0%;background:var(--color-primary);border-radius:var(--radius-pill);transition:width 0.3s ease;"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content-area">
+
+      <section id="section-overview" class="section active">
+
+        <div class="page-hero">
+          <div class="hero-eyebrow">Structured Reference · April 2026</div>
+          <h1 class="hero-title">Google Workspace Vendor Onboarding into Apptium / ION</h1>
+          <p class="hero-subtitle">This document captures the full context, engineering workstreams, technical logic, and open decisions involved in stabilizing GWS as a vendor in TD SYNNEX's Apptium/ION billing and marketplace platform.</p>
+          <div class="hero-tags">
+            <span class="tag tag-blue">Billing</span>
+            <span class="tag tag-orange">Price Book</span>
+            <span class="tag tag-green">Entitlement API</span>
+            <span class="tag tag-red">7 Workstreams</span>
+            <span class="tag tag-purple">14 Open Questions</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">① Core Purpose</h2>
+        <div class="callout callout-blue"><div class="callout-icon">🎯</div><div class="callout-body"><div class="callout-title">The Single Goal</div><div class="callout-text">Every change to a GWS subscription (upgrade, downgrade, plan change, cancellation, seat shift, renewal) must map to a <strong>correctly priced line item</strong> using the right entitlement context — while resellers see only their own data, and customer alternate email is captured end-to-end.</div></div></div>
+        <div class="callout callout-orange"><div class="callout-icon">⚠️</div><div class="callout-body"><div class="callout-title">The Central Problem</div><div class="callout-text">The existing Price Book architecture was built for flat product catalogs. GWS requires <strong>entitlement-level, customer-specific, time-sensitive pricing</strong> — a fundamentally different model the current platform doesn't support.</div></div></div>
+
+        <h2 class="section-heading">② Main Ideas, Simply Explained</h2>
+        <div class="card"><div class="card-header"><div class="card-icon icon-orange">📚</div><div><div class="card-title">What is a Price Book?</div><div class="card-subtitle">The catalog that tells the system what to charge</div></div></div><p>Think of a Price Book like a restaurant menu. Today, ION has one shared menu for everyone. GWS requires each table (reseller) to have their own secret menu — with their own customer-specific prices, discounts, and deal terms. The problem: the kitchen (ION) doesn't know how to run that kind of operation yet.</p><p style="margin-top:var(--space-3);">The Master Price Book is what TD SYNNEX/administrators see (full pricing data). The Reseller Price Book is a filtered view — resellers only see their own customers' data, never discount terms or other resellers' info.</p></div>
+
+        <div class="card"><div class="card-header"><div class="card-icon icon-blue">🔑</div><div><div class="card-title">What is an Entitlement?</div><div class="card-subtitle">Google's record that a customer has access to a product</div></div></div><p>When a customer purchases Google Workspace, Google creates an <strong>entitlement</strong> — a unique record that says "Customer X has Y seats of Product Z under offer W, at price phase P." This is Google's source of truth for what was sold and when.</p><p style="margin-top:var(--space-3);">ION must read and track these entitlement records to know: what price applies today, what changed over time (upgrades, renewals, seat changes), and what credit is owed on cancellation.</p></div>
+
+        <div class="card"><div class="card-header"><div class="card-icon icon-purple">🔢</div><div><div class="card-title">What is the "Unique ID"?</div><div class="card-subtitle">A new identifier that links pricing to a specific customer's deal</div></div></div><p>Today ION prices GWS from a generic product catalog entry. The "Unique ID" is a proposed new concept — a composite key that ties a specific entitlement (customer + offer + price phase) to its exact discount percentage. This allows ION to price accurately at the day level across the full life of a subscription.</p><p style="margin-top:var(--space-3);">Think of it as a serial number for a customer's specific pricing deal, not just the product type.</p></div>
+
+        <div class="card"><div class="card-header"><div class="card-icon icon-green">📧</div><div><div class="card-title">Why does Alternate Email matter?</div><div class="card-subtitle">A lost field that breaks Google customer creation</div></div></div><p><code>Customer.alternateEmail</code> is a required field for creating GWS, Cloud Identity, and Chrome Enterprise customers in Google's system. It was removed when Feature 755664 (Buy Flow Redesign) shipped on 23 Jan 2026. Without it, Welcome Emails go to the end customer instead of the MSP/reseller, and the unique email constraint blocks MSPs from reusing a reseller email across multiple customers.</p><p style="margin-top:var(--space-3);">This is classified as a foundational defect — no new GWS customer can be properly onboarded until this field is restored.</p></div>
+
+        <h2 class="section-heading">③ Who's Involved</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);">Two organizations collaborate on this project, with distinct roles in the requirements-to-delivery pipeline.</p>
+        <table class="stakeholder-table">
+          <thead><tr><th>Person</th><th>Org</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>Brian Young</td><td><span class="org-badge org-tdsynnex">TD SYNNEX</span></td><td>Authors all FRDs &amp; BRDs; primary technical counterpart to Apptium</td></tr>
+            <tr><td>Janna Wassberg</td><td><span class="org-badge org-tdsynnex">TD SYNNEX</span></td><td>Program manager; organizes LOE and shadow-estimate meetings</td></tr>
+            <tr><td>Melanie</td><td><span class="org-badge org-tdsynnex">TD SYNNEX</span></td><td>Intake cycle gatekeeper — nothing moves to delivery without her sign-off</td></tr>
+            <tr><td>EU Operations Team</td><td><span class="org-badge org-tdsynnex">TD SYNNEX</span></td><td>Manages price book structures; co-authored Price Book requirements</td></tr>
+            <tr><td>Srilatha Peyyala</td><td><span class="org-badge org-apptium">Apptium</span></td><td>Managing Architect — reviews all requirements for architectural feasibility</td></tr>
+            <tr><td>Varun Pant</td><td><span class="org-badge org-apptium">Apptium</span></td><td>Technical Program Manager; coordinates Apptium delivery</td></tr>
+            <tr><td>Rick Kapani</td><td><span class="org-badge org-apptium">Apptium</span></td><td>Engineer/architect; identified as E2E SIT gap origin for feature 959113</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-purple"><div class="callout-icon">📅</div><div class="callout-body"><div class="callout-title">Timeline: April 14–28, 2026</div><div class="callout-text"><strong>Apr 14</strong> — Janna organized the initial LOE/shadow estimate meeting for 8 priority items<br><strong>Apr 21</strong> — Brian proposed focused follow-up call (Price Book, Cancel, Alternate Email, Intake)<br><strong>Apr 22</strong> — BRD documents sent to Srilatha<br><strong>Apr 23</strong> — Brian pasted full BRD text directly into email to bypass SharePoint friction<br><strong>Apr 24</strong> — Reworked Price Book FRD (Feature 959113) sent; "unique ID" concept introduced<br><strong>Apr 26</strong> — Srilatha raised three architectural concerns: partner filtering feasibility, Price Book/Partner independence, and grouping by <code>discountType</code><br><strong>Apr 28</strong> — Brian replied: SKU must remain visible, user needs exact <code>discountPercentage</code> for bulk adjustments, and future unique IDs must auto-inherit price adjustments</div></div></div>
+
+      </section>
+
+      <section id="section-concepts" class="section">
+
+        <div class="page-hero">
+          <div class="hero-eyebrow">Technical Concepts · GWS Billing</div>
+          <h1 class="hero-title">Key Concepts Explained</h1>
+          <p class="hero-subtitle">Expand each block to understand the core technical ideas, API structures, and unresolved design decisions behind the GWS vendor onboarding project.</p>
+          <div class="hero-tags">
+            <span class="tag tag-blue">Price Phases</span>
+            <span class="tag tag-orange">Discount Logic</span>
+            <span class="tag tag-green">Entitlement API</span>
+            <span class="tag tag-purple">Unique ID</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Key Concepts Explained</h2>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>💰 Price Phases — Time-Bound Pricing Periods</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>A <strong>pricePhase</strong> is a time-bounded segment of a subscription's pricing. Imagine a 3-year GWS deal: Year 1 might be at 30% discount, Year 2 at 20%, Year 3 at 10%. Each of those is a separate price phase. ION must know <em>which phase is active on any given calendar day</em> to generate correct billing. It does this by taking the subscription's <code>createTime</code> as the start, then counting forward using the <code>firstPeriod</code> value (in days) of each phase.</p>
+            <div class="callout callout-blue" style="margin-top:var(--space-4);">
+              <div class="callout-icon">💡</div>
+              <div class="callout-body"><div class="callout-title">Mental Model</div><div class="callout-text">Think of it like a tiered lease. If you signed a 3-year lease with decreasing discounts, the billing system must know which year you're in — day 364 vs. day 366 can mean entirely different rates.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🏷️ discountPercentage vs. discountType — The Unresolved Debate</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p><code>discountPercentage</code> is the numeric rate (e.g., <code>.15</code> = 15%). <code>discountType</code> is a category label (e.g., <code>RESELLER_MARGIN</code>, <code>SALES_DISCOUNT</code>). <strong>Srilatha's position (Apr 26):</strong> Grouping by <code>discountType</code> is the better architectural fit. Any further sub-selection should be done at the row level. <strong>Brian's reply (Apr 28):</strong> Users must know the exact discount percent to apply the correct PB Price Adjust. Concrete use case: user selects all entries with <code>.15</code> discountPercentage and bulk-adjusts them. Any new Unique IDs added later with that same <code>.15</code> discountPercentage must automatically inherit the existing price adjustment.</p>
+            <div class="callout callout-orange" style="margin-top:var(--space-4);">
+              <div class="callout-icon">⚠️</div>
+              <div class="callout-body"><div class="callout-title">Still Unresolved — Decision Required</div><div class="callout-text">The two positions are not necessarily mutually exclusive: a hybrid model (group by discountType architecturally, but surface exact discountPercentage for user selection) may satisfy both sides. No formal decision has been documented yet.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🆔 Unique ID — The Entitlement Identifier</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>The <strong>Unique ID</strong> is a proposed new concept in ION. It acts as a composite reference that links one specific customer's entitlement → offer → price-phase context → discount percentage into a single identifiable object.</p>
+            <ul class="styled">
+              <li>Must resolve to an exact <code>discountPercentage</code> at any point in time</li>
+              <li>Stays stable across seat changes</li>
+              <li>Updates when a <code>SKU_CHANGED</code> or <code>COMMITMENT_CHANGED</code> event fires</li>
+              <li>New IDs with the same discount % must auto-inherit existing bulk price adjustments</li>
+            </ul>
+            <p style="margin-top:var(--space-3);">Open question: Is this a <em>database-generated surrogate key</em>, or is it <em>derived from Google fields</em> (entitlementID + offerID + startDate)? This isn't decided yet.</p>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🧾 COMMITMENT_CANCEL_ITEM — The Cancellation Billing Event</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>When a customer cancels an annual GWS commitment plan, Google generates a <code>COMMITMENT_CANCEL_ITEM</code> charge type in the billing data. ION must issue a <strong>credit</strong> to the reseller/end-customer for the unused portion. <strong>The current bug:</strong> ION is using BigQuery's end-date value instead of calculating it independently. BigQuery's value is incorrect, causing wrong credit amounts.</p>
+            <div class="formula-box"><span class="formula-label">Correct Formula</span>Billing End Date = createTime (subscription start) + 1 year
+
+Credit Calculation:
+  Discount Factor    = 1 − Price Adjust Value
+  SaaS Customer Cost = Seller Cost ÷ Discount Factor
+
+Example:
+  Seller Cost        = −493.4
+  Price Adjust Value = −29.167%
+  Discount Factor    = 1 − (−0.29167) = 1.29167
+  Customer Cost      = −493.4 ÷ 1.29167 = −697.78</div>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🔍 listEntitlementChanges API — The History Engine</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>This Google API returns a chronological log of every change to a customer's entitlement. ION needs this history to answer: "What was the pricing state on day X of this subscription?"</p>
+            <ul class="styled">
+              <li><code>PAID_SUBSCRIPTION_STARTED</code> — the original subscription start</li>
+              <li><code>SKU_CHANGED</code> — customer switched products</li>
+              <li><code>COMMITMENT_CHANGED</code> — term length changed</li>
+              <li><code>RENEWED</code> — annual renewal occurred</li>
+              <li><code>RENEWAL_SETTING_CHANGED</code> — auto-renew setting changed</li>
+            </ul>
+            <div class="callout callout-orange" style="margin-top:var(--space-4);">
+              <div class="callout-icon">⚠️</div>
+              <div class="callout-body"><div class="callout-title">Critical Open Question</div><div class="callout-text">Which createTime is the authoritative start date for billing end-date calculations: the original PAID_SUBSCRIPTION_STARTED, or the most recent RENEWED or SKU_CHANGED? This must be resolved before cancel billing can be correctly implemented.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🛡️ Reseller Data Isolation — The Security Architecture Problem</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>Currently, a single Price Book in ION can be <strong>shared across multiple reseller partners</strong>. This means one reseller could potentially see another reseller's discount percentages, customer domain names, and deal terms. The architectural problem: ION currently treats Price Books as completely independent of Partner-Customer associations. Implementing per-partner filtering would require ION to process all Partner-associated customer domains and their entitlements on every Price Book load — a potentially expensive operation.</p>
+            <p style="margin-top:var(--space-3);"><strong>Brian's Apr 28 clarification:</strong> The proposal is to filter/hide offer + entitlement entries belonging to other partners on load. The SKU must remain easily identifiable alongside the Unique ID at all times.</p>
+            <div class="callout callout-red" style="margin-top:var(--space-4);">
+              <div class="callout-icon">🚨</div>
+              <div class="callout-body"><div class="callout-title">Blocked Until Feasibility Is Confirmed</div><div class="callout-text">Srilatha's architectural review of whether ION's current data model can support per-partner filtering is the single biggest blocker for Feature 959113. Until her assessment is complete, engineering cannot proceed.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🛒 The Buy Flow Gap — Pricing Before an Entitlement Exists</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>There's a chicken-and-egg problem: The new pricing model relies on <em>entitlement data from Google</em> to price accurately. But during the purchase (buy) flow, no entitlement exists yet — it's only created after the order goes through.</p>
+            <div class="flow-diagram">
+              <div class="flow-step">User places order</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step warn">No entitlement yet</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step highlight">Show MSRP + disclaimer</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">Order processed</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">Entitlement created</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step highlight">Resolve exact pricing</div>
+            </div>
+            <p style="margin-top:var(--space-3);">The current recommendation is to show MSRP with a disclaimer during purchase, then reconcile to the correct entitlement-based pricing after the entitlement is created. The downstream reconciliation path for this is still undefined.</p>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="section-workstreams" class="section">
+
+        <div class="page-hero">
+          <div class="hero-eyebrow">Engineering Workstreams · 7 Active Items</div>
+          <h1 class="hero-title">The 7 Workstreams</h1>
+          <p class="hero-subtitle">Seven parallel engineering tracks that together stabilize GWS as a fully operational vendor in ION. Click any card to expand its full specification.</p>
+          <div class="hero-tags">
+            <span class="tag tag-orange">Price Book</span>
+            <span class="tag tag-purple">Unique ID</span>
+            <span class="tag tag-green">Alternate Email</span>
+            <span class="tag tag-red">Cancel Fix</span>
+            <span class="tag tag-blue">API Tracking</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">The 7 Workstreams</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6);">Click any workstream card to toggle its full details panel below the grid.</p>
+
+        <div class="ws-grid">
+          <div class="ws-card" onclick="expandWS('ws1')">
+            <div class="ws-number">WS 1 · Feature 959113 / Task 959111</div>
+            <div class="ws-name">Price Book Refactor</div>
+            <div class="ws-desc">Rebuild the MSRP Price Book to support entitlement-level pricing, reseller data isolation, and discount-based grouping.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
+              <span class="ws-status status-progress">⏳ Feasibility Pending</span>
+              <button onclick="event.stopPropagation();showSection('stories',null);setTimeout(()=>showStory('s1'),100);" class="story-link-btn">📄 BRD Story 1</button>
+            </div>
+          </div>
+          <div class="ws-card" onclick="expandWS('ws2')">
+            <div class="ws-number">WS 2 · Task 959111</div>
+            <div class="ws-name">Unique ID / Entitlement Pricing</div>
+            <div class="ws-desc">Introduce a unique identifier at the entitlement level for day-granularity pricing across all subscription change types.</div>
+            <span class="ws-status status-progress">⏳ In Progress</span>
+          </div>
+          <div class="ws-card" onclick="expandWS('ws3')">
+            <div class="ws-number">WS 3 · Task 959443</div>
+            <div class="ws-name">Alternate Email Restore</div>
+            <div class="ws-desc">Restore <code>Customer.alternateEmail</code> in the GWS buy flow (Register + Transfer + Cloud Providers flows).</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
+              <span class="ws-status status-progress">⏳ Awaiting Intake</span>
+              <button onclick="event.stopPropagation();showSection('stories',null);setTimeout(()=>showStory('s2'),100);" class="story-link-btn">📄 FRD Story 2</button>
+            </div>
+          </div>
+          <div class="ws-card" onclick="expandWS('ws4')">
+            <div class="ws-number">WS 4 · Feature 959440</div>
+            <div class="ws-name">Cancel / Billing Fix</div>
+            <div class="ws-desc">Fix billing end-date and credit calculation for <code>COMMITMENT_CANCEL_ITEM</code> events on annual GWS plans.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
+              <span class="ws-status status-progress">⏳ In Progress (AWG)</span>
+              <button onclick="event.stopPropagation();showSection('stories',null);setTimeout(()=>showStory('s3'),100);" class="story-link-btn">📄 FRD Story 3</button>
+            </div>
+          </div>
+          <div class="ws-card" onclick="expandWS('ws5')">
+            <div class="ws-number">WS 5 · Task 959444</div>
+            <div class="ws-name">Entitlement Change Tracking</div>
+            <div class="ws-desc">Enable ION/SSIM to call <code>listEntitlementChanges</code> API and store the full history of entitlement events.</div>
+            <span class="ws-status status-progress">⏳ No BRD Required</span>
+          </div>
+          <div class="ws-card" onclick="expandWS('ws6')">
+            <div class="ws-number">WS 6 · Task 959443</div>
+            <div class="ws-name">Marketplace Link Button Removal</div>
+            <div class="ws-desc">Remove the non-functional "Link" button from the Marketplace UI that confuses resellers (they don't have PSC access).</div>
+            <span class="ws-status status-progress">⏳ In Progress</span>
+          </div>
+          <div class="ws-card" onclick="expandWS('ws7')">
+            <div class="ws-number">WS 7 · All Items</div>
+            <div class="ws-name">Intake, LOE &amp; Shadow Estimates</div>
+            <div class="ws-desc">Advance all 6 active items through the TD SYNNEX intake cycle by obtaining LOE and shadow estimates from Apptium engineering.</div>
+            <span class="ws-status status-progress">⏳ Pending LOE</span>
+          </div>
+        </div>
+
+        <!-- ── Detail Panels ───────────────────────────────────────────────────── -->
+
+        <div id="ws1" class="card" style="display:none">
+          <div class="card-header"><div class="card-icon icon-orange">📚</div><div><div class="card-title">WS 1: Price Book Refactor (Feature 959113)</div><div class="card-subtitle">The architecturally most complex workstream</div></div></div>
+          <div class="subsection-heading" style="margin-top:0;">Master Price Book must expose:</div>
+          <ul class="styled">
+            <li>Reseller name, Google Cloud Identity ID / Channel Partner ID</li>
+            <li>End-customer domain, Google Customer ID, country, currency, billing account</li>
+            <li>SKU/offer/plan details, price phases, discount values/types, effective price, pricing tiers</li>
+            <li>Bulk adjustments grouped by same <code>discountPercentage</code>; also supports single-line adjustments</li>
+          </ul>
+          <div class="subsection-heading">Reseller Price Book must hide:</div>
+          <ul class="styled">
+            <li><code>discountPercentage</code>, <code>discountType</code>, <code>discount</code></li>
+            <li>Other resellers' domains or any other reseller's data</li>
+            <li>CSV exports must enforce the same visibility rules</li>
+          </ul>
+          <div class="callout callout-red" style="margin-top:var(--space-4);">
+            <div class="callout-icon">🚧</div>
+            <div class="callout-body"><div class="callout-title">Key Blocker</div><div class="callout-text">Current ION architecture treats Price Books as independent of Partner-Customer associations. Reseller filtering may require a new data-scoping layer — scope unknown until Srilatha's feasibility review is complete.</div></div>
+          </div>
+        </div>
+
+        <div id="ws2" class="card" style="display:none">
+          <div class="card-header"><div class="card-icon icon-purple">🔢</div><div><div class="card-title">WS 2: Unique ID / Entitlement-Based Pricing (Task 959111)</div><div class="card-subtitle">New identifier enabling day-granularity pricing</div></div></div>
+          <ul class="styled">
+            <li>Maps to a specific end-customer's entitlement + offer pricing, tracked from start through price-phase transitions</li>
+            <li>Without pricePhases: flat discount applies for full offer life</li>
+            <li>With pricePhases: system identifies which phase is active per calendar day using <code>firstPeriod</code> values</li>
+            <li>Resolves correct tier when seat counts cross boundaries (e.g., 20→21 seats, 300→301 seats)</li>
+            <li>SKU name must remain visible alongside Unique ID at all times</li>
+            <li>Must also appear in the "GWS Custom SKU Added to Pricebook" email template</li>
+          </ul>
+          <div class="callout callout-orange" style="margin-top:var(--space-4);">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-body"><div class="callout-title">Key Constraint</div><div class="callout-text">During the buy flow, no entitlement exists yet. Show MSRP + disclaimer until entitlement is created. Exact pricing resolved post-creation.</div></div>
+          </div>
+        </div>
+
+        <div id="ws3" class="card" style="display:none">
+          <div class="card-header"><div class="card-icon icon-green">📧</div><div><div class="card-title">WS 3: Alternate Email — Customer.alternateEmail (Task 959443)</div><div class="card-subtitle">Restore a required field removed in Feature 755664 (Jan 23, 2026)</div></div></div>
+          <ol class="styled">
+            <li><strong>Register flow:</strong> Mandatory field in the Register popup. Pre-populated from ION DB if known. User must use Cancel or Confirm to exit — clicking elsewhere is blocked.</li>
+            <li><strong>Transfer flow:</strong> Same rules. Popup title changes to "Transfer Confirmation."</li>
+            <li><strong>Cloud Providers section:</strong> View / Edit / Discard / Update at any time outside the buy flow.</li>
+          </ol>
+          <div class="callout callout-red" style="margin-top:var(--space-4);">
+            <div class="callout-icon">🚨</div>
+            <div class="callout-body"><div class="callout-title">Critical: readMask Required + Remove Link Button</div><div class="callout-text">GET Customer API must include readMask or the field is silently omitted. No error — just missing data. Also: remove the Link button from Marketplace Plans entirely.</div></div>
+          </div>
+        </div>
+
+        <div id="ws4" class="card" style="display:none">
+          <div class="card-header"><div class="card-icon icon-red">❌</div><div><div class="card-title">WS 4: Cancel / COMMITMENT_CANCEL_ITEM Billing Fix (Feature 959440)</div><div class="card-subtitle">Correct end-date and credit calculation for annual cancellations</div></div></div>
+          <div class="formula-box"><span class="formula-label">Billing End Date Formula</span>end date = createTime (subscription start) + 1 year
+(Do NOT use BigQuery's value — it is incorrect)
+
+<span class="formula-label">Credit Calculation</span>Discount Factor    = 1 − Price Adjust Value
+SaaS Customer Cost = Seller Cost ÷ Discount Factor
+
+Example: Seller Cost = −493.4, Adjust = −29.167%
+→ Factor = 1 − (−0.29167) = 1.29167
+→ Customer Cost = −493.4 ÷ 1.29167 = −697.78</div>
+          <div class="callout callout-orange" style="margin-top:var(--space-4);">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-body"><div class="callout-title">Open Question</div><div class="callout-text">If a subscription was renewed or SKU-changed before cancellation, which createTime is the start date: original PAID_SUBSCRIPTION_STARTED or the most recent RENEWED/SKU_CHANGED?</div></div>
+          </div>
+        </div>
+
+        <div id="ws5" class="card" style="display:none">
+          <div class="card-header"><div class="card-icon icon-blue">🔄</div><div><div class="card-title">WS 5: Entitlement Change Tracking (Task 959444)</div><div class="card-subtitle">Build history of all entitlement events into ION/SSIM</div></div></div>
+          <ul class="styled">
+            <li>Calls <code>accounts.customers.entitlements.listEntitlementChanges</code> API</li>
+            <li>Key fields per change object: <code>changeType</code>, <code>createTime</code>, <code>parameters</code> (contains <code>order_id</code>, <code>previous_num_units</code>, <code>num_units</code>), <code>offer</code></li>
+            <li>No BRD required — this is a backend data-plumbing workstream</li>
+          </ul>
+          <div class="callout callout-orange" style="margin-top:var(--space-4);">
+            <div class="callout-icon">⚠️</div>
+            <div class="callout-body"><div class="callout-title">Open Design Questions</div><div class="callout-text">How often should this be polled: on demand, nightly batch, or event-driven? Store as raw JSON, normalized tables, or both?</div></div>
+          </div>
+        </div>
+
+        <div id="ws6" class="card" style="display:none">
+          <div class="card-header"><div class="card-icon icon-orange">🔗</div><div><div class="card-title">WS 6: Marketplace Link Button Removal (Task 959443)</div><div class="card-subtitle">Remove a non-functional UI element causing reseller confusion</div></div></div>
+          <p style="color:var(--color-text-muted);">The "Link" button in the Marketplace Plans UI is non-functional for resellers because they don't have PSC (Partner Sales Console) access. Remove it entirely from the UI. No backend changes required. Conditional hide/show based on partner role.</p>
+          <div class="callout callout-green" style="margin-top:var(--space-4);">
+            <div class="callout-icon">✅</div>
+            <div class="callout-body"><div class="callout-title">Low Complexity</div><div class="callout-text">Note: this task shares ADO ID 959443 with the Alternate Email workstream — they are separate items.</div></div>
+          </div>
+        </div>
+
+        <div id="ws7" class="card" style="display:none">
+          <div class="card-header"><div class="card-icon icon-orange">📋</div><div><div class="card-title">WS 7: Intake, LOE &amp; Shadow Estimates (All Items)</div><div class="card-subtitle">Move all 6 active items through the formal TD SYNNEX intake cycle</div></div></div>
+          <p style="color:var(--color-text-muted);">All 6 active work items must pass through TD SYNNEX's formal intake cycle before Apptium can begin development. This requires documented LOE estimates, shadow cost estimates for internal budgeting, and sign-off from Melanie (intake gatekeeper).</p>
+          <ul class="styled" style="margin-top:var(--space-4);">
+            <li>Items awaiting LOE: Price Book Refactor (WS1), Unique ID (WS2), Alternate Email (WS3), Cancel Billing Fix (WS4), Entitlement Change Tracking (WS5), Link Button Removal (WS6)</li>
+            <li>Janna Wassberg coordinates all LOE/shadow estimate meeting scheduling</li>
+            <li>No development work begins until intake is formally approved by Melanie</li>
+          </ul>
+        </div>
+
+      </section>
+
+      <section id="section-technical" class="section">
+
+        <div class="page-hero">
+          <div class="hero-eyebrow">API Reference · Pricing Logic</div>
+          <h1 class="hero-title">Technical Logic &amp; API Reference</h1>
+          <p class="hero-subtitle">Field-level API documentation, pricing phase resolution logic, and scenario walkthroughs for the GWS entitlement and billing integration.</p>
+          <div class="hero-tags">
+            <span class="tag tag-blue">8 API Fields</span>
+            <span class="tag tag-orange">4 Pricing Scenarios</span>
+            <span class="tag tag-green">3 API Methods</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Technical Logic &amp; API Reference</h2>
+
+        <h3 class="subsection-heading" style="margin-top:0;">Key API Fields</h3>
+        <table class="stakeholder-table">
+          <thead>
+            <tr><th>Field</th><th>Location</th><th>Purpose &amp; Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Customer.alternateEmail</code></td><td>Google Customer object</td><td>Secondary admin email; required for GWS creation. <strong>Removed in Jan 2026 — needs restoration.</strong></td></tr>
+            <tr><td><code>pricePhases</code></td><td>Offer price object</td><td>Array of time-bound price periods with effectivePrice &amp; discount breakdown</td></tr>
+            <tr><td><code>discountPercentage</code></td><td><code>priceByResources.price.discountComponents</code></td><td>Numeric discount rate (e.g., .15); used for bulk grouping &amp; price adjustment</td></tr>
+            <tr><td><code>discountType</code></td><td>Same as above</td><td>Type qualifier: <code>RESELLER_MARGIN</code>, <code>SALES_DISCOUNT</code>, etc.</td></tr>
+            <tr><td><code>effectivePrice</code></td><td><code>priceByResources.pricePhases.effectivePrice</code></td><td>Final unit price after all discounts within a phase</td></tr>
+            <tr><td><code>discount</code></td><td><code>priceByResources.pricePhases.price.discount</code></td><td>Absolute discount amount within a phase</td></tr>
+            <tr><td><code>createTime</code></td><td>Entitlement / change event</td><td>ISO 8601 timestamp; used as subscription start date for billing calculations</td></tr>
+            <tr><td><code>readMask</code></td><td>GET Customer API parameter</td><td><strong>Must be set</strong> or <code>Customer.alternateEmail</code> will be silently omitted from response</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-heading">End-to-End Pricing Scenarios</h3>
+
+        <div class="card">
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 1 — No pricePhases (Flat Pricing)</div>
+          <p style="color:var(--color-text-muted);">A single <code>discountPercentage</code> and <code>discountType</code> apply for the full life of the offer ID under that entitlement. Simple case — Price Book displays these flat values.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 2 — With pricePhases (Time-Bound Pricing)</div>
+          <p style="color:var(--color-text-muted);">Each phase has its own <code>effectivePrice</code>, <code>discount</code>, <code>discountPercentage</code>, and <code>discountType</code>. ION determines which phase is active using <code>firstPeriod</code> values and <code>createTime</code>.</p>
+          <div class="formula-box"><span class="formula-label">Phase Resolution Logic</span>Active Phase = first phase where:
+  (today − createTime in days) &lt; phase.firstPeriod
+
+Example (36-month term):
+  Phase 1: days  1–365  → discountPercentage = 30%
+  Phase 2: days 366–730 → discountPercentage = 20%
+  Phase 3: days 731+    → discountPercentage = 10%
+
+If today is day 1097 → Phase 3 applies (10% discount)</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 3 — Seat-Tier Resolution</div>
+          <p style="color:var(--color-text-muted);">When seat count changes cross a tier boundary (e.g., Tier 1 = 1–300 seats, Tier 2 = &gt;300 seats), ION must re-evaluate the applicable pricing tier. A move from 300 to 301 seats triggers a tier change and must apply Tier 2 pricing.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 4 — Buy Flow Gap</div>
+          <p style="color:var(--color-text-muted);">No entitlement exists at purchase time. Current recommendation: show MSRP + disclaimer. Resolve exact pricing post-entitlement creation. Downstream reconciliation path not yet documented.</p>
+        </div>
+
+        <h3 class="subsection-heading">API Methods Reference</h3>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>GET Customer + readMask</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>Retrieves the Google Customer object. <strong>Critical:</strong> <code>Customer.alternateEmail</code> is only returned if <code>readMask</code> explicitly includes it. Any code path calling GET Customer without <code>readMask</code> will silently receive no alternate email value.</p>
+            <div class="callout callout-red" style="margin-top:var(--space-3);">
+              <div class="callout-icon">🚨</div>
+              <div class="callout-body"><div class="callout-title">Silent Failure Risk</div><div class="callout-text">No error is thrown when readMask is missing — the field is just absent from the 200 response. This must be validated in every code path that reads this field.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>PATCH Customer</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>Updates <code>Customer.alternateEmail</code> for an existing customer. Used during the Transfer flow after the user enters a domain and clicks Continue. The popup title must change from "Link &amp; Transfer Confirmation" to "Transfer Confirmation" when this field is involved.</p>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>accounts.customers.entitlements.listEntitlementChanges</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <p>Returns the full chronological history of entitlement events as a JSON array. Key fields per change: <code>changeType</code>, <code>createTime</code>, <code>parameters</code> (contains <code>order_id</code>, <code>previous_num_units</code>, <code>num_units</code>), <code>offer</code>.</p>
+            <p style="margin-top:var(--space-3);">Open design decisions: polling frequency (on demand / nightly / event-driven) and storage format (raw JSON, normalized tables, or both) are not yet decided.</p>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="section-risks" class="section">
+        <div class="page-hero">
+          <p class="hero-eyebrow">Risk Register · April 2026</p>
+          <h1 class="hero-title">Risks &amp; Open Questions</h1>
+          <p class="hero-subtitle">Known risks, key dependencies, and the 14 unresolved questions that must be answered before any workstream can ship.</p>
+          <div class="hero-tags">
+            <span class="tag tag-red">3 High Risks</span>
+            <span class="tag tag-orange">4 Medium Risks</span>
+            <span class="tag tag-green">1 Low Risk</span>
+            <span class="tag tag-blue">14 Open Questions</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Risk Register</h2>
+        <div class="risk-grid">
+
+          <!-- HIGH -->
+          <div class="risk-card high">
+            <div class="risk-label">High</div>
+            <h3 class="risk-title">Price Book overwrite on every sync</h3>
+            <p class="risk-desc">If ION writes the master price book on each GCP sync cycle, reseller overrides are silently erased. No guard exists today.</p>
+          </div>
+
+          <div class="risk-card high">
+            <div class="risk-label">High</div>
+            <h3 class="risk-title">alternateEmail lost on PATCH</h3>
+            <p class="risk-desc">Any PATCH to Customer that omits <code>alternateEmail</code> in <code>readMask</code> will clear the field — breaking entitlement lookup silently downstream.</p>
+          </div>
+
+          <div class="risk-card high">
+            <div class="risk-label">High</div>
+            <h3 class="risk-title">Unique ID gap at transfer time</h3>
+            <p class="risk-desc">When a subscription transfers from Direct to Reseller, the entitlement ID changes. ION has no reconciliation step — billing continuity breaks for that seat window.</p>
+          </div>
+
+          <!-- MEDIUM -->
+          <div class="risk-card medium">
+            <div class="risk-label">Medium</div>
+            <h3 class="risk-title">listEntitlementChanges pagination not implemented</h3>
+            <p class="risk-desc">The API returns a <code>nextPageToken</code> for large result sets. ION currently ignores it — change events beyond page 1 are silently dropped.</p>
+          </div>
+
+          <div class="risk-card medium">
+            <div class="risk-label">Medium</div>
+            <h3 class="risk-title">discountType ambiguity (PERCENTAGE vs AMOUNT)</h3>
+            <p class="risk-desc">ION passes <code>discountPercentage</code> regardless of <code>discountType</code>. If Google returns <code>AMOUNT</code>-type discounts, the stored value is misinterpreted.</p>
+          </div>
+
+          <div class="risk-card medium">
+            <div class="risk-label">Medium</div>
+            <h3 class="risk-title">Buy flow bypasses reseller price book</h3>
+            <p class="risk-desc">Customers who self-provision via Google's native buy flow see Google list price, not reseller pricing. No mechanism exists to intercept or correct this post-purchase.</p>
+          </div>
+
+          <div class="risk-card medium">
+            <div class="risk-label">Medium</div>
+            <h3 class="risk-title">Billing end date formula edge cases</h3>
+            <p class="risk-desc">The <code>COMMITMENT_CANCEL_ITEM</code> billing end date formula (<em>start + committed months − 1 day</em>) has not been validated against partial-month commitments or mid-cycle seat changes.</p>
+          </div>
+
+          <!-- LOW -->
+          <div class="risk-card low">
+            <div class="risk-label">Low</div>
+            <h3 class="risk-title">Marketplace link button UX regression</h3>
+            <p class="risk-desc">Removing the Marketplace link button (WS6) may confuse admins who bookmarked that navigation path. Low risk because the button links out of ION entirely — removal is straightforward.</p>
+          </div>
+
+        </div><!-- /.risk-grid -->
+
+        <h2 class="section-heading">Key Dependencies</h2>
+        <div class="callout callout-orange" style="margin-bottom:var(--space-6)">
+          <div class="callout-icon">⚠️</div>
+          <div class="callout-body">
+            <p class="callout-title">All workstreams block on these dependencies</p>
+            <p class="callout-text">Until the items below are resolved or confirmed, no workstream can be considered unblocked for development. Review in every sprint planning session.</p>
+          </div>
+        </div>
+        <ul class="styled">
+          <li><strong>Google Cloud Channel API access</strong> — Production credentials and quota limits must be confirmed with Google TAM before WS2 and WS5 can be fully tested.</li>
+          <li><strong>Apptium schema approval</strong> — The Price Book Refactor (WS1) requires schema sign-off from the Apptium engineering team (Srilatha / Varun) before any migration script is written.</li>
+          <li><strong>EU Ops runbook update</strong> — WS3 (Alternate Email Restore) requires the EU Operations team to update their provisioning runbook so the field is set on every new customer record.</li>
+          <li><strong>ADO story grooming</strong> — Stories 959443 and 959440 need acceptance criteria finalized in ADO before dev can start; BRD/FRD drafts are still open (DRI: Brian Young).</li>
+          <li><strong>Rick Kapani API spec review</strong> — WS5 (listEntitlementChanges) implementation details are pending Rick's review of the proposed polling interval and field mapping.</li>
+        </ul>
+
+        <h2 class="section-heading">14 Open Questions</h2>
+
+        <!-- Q1–4: Price Book Architecture -->
+        <div class="expand-block">
+          <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
+            <span>Q1–4 · Price Book Architecture</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <ol start="1">
+              <li>
+                <strong>Should master and reseller price books live in the same DB table with a discriminator column, or in separate tables?</strong><br>
+                <em>Context:</em> Separate tables make the sync overwrite problem impossible by design; a single table with a flag is simpler to query but requires careful write guards.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>Who is the authoritative owner of the reseller price book — ION or a human operator?</strong><br>
+                <em>Context:</em> If ION owns it, we need a UI for reseller margin entry. If a human operator owns it, we need a protected write path that the sync job cannot touch.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>What is the expected cadence of GCP price sync, and can ION batch-defer reseller recalculation until after the sync window?</strong><br>
+                <em>Context:</em> If sync happens nightly, we can run a post-sync reseller reconciliation job. If sync is real-time, we need row-level locking or an event-driven approach.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>Do pricePhases arrays ever contain more than one phase in practice for GWS SKUs?</strong><br>
+                <em>Context:</em> The API supports multi-phase pricing, but if GWS SKUs always return a single phase, we can simplify the data model significantly.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Q5–6: Unique ID Modeling -->
+        <div class="expand-block">
+          <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
+            <span>Q5–6 · Unique ID Modeling</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <ol start="5">
+              <li>
+                <strong>Should ION store a mapping table of old entitlement ID → new entitlement ID to handle transfer reconciliation, or rely on the customer's alternateEmail as the durable key?</strong><br>
+                <em>Context:</em> The entitlement ID changes on transfer but the customer domain (via alternateEmail) does not. A mapping table adds complexity; using alternateEmail as the key requires it to be reliably present.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>Is there a Google API event or webhook that fires when an entitlement transfers, or must ION poll and detect the ID change?</strong><br>
+                <em>Context:</em> If a transfer event exists in listEntitlementChanges, WS5 can handle this passively. If not, WS2 needs active polling logic with a diff algorithm.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Q7–9: Alternate Email -->
+        <div class="expand-block">
+          <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
+            <span>Q7–9 · Alternate Email</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <ol start="7">
+              <li>
+                <strong>In the Transfer flow, does the Google API preserve the existing alternateEmail from the previous reseller, or is it cleared and must be re-set by ION?</strong><br>
+                <em>Context:</em> If Google clears it, ION must set it as the first call after confirming a transfer — any delay means a window where entitlement lookup fails.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>For the "Outside Marketplace" flow (customer exists in Google but not in ION), how does the operator discover the customer's domain to populate alternateEmail?</strong><br>
+                <em>Context:</em> This is a pure UX/ops question. The answer drives the design of the manual entry screen in the ION portal.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>Is alternateEmail validated by Google (format check, MX record, domain ownership) or accepted as any string?</strong><br>
+                <em>Context:</em> If Google validates it, ION must surface API errors meaningfully. If not, ION needs its own validation to prevent garbage data from being stored.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Q10–11: Cancel / Billing -->
+        <div class="expand-block">
+          <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
+            <span>Q10–11 · Cancel / Billing</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <ol start="10">
+              <li>
+                <strong>Has the billing end date formula (<em>commitment start + committed months − 1 day</em>) been validated against Google's own cancellation invoice for a real GWS subscription?</strong><br>
+                <em>Context:</em> If there's a discrepancy, ION will overbill or underbill for the commitment window. This needs a real test transaction, not just a formula review.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>What is the correct credit calculation when a customer cancels mid-commitment and has already been invoiced for the full commitment period?</strong><br>
+                <em>Context:</em> The spec mentions a credit, but the formula for proration (daily rate × remaining days vs. monthly chunks) has not been specified.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Q12–14: Entitlement Tracking -->
+        <div class="expand-block">
+          <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
+            <span>Q12–14 · Entitlement Tracking</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <ol start="12">
+              <li>
+                <strong>What is the recommended polling interval for listEntitlementChanges — and does Google impose a rate limit that would constrain a near-real-time implementation?</strong><br>
+                <em>Context:</em> Rick Kapani is the DRI for this answer. The polling interval directly determines the maximum delay between a seat change and ION's billing update.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>Should ION store the raw listEntitlementChanges payload for audit purposes, or only the derived delta (seats before → seats after)?</strong><br>
+                <em>Context:</em> Storing the raw payload enables full replay but adds storage cost. Storing only the delta is leaner but loses context if the interpretation logic changes later.
+              </li>
+              <li style="margin-top:var(--space-4)">
+                <strong>Is there a defined SLA between a seat change event and when ION must reflect it in billing — and does that SLA differ for increases vs. decreases?</strong><br>
+                <em>Context:</em> Seat increases that are billed late undercharge the customer; seat decreases that are billed late overcharge them. The risk profile differs, and the SLA may need to differ too.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="section-questions" class="section">
+        <div class="page-hero">
+          <p class="hero-eyebrow">Deep Questions · April 2026</p>
+          <h1 class="hero-title">Questions for Deeper Learning</h1>
+          <p class="hero-subtitle">These aren't quiz questions — they're designed to build genuine intuition. Write your answers, even rough ones.</p>
+          <div class="hero-tags">
+            <span class="tag tag-blue">8 Reflection Questions</span>
+            <span class="tag tag-purple">Add Your Own</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Questions to Ask Yourself for Deeper Learning</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6);">These aren't quiz questions — they're designed to build genuine intuition. Write your answers, even rough ones.</p>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">1</span>Why can't ION simply copy the Price Book model it uses for other vendors and apply it to GWS?</div>
+          <div class="reflection-hint">Think about what makes GWS pricing different: entitlements, price phases, seat tiers, reseller isolation requirements.</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">2</span>If you were Brian Young, how would you explain the "Unique ID" concept to a skeptical engineer who says "we can just use the product SKU"?</div>
+          <div class="reflection-hint">The SKU doesn't capture entitlement context, price phases, or customer-specific discounts. How is the Unique ID different?</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">3</span>Srilatha suggested grouping by <code>discountType</code>. Brian insists on <code>discountPercentage</code>. Both have valid reasons. Who do you think is right, and why?</div>
+          <div class="reflection-hint">Consider: What does a user actually need to do when bulk-adjusting prices? What problems arise with each approach?</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">4</span>The <code>readMask</code> omission is called a "silent data-loss risk." Why is silent failure potentially more dangerous than an explicit error?</div>
+          <div class="reflection-hint">Think about how engineers typically debug issues. What makes silent failures harder to detect and trace?</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">5</span>Epic 891299 (Period Phase Changes) is on hold because 959022 hasn't cleared UAT. What does this tell you about how dependencies cascade in large software delivery projects?</div>
+          <div class="reflection-hint">Think about critical path, dependency chains, and the compounding effect of one blocked item on adjacent work.</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">6</span>The document shows Brian pasting full BRD text directly into an email (April 23) to bypass SharePoint friction. What does this tell you about the relationship between process and actual work getting done?</div>
+          <div class="reflection-hint">What friction in collaboration processes leads to workarounds like this?</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">7</span>The "buy flow gap" is a chicken-and-egg problem: you need an entitlement to price correctly, but an entitlement doesn't exist until after purchase. What other software systems have you seen with a similar pre/post state problem?</div>
+          <div class="reflection-hint">Think about payment processing, reservation systems, or workflows where the record is created after the action is committed.</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">8</span>What single question, if answered, would unblock the most downstream work? How would you justify that prioritization to stakeholders?</div>
+          <div class="reflection-hint">Review the dependencies table. Which open question, when resolved, removes the most blockers at once?</div>
+          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+        </div>
+
+        <div style="margin-top:var(--space-8);">
+          <h3 class="subsection-heading" style="margin-top:0;">➕ Add Your Own Questions</h3>
+          <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);font-size:var(--text-sm);">Capture questions as they arise during meetings or review. Added questions stay for this session.</p>
+          <div class="card" style="margin-bottom:var(--space-5);">
+            <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+              <div>
+                <label style="font-size:var(--text-sm);font-weight:600;color:var(--color-text);display:block;margin-bottom:var(--space-2);">Your question <span style="color:var(--color-error);">*</span></label>
+                <input type="text" id="new-q-text" placeholder="e.g. What happens to entitlement pricing during a mid-term seat upgrade?" style="width:100%;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-family:var(--font-body);font-size:var(--text-sm);color:var(--color-text);outline:none;transition:border-color var(--transition);box-sizing:border-box;" onfocus="this.style.borderColor='var(--color-primary)'" onblur="this.style.borderColor='var(--color-border)'" />
+              </div>
+              <div>
+                <label style="font-size:var(--text-sm);font-weight:600;color:var(--color-text);display:block;margin-bottom:var(--space-2);">Hint / context <span style="color:var(--color-text-faint);font-weight:400;">(optional)</span></label>
+                <input type="text" id="new-q-hint" placeholder="Which section or concept does this relate to?" style="width:100%;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-family:var(--font-body);font-size:var(--text-sm);color:var(--color-text);outline:none;transition:border-color var(--transition);box-sizing:border-box;" onfocus="this.style.borderColor='var(--color-primary)'" onblur="this.style.borderColor='var(--color-border)'" />
+              </div>
+              <div style="display:flex;align-items:center;gap:var(--space-3);">
+                <button onclick="addCustomQuestion()" style="background:var(--color-primary);color:white;border:none;border-radius:var(--radius-lg);padding:var(--space-2) var(--space-6);font-family:var(--font-body);font-size:var(--text-sm);font-weight:600;cursor:pointer;" onmouseover="this.style.background='var(--color-primary-hover)'" onmouseout="this.style.background='var(--color-primary)'">Add Question</button>
+                <span id="add-q-feedback" style="font-size:var(--text-sm);color:var(--color-success);opacity:0;transition:opacity 0.3s;">✓ Question added!</span>
+              </div>
+            </div>
+          </div>
+          <div id="custom-questions-list" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
+        </div>
+      </section>
+
+      <section id="section-stories" class="section">
+        <div class="page-hero">
+          <p class="hero-eyebrow">Story Tracker · April 2026</p>
+          <h1 class="hero-title">Story Tracker</h1>
+          <p class="hero-subtitle">Click any card to expand full details, acceptance criteria, and people involved.</p>
+          <div class="hero-tags">
+            <span class="tag tag-blue">3 Stories</span>
+            <span class="tag tag-orange">1 BRD</span>
+            <span class="tag tag-green">2 FRD</span>
+            <span class="tag tag-purple">DRI: B. Young</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Story Tracker</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-5);">Click any card to expand full details, acceptance criteria, and people involved.</p>
+
+        <div class="stories-summary-bar">
+          <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">Stories</div></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">BRD</div></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">FRD</div></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">In Progress</div></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Blocked</div></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><div class="stat-num">B. Young</div><div class="stat-lbl">DRI</div></div>
+        </div>
+
+        <div class="story-filter-row">
+          <span style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Filter:</span>
+          <button class="story-filter-btn active" onclick="filterStories('all',this)">All Stories</button>
+          <button class="story-filter-btn" onclick="filterStories('brd',this)">BRD</button>
+          <button class="story-filter-btn" onclick="filterStories('frd',this)">FRD</button>
+          <button class="story-filter-btn" onclick="filterStories('pricebook',this)">Price Book</button>
+          <button class="story-filter-btn" onclick="filterStories('billing',this)">Billing</button>
+          <button class="story-filter-btn" onclick="filterStories('ux',this)">UX / Buy Flow</button>
+        </div>
+
+        <div class="story-list" id="story-list">
+
+          <div class="story-card" id="story-card-s1" data-tags="brd pricebook" onclick="toggleStory('s1')">
+            <div class="story-card-header">
+              <span class="story-type-badge badge-brd">BRD</span>
+              <div class="story-card-meta">
+                <div class="story-card-id">#959113 / #959111 · GWS-story-1</div>
+                <div class="story-card-title">Differentiate End Customer Pricing — Stabilize Price Book</div>
+                <div class="story-card-tags"><span class="story-tag">Price Book</span><span class="story-tag">Unique ID</span><span class="story-tag">SSIM</span><span class="story-tag">All Regions</span></div>
+              </div>
+              <div class="story-card-right">
+                <span class="ws-status status-progress" style="margin:0;">⏳ In Progress</span>
+                <a href="https://dev.azure.com/techdatacorp/NextGen%20Cloud/_workitems/edit/959113" target="_blank" rel="noopener" class="story-external-link" onclick="event.stopPropagation()">↗ ADO 959113</a>
+                <span class="story-chevron">▼</span>
+              </div>
+            </div>
+            <div class="story-detail-panel">
+              <div class="story-detail-grid">
+                <div class="story-detail-field"><div class="story-detail-label">Doc Type</div><div class="story-detail-value">Business Requirements Document (BRD)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Doc Version</div><div class="story-detail-value">v3.0 — Rework after TPM meeting (24 Apr 2026)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value">⏳ In Progress — Awaiting feasibility sign-off</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Modules</div><div class="story-detail-value">Price Book, Price Book Updater, Vendor Import Job, SSIM</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Regions</div><div class="story-detail-value">All</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Linked Items</div><div class="story-detail-value"><a href="https://dev.azure.com/techdatacorp/NextGen%20Cloud/_workitems/edit/959111" target="_blank" rel="noopener">#959111 SSIM price showing zero</a></div></div>
+              </div>
+              <div class="story-section-label">People Involved</div>
+              <div class="people-chips">
+                <div class="person-chip"><div class="avatar">BY</div><div><div>Brian Young</div><div class="role-label">TD SYNNEX · Author / DRI</div></div></div>
+                <div class="person-chip"><div class="avatar">SP</div><div><div>Srilatha Peyyala</div><div class="role-label">Apptium · Managing Architect</div></div></div>
+                <div class="person-chip"><div class="avatar">VP</div><div><div>Varun Pant</div><div class="role-label">Apptium · CC</div></div></div>
+                <div class="person-chip"><div class="avatar">XM</div><div><div>Xavier Martorell</div><div class="role-label">TD SYNNEX · CC</div></div></div>
+                <div class="person-chip"><div class="avatar">FM</div><div><div>Federico M.</div><div class="role-label">TD SYNNEX · EU Ops</div></div></div>
+                <div class="person-chip"><div class="avatar">GE</div><div><div>Geo</div><div class="role-label">TD SYNNEX · EU Ops</div></div></div>
+              </div>
+              <div class="story-section-label">Summary</div>
+              <div class="story-body-text">
+                <p>Google now uses the same Offer ID for multiple end customers, but each customer can have different <code>pricePhases</code> and different prices. The current ION Price Book can't distinguish between these customers — when SSIM looks up pricing it either returns <code>0</code> or overwrites data incorrectly.</p>
+                <p>This BRD proposes introducing a <strong>Unique Identifier</strong> at the entitlement level to allow accurate per-customer, per-phase pricing with <strong>day-level granularity</strong>. A Master Price Book (ISV) and a filtered Reseller Price Book would be provided. Key constraint: SKU must remain clearly identifiable by the user alongside any new Unique ID fields.</p>
+              </div>
+              <div class="story-section-label">Business Justification</div>
+              <div class="story-body-text">
+                <p>Offer IDs for RABF and standard offers are used across multiple partners and end-customers with varying costs — ION cannot correctly identify the current price for existing subscriptions. The most manual task for TD Synnex Operations is the Price Book price adjust / assignment, which this change directly reduces.</p>
+              </div>
+              <div class="story-section-label">Open Design Questions (from Apr 26–28 email)</div>
+              <div class="story-body-text">
+                <ul>
+                  <li><strong>Filtering:</strong> Should offer+entitlement entries for other partners be hidden/filtered on load? Needs SME feasibility discussion.</li>
+                  <li><strong>Grouping key:</strong> Srilatha proposes <code>discountType</code>; Brian requires visible <code>discountPercentage</code> (e.g., <code>.15</code>) for bulk adjustments. Hybrid approach not yet decided.</li>
+                  <li><strong>Auto-inheritance:</strong> New Unique IDs added later with matching <code>discountPercentage</code> must automatically inherit the existing price adjustment.</li>
+                </ul>
+              </div>
+              <div class="story-section-label">Acceptance Criteria</div>
+              <div class="ac-item">Identification of discountPercentage and easy Price Book price adjustment for each discount value</div>
+              <div class="ac-item">In same calendar month, platform tracks end customer subscription from start date through each pricePhase with day granularity</div>
+              <div class="ac-item">For a given end customer subscription in a given country, correct SSIM price and SaaS report line items for ISV and Reseller Customer Cost</div>
+              <div class="story-section-label">Document Revision History</div>
+              <div class="story-version-history">
+                <div class="story-version-row header"><span>Ver</span><span>Notes</span><span>By</span><span>Date</span></div>
+                <div class="story-version-row"><span>1.0</span><span>Draft Light</span><span>B. Young</span><span>16 Apr 2026</span></div>
+                <div class="story-version-row"><span>2.0</span><span>After meeting with EU Ops</span><span>B. Young</span><span>21 Apr 2026</span></div>
+                <div class="story-version-row"><span>3.0</span><span>Rework after TPM meeting</span><span>B. Young</span><span>24 Apr 2026</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="story-card" id="story-card-s2" data-tags="frd ux" onclick="toggleStory('s2')">
+            <div class="story-card-header">
+              <span class="story-type-badge badge-frd">FRD</span>
+              <div class="story-card-meta">
+                <div class="story-card-id">#959443 · GWS-story-2</div>
+                <div class="story-card-title">Customer Creation / Marketplace Alternate Email</div>
+                <div class="story-card-tags"><span class="story-tag">Buy Flow</span><span class="story-tag">UX</span><span class="story-tag">Customer Creation</span><span class="story-tag">GWS/CI/CE</span></div>
+              </div>
+              <div class="story-card-right">
+                <span class="ws-status status-progress" style="margin:0;">⏳ Awaiting Intake</span>
+                <span class="story-chevron">▼</span>
+              </div>
+            </div>
+            <div class="story-detail-panel">
+              <div class="story-detail-grid">
+                <div class="story-detail-field"><div class="story-detail-label">Doc Type</div><div class="story-detail-value">Functional Requirements Document (FRD)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Doc Version</div><div class="story-detail-value">v4.0 — BRD Light (17 Apr 2026)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value">⏳ Awaiting intake</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Trigger</div><div class="story-detail-value">Blocker from EU Google Champion team meeting (09 Mar 2026)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Modules</div><div class="story-detail-value">Cart, Order, Subscription — Admin Console, WLSF</div></div>
+              </div>
+              <div class="story-section-label">People Involved</div>
+              <div class="people-chips">
+                <div class="person-chip"><div class="avatar">BY</div><div><div>Brian Young</div><div class="role-label">TD SYNNEX · Author / DRI</div></div></div>
+                <div class="person-chip"><div class="avatar">SP</div><div><div>Srilatha Peyyala</div><div class="role-label">Apptium · Managing Architect</div></div></div>
+                <div class="person-chip"><div class="avatar">SO</div><div><div>Stephen O'Brien</div><div class="role-label">Apptium · PM</div></div></div>
+                <div class="person-chip"><div class="avatar">RK</div><div><div>Rahul Kumar Vishwakarma</div><div class="role-label">Apptium · Engineering</div></div></div>
+                <div class="person-chip"><div class="avatar">VE</div><div><div>Vincent Eynard</div><div class="role-label">TD SYNNEX EU · Reporter</div></div></div>
+              </div>
+              <div class="story-section-label">Summary</div>
+              <div class="story-body-text">
+                <p>The <code>alternateEmail</code> field was <strong>removed</strong> from the buy flow when Feature 755664 (Buy Flow Redesign) shipped on 23 Jan 2026. MSPs need this field to direct Welcome Emails to their own domain instead of the end customer's domain.</p>
+                <p>Currently ION incorrectly maps the ION Customer Contact Email to <code>Customer.alternateEmail</code>, causing two issues: (1) end customers receive the Welcome email instead of resellers, and (2) the unique email constraint blocks MSPs from reusing a single reseller email across multiple customer registrations.</p>
+              </div>
+              <div class="story-section-label">Key Functional Requirements</div>
+              <div class="story-body-text">
+                <ul>
+                  <li><strong>Register flow:</strong> Mandatory <code>alternateEmail</code> field with pre-population if known; user must use Cancel or Confirm to exit</li>
+                  <li><strong>Transfer flow:</strong> Same field; title renamed from "Link &amp; Transfer Confirmation" to "Transfer Confirmation"</li>
+                  <li><strong>Cloud Providers section:</strong> View / Edit / Discard / Update for <code>alternateEmail</code> at any time outside buy flow</li>
+                  <li><strong>Link button:</strong> Remove from Marketplace Plans UI entirely</li>
+                  <li><strong>readMask:</strong> Must be included in GET Customer calls to surface <code>alternateEmail</code></li>
+                </ul>
+              </div>
+              <div class="story-section-label">Acceptance Criteria</div>
+              <div class="ac-item">Alternate Email is a mandatory field — user cannot proceed without entering a value</div>
+              <div class="ac-item">User can only exit edit state via Confirm/Update or Cancel/Discard — clicking away is blocked</div>
+              <div class="ac-item">System pre-populates Alternate Email when an existing value is known for the customer</div>
+              <div class="ac-item">Google Welcome email is received at the entered Alternate Email address upon successful provisioning</div>
+              <div class="ac-item">User can view, edit, and persist Alternate Email from the Cloud Providers section at any time</div>
+              <div class="story-section-label">Document Revision History</div>
+              <div class="story-version-history">
+                <div class="story-version-row header"><span>Ver</span><span>Notes</span><span>By</span><span>Date</span></div>
+                <div class="story-version-row"><span>1.0</span><span>Draft</span><span>B. Young</span><span>06 Apr 2026</span></div>
+                <div class="story-version-row"><span>2.0</span><span>Pre Intake Feedback</span><span>B. Young</span><span>10 Apr 2026</span></div>
+                <div class="story-version-row"><span>3.0</span><span>Based on Final Feedback</span><span>B. Young</span><span>14 Apr 2026</span></div>
+                <div class="story-version-row"><span>4.0</span><span>BRD Light</span><span>B. Young</span><span>17 Apr 2026</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="story-card" id="story-card-s3" data-tags="frd billing" onclick="toggleStory('s3')">
+            <div class="story-card-header">
+              <span class="story-type-badge badge-frd">FRD</span>
+              <div class="story-card-meta">
+                <div class="story-card-id">#959440 · GWS-story-3</div>
+                <div class="story-card-title">Cancel Line — Billing End Date &amp; COMMITMENT_CANCEL_ITEM Fix</div>
+                <div class="story-card-tags"><span class="story-tag">SaaS Report</span><span class="story-tag">Billing</span><span class="story-tag">BigQuery</span><span class="story-tag">All Regions</span></div>
+              </div>
+              <div class="story-card-right">
+                <span class="ws-status status-progress" style="margin:0;">⏳ In Progress (AWG)</span>
+                <a href="https://dev.azure.com/techdatacorp/NextGen%20Cloud/_workitems/edit/959440" target="_blank" rel="noopener" class="story-external-link" onclick="event.stopPropagation()">↗ ADO 959440</a>
+                <span class="story-chevron">▼</span>
+              </div>
+            </div>
+            <div class="story-detail-panel">
+              <div class="story-detail-grid">
+                <div class="story-detail-field"><div class="story-detail-label">Doc Type</div><div class="story-detail-value">Functional Requirements Document (FRD)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Doc Version</div><div class="story-detail-value">v2.0 — Logic update (20 Apr 2026)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value">⏳ In Progress — AWG assigned</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Testing Env</div><div class="story-detail-value">NearProd only — Shadow cannot be used</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Data Source</div><div class="story-detail-value">Google Workspace BigQuery import job (required)</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Modules</div><div class="story-detail-value">SaaS Report rating engine</div></div>
+              </div>
+              <div class="story-section-label">People Involved</div>
+              <div class="people-chips">
+                <div class="person-chip"><div class="avatar">BY</div><div><div>Brian Young</div><div class="role-label">TD SYNNEX · Author / DRI</div></div></div>
+                <div class="person-chip"><div class="avatar">SP</div><div><div>Srilatha Peyyala</div><div class="role-label">Apptium · Managing Architect</div></div></div>
+              </div>
+              <div class="story-section-label">Summary</div>
+              <div class="story-body-text">
+                <p>When a GWS subscription on an annual commitment plan is cancelled mid-term, the SaaS Report creates a <code>COMMITMENT_CANCEL_ITEM</code> line. The existing rating engine incorrectly calculates <code>Customer Cost</code> — resellers are not receiving the correct credit amount.</p>
+                <p>Two compounding bugs: (1) BigQuery provides an incorrect billing end date for cancels, and (2) the rating logic used for <code>TERM_START</code> / <code>SEATS</code> usage types does not apply correctly to cancel lines.</p>
+              </div>
+              <div class="story-section-label">The Fix — Formula</div>
+              <div class="story-body-text">
+                <ul>
+                  <li><em>Discount Factor</em> = 1 − Price Adjust Value</li>
+                  <li><strong>Customer Cost = Seller Cost ÷ Discount Factor</strong></li>
+                  <li>Example: −493.4 ÷ (1 + (−29.167 ÷ 100)) = <strong>−697.78</strong> (correct credit)</li>
+                </ul>
+                <p style="margin-top:var(--space-3);">Known test cases: Spain (Sep, Dec 2025), UK (Oct, Dec 2025), France (Sep, Nov 2025).</p>
+              </div>
+              <div class="story-section-label">Acceptance Criteria</div>
+              <div class="ac-item">SaaS line items with charge type COMMITMENT_CANCEL_ITEM use the defined formula to calculate Customer Cost</div>
+              <div class="ac-item">Calculated Customer Cost matches expected result from formula with no rounding or proration errors</div>
+              <div class="ac-item">Customer Cost reflects correct credit at both ISV and Reseller level for cancelled subscriptions</div>
+              <div class="story-section-label">Document Revision History</div>
+              <div class="story-version-history">
+                <div class="story-version-row header"><span>Ver</span><span>Notes</span><span>By</span><span>Date</span></div>
+                <div class="story-version-row"><span>1.0</span><span>Draft</span><span>B. Young</span><span>15 Apr 2026</span></div>
+                <div class="story-version-row"><span>2.0</span><span>Logic update</span><span>B. Young</span><span>20 Apr 2026</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end story-list -->
+      </section>
+
+      <section id="section-study" class="section">
+        <div class="page-hero">
+          <p class="hero-eyebrow">Study Guide · April 2026</p>
+          <h1 class="hero-title">Study Guide</h1>
+          <p class="hero-subtitle">Track your readiness, test your understanding, and build a durable mental model of the GWS onboarding project.</p>
+          <div class="hero-tags">
+            <span class="tag tag-green">12 Checkpoints</span>
+            <span class="tag tag-blue">5-Question Quiz</span>
+            <span class="tag tag-orange">6 Study Tips</span>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Interactive Study Guide</h2>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon icon-green">✅</div>
+            <div>
+              <div class="card-title">Learning Checkpoints</div>
+              <div class="card-subtitle">Track your progress through the material</div>
+            </div>
+          </div>
+          <div class="progress-section">
+            <div class="progress-header">
+              <span class="progress-label">Overall Progress</span>
+              <span class="progress-count" id="progress-label-main">0 of 12</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="progress-bar-main" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="phase-label">Phase 1 — Foundation</div>
+          <div class="checkpoint-list">
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I can explain what the Apptium/ION platform does and why GWS is being onboarded into it</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I understand what a "Price Book" is and why the existing one can't handle GWS without refactoring</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I can name the two key stakeholder organizations and the primary person from each</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I understand why <code>Customer.alternateEmail</code> matters and what happens when it's missing</div>
+            </div>
+          </div>
+
+          <div class="phase-label">Phase 2 — Core Technical Concepts</div>
+          <div class="checkpoint-list">
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I can explain what a GWS "entitlement" is and why it's the source of truth for pricing</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I can explain price phases and how ION determines which phase is active on a given day</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I understand the cancellation billing formula and why <code>createTime</code> selection matters</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I know the three Google API methods used and what each is responsible for</div>
+            </div>
+          </div>
+
+          <div class="phase-label">Phase 3 — Risks &amp; Open Questions</div>
+          <div class="checkpoint-list">
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I can describe the "reseller data isolation" architectural risk and why it's hard to solve</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I understand the <code>discountPercentage</code> vs. <code>discountType</code> dispute and the consequences of the wrong decision</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I can name the top 3 blockers preventing delivery progress right now</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">I've worked through at least 3 of the 8 deep reflection questions in the Questions section</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-heading">Quick-Check Quiz</h3>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);">Test your understanding. No scores saved — this is for your own insight.</p>
+
+        <div class="quiz-card" id="q1">
+          <div class="quiz-q">1. ION is generating the wrong billing credit for a cancelled annual GWS commitment. The most likely cause is:</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">A</div>The wrong SKU name was used in the Price Book</div>
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,true)"><div class="opt-letter">B</div>ION is using BigQuery's end-date value instead of calculating createTime + 1 year itself</div>
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">C</div>The readMask parameter was omitted from the GET Customer call</div>
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">D</div>The reseller Price Book is showing admin-only fields</div>
+          </div>
+          <div class="quiz-feedback" id="q1-feedback"></div>
+        </div>
+
+        <div class="quiz-card" id="q2">
+          <div class="quiz-q">2. A reseller reports they can see another company's discount percentages in their Price Book view. This is most directly caused by:</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">A</div>A bug in the listEntitlementChanges API call</div>
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">B</div>The Customer.alternateEmail field not being persisted in ION DB</div>
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,true)"><div class="opt-letter">C</div>Price Books are currently partner-agnostic with no per-reseller filtering mechanism</div>
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">D</div>The Marketplace Link button is routing to the wrong customer context</div>
+          </div>
+          <div class="quiz-feedback" id="q2-feedback"></div>
+        </div>
+
+        <div class="quiz-card" id="q3">
+          <div class="quiz-q">3. During a GWS purchase, the Price Book cannot show entitlement-based pricing. The recommended approach is:</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">A</div>Block the purchase until an entitlement ID is pre-generated</div>
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">B</div>Use the previous customer's pricing as a fallback</div>
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,true)"><div class="opt-letter">C</div>Show MSRP + a disclaimer; resolve exact entitlement-based pricing after purchase</div>
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">D</div>Use the discountType grouping to estimate the nearest applicable price</div>
+          </div>
+          <div class="quiz-feedback" id="q3-feedback"></div>
+        </div>
+
+        <div class="quiz-card" id="q4">
+          <div class="quiz-q">4. Why is the readMask omission considered a "silent" risk?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">A</div>It triggers a 500 error that is logged but not surfaced to the UI</div>
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,true)"><div class="opt-letter">B</div>The API returns a 200 success but simply omits the field — no error is raised</div>
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">C</div>It causes the entire GET Customer response to return null</div>
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">D</div>It only affects the Register flow, not Transfer or Cloud Providers</div>
+          </div>
+          <div class="quiz-feedback" id="q4-feedback"></div>
+        </div>
+
+        <div class="quiz-card" id="q5">
+          <div class="quiz-q">5. A subscription was created on Jan 1. Phase 1 covers days 1–365 at 30% discount. Phase 2 covers days 366–730 at 20% discount. Today is day 400. Which phase applies?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">A</div>Phase 1 — because the subscription is still in its first year by calendar month</div>
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,true)"><div class="opt-letter">B</div>Phase 2 — day 400 exceeds the 365-day firstPeriod of Phase 1</div>
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">C</div>Phase 1 — BigQuery determines the active phase, not ION</div>
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">D</div>Neither — a proration blending both phases must be applied</div>
+          </div>
+          <div class="quiz-feedback" id="q5-feedback"></div>
+        </div>
+
+        <h3 class="subsection-heading" style="margin-top:var(--space-8);">How to Use This Document Over Time</h3>
+        <div class="card">
+          <div class="how-step">
+            <div class="how-num">1</div>
+            <div class="how-body">
+              <div class="how-title">Start with Overview, then Concepts</div>
+              <div class="how-desc">Read the Overview first to understand the goal and cast of characters. Then expand every block in Concepts. Each concept directly underpins the workstreams.</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">2</div>
+            <div class="how-body">
+              <div class="how-title">Use Workstreams as a Reference Map</div>
+              <div class="how-desc">When someone mentions a feature number (e.g., 959113), jump to Workstreams and expand that card. It gives you the full objective, requirements, and constraints in one place.</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">3</div>
+            <div class="how-body">
+              <div class="how-title">Keep Technical Open During API Discussions</div>
+              <div class="how-desc">In meetings involving billing logic, pricing formulas, or API calls, keep the Technical section open. The Key Fields table and formula boxes are quick lookups.</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">4</div>
+            <div class="how-body">
+              <div class="how-title">Revisit Risks When a Decision Is Made</div>
+              <div class="how-desc">Each time one of the 14 open questions gets resolved, re-read the Risks section. Some risks reduce; others may surface new concerns.</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">5</div>
+            <div class="how-body">
+              <div class="how-title">Use Questions for Meeting Prep</div>
+              <div class="how-desc">Before any stakeholder meeting, skim the 8 reflection questions. They help you move from "what happened" thinking to "why does this matter" thinking.</div>
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">6</div>
+            <div class="how-body">
+              <div class="how-title">Use Checkpoints to Gauge Readiness</div>
+              <div class="how-desc">Before attending a technical review or contributing to a BRD discussion, run through the 12 checkpoints. If you can't honestly check one, return to that section before the meeting.</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div><!-- /.content-area -->
+
+  </main><!-- /.main-layout -->
+
+  <script>
+    // ===== THEME TOGGLE =====
+    (function(){
+      const t=document.querySelector('[data-theme-toggle]');
+      const r=document.documentElement;
+      let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+      r.setAttribute('data-theme',d);
+      const sun='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+      const moon='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      if(t){t.innerHTML=d==='dark'?sun:moon;t.setAttribute('aria-label','Switch to '+(d==='dark'?'light':'dark')+' mode');t.addEventListener('click',()=>{d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);t.innerHTML=d==='dark'?sun:moon;t.setAttribute('aria-label','Switch to '+(d==='dark'?'light':'dark')+' mode');});}
+    })();
+
+    // ===== NAVIGATION =====
+    function showSection(id,btn,fromSidebar){
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.getElementById('section-'+id).classList.add('active');
+      document.querySelectorAll('.header-nav .nav-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.sidebar-link').forEach(b=>b.classList.remove('active'));
+      const map={overview:0,concepts:1,workstreams:2,technical:3,risks:4,questions:5,stories:6,study:7};
+      if(fromSidebar){
+        if(btn)btn.classList.add('active');
+        const nb=document.querySelectorAll('.header-nav .nav-btn');
+        if(map[id]!==undefined)nb[map[id]].classList.add('active');
+      } else {
+        if(btn)btn.classList.add('active');
+        const sb=document.querySelectorAll('.sidebar-link');
+        if(map[id]!==undefined)sb[map[id]].classList.add('active');
+      }
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    // ===== EXPAND BLOCKS =====
+    function toggleExpand(trigger){
+      const expanded=trigger.getAttribute('aria-expanded')==='true';
+      trigger.setAttribute('aria-expanded',String(!expanded));
+      trigger.nextElementSibling.classList.toggle('open',!expanded);
+    }
+
+    // ===== WORKSTREAM PANELS =====
+    function expandWS(id){
+      const el=document.getElementById(id);
+      if(!el)return;
+      if(el.style.display==='none'||!el.style.display){el.style.display='block';el.scrollIntoView({behavior:'smooth',block:'nearest'});}
+      else{el.style.display='none';}
+    }
+
+    // ===== QUIZ =====
+    const quizAnswers={
+      q1:"B: ION is using BigQuery's end-date value instead of calculating createTime + 1 year itself.",
+      q2:"C: Price Books are currently partner-agnostic with no per-reseller filtering mechanism.",
+      q3:"C: Show MSRP + a disclaimer; resolve exact entitlement-based pricing after purchase.",
+      q4:"B: The API returns a 200 success but simply omits the field — no error is raised.",
+      q5:"B: Day 400 exceeds the 365-day firstPeriod of Phase 1, so Phase 2 (20%) is active."
+    };
+    function answerQuiz(qId,optEl,isCorrect){
+      const card=document.getElementById(qId);
+      if(card.querySelector('.correct')||card.querySelector('.wrong'))return;
+      card.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('disabled'));
+      optEl.classList.add(isCorrect?'correct':'wrong');
+      if(!isCorrect){card.querySelectorAll('.quiz-opt').forEach(o=>{const l=o.querySelector('.opt-letter').textContent;if(quizAnswers[qId]&&quizAnswers[qId].startsWith(l+':'))o.classList.add('correct');});}
+      const fb=document.getElementById(qId+'-feedback');
+      fb.className='quiz-feedback show '+(isCorrect?'feedback-correct':'feedback-wrong');
+      fb.textContent=(isCorrect?'✓ Correct! ':'✗ Not quite. ')+quizAnswers[qId];
+    }
+
+    // ===== STORIES =====
+    function toggleStory(id){
+      const card=document.getElementById('story-card-'+id);
+      if(!card)return;
+      const was=card.classList.contains('expanded');
+      document.querySelectorAll('.story-card.expanded').forEach(c=>c.classList.remove('expanded'));
+      if(!was)card.classList.add('expanded');
+    }
+    function showStory(id){
+      setTimeout(()=>{
+        const card=document.getElementById('story-card-'+id);
+        if(card){document.querySelectorAll('.story-card.expanded').forEach(c=>c.classList.remove('expanded'));card.classList.add('expanded');card.scrollIntoView({behavior:'smooth',block:'start'});}
+      },80);
+    }
+    function filterStories(tag,btn){
+      document.querySelectorAll('.story-filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.story-card').forEach(card=>{
+        const tags=card.getAttribute('data-tags')||'';
+        if(tag==='all'||tags.includes(tag)){card.style.display='';card.style.opacity='1';}
+        else{card.style.opacity='0';card.style.transition='opacity 0.2s';setTimeout(()=>{if(tag!=='all'&&!tags.includes(tag))card.style.display='none';},200);}
+      });
+    }
+
+    // ===== CUSTOM QUESTIONS =====
+    let customQCount=8;
+    function addCustomQuestion(){
+      const qi=document.getElementById('new-q-text'),hi=document.getElementById('new-q-hint');
+      const qt=qi.value.trim(),qh=hi.value.trim();
+      if(!qt){qi.style.borderColor='var(--color-error)';qi.focus();setTimeout(()=>{qi.style.borderColor='var(--color-border)';},1800);return;}
+      customQCount++;
+      const container=document.getElementById('custom-questions-list');
+      const card=document.createElement('div');card.className='reflection-card';
+      card.style.cssText='transition:opacity 0.25s,transform 0.25s;opacity:0;transform:translateY(10px);';
+      card.innerHTML='<div class="reflection-q"><span class="q-num">'+customQCount+'</span><span style="flex:1">'+escHtml(qt)+'</span><button onclick="removeCustomQ(this)" style="background:none;border:none;cursor:pointer;color:var(--color-text-faint);font-size:1.1rem;padding:0 4px;flex-shrink:0;line-height:1;">✕</button></div>'+(qh?'<div class="reflection-hint">'+escHtml(qh)+'</div>':'')+'<textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>';
+      container.appendChild(card);
+      requestAnimationFrame(()=>{card.style.opacity='1';card.style.transform='translateY(0)';});
+      qi.value='';hi.value='';
+      const fb=document.getElementById('add-q-feedback');fb.style.opacity='1';
+      setTimeout(()=>{fb.style.opacity='0';},2200);
+      card.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+    function removeCustomQ(btn){
+      const card=btn.closest('.reflection-card');card.style.opacity='0';card.style.transform='translateY(-8px)';
+      setTimeout(()=>{card.remove();renumberCustomQs();},220);
+    }
+    function renumberCustomQs(){
+      const cards=document.querySelectorAll('#custom-questions-list .reflection-card');
+      cards.forEach((c,i)=>{const n=c.querySelector('.q-num');if(n)n.textContent=9+i;});
+      customQCount=8+cards.length;
+    }
+    function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+    // ===== CHECKPOINTS =====
+    let checkedCount=0;
+    const totalCheckpoints=12;
+    function toggleCheck(item){
+      const isChecked=item.classList.toggle('checked');
+      checkedCount+=isChecked?1:-1;
+      const pct=Math.round((checkedCount/totalCheckpoints)*100);
+      document.getElementById('progress-bar-main').style.width=pct+'%';
+      document.getElementById('progress-label-main').textContent=checkedCount+' of '+totalCheckpoints;
+      document.getElementById('sidebar-progress').style.width=pct+'%';
+      document.getElementById('sidebar-progress-label').textContent=checkedCount+' of '+totalCheckpoints+' checkpoints';
+    }
+
+    // ===== KEYBOARD NAVIGATION =====
+    document.addEventListener('keydown',e=>{
+      if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
+      const sections=['overview','concepts','workstreams','technical','risks','questions','stories','study'];
+      const active=document.querySelector('.section.active');
+      if(!active)return;
+      const idx=sections.findIndex(s=>active.id==='section-'+s);
+      if(e.key==='ArrowRight'||e.key==='l'){const next=sections[idx+1];if(next){const btn=document.querySelectorAll('.header-nav .nav-btn')[idx+1];showSection(next,btn);}}
+      if(e.key==='ArrowLeft'||e.key==='h'){const prev=sections[idx-1];if(prev){const btn=document.querySelectorAll('.header-nav .nav-btn')[idx-1];showSection(prev,btn);}}
+      if(e.key==='t'){document.querySelector('[data-theme-toggle]').click();}
+    });
+
+    // ===== WIRE UP NAV BUTTONS =====
+    document.querySelectorAll('.header-nav .nav-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>showSection(btn.dataset.section,btn,false));
+    });
+    document.querySelectorAll('.sidebar-link').forEach(btn=>{
+      btn.addEventListener('click',()=>showSection(btn.dataset.section,btn,true));
+    });
+  </script>
+
+</body>
+</html>
