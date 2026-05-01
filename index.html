@@ -533,6 +533,24 @@
     .icon-blue { background:var(--color-primary-light); } .icon-orange { background:var(--color-accent-light); } .icon-green { background:var(--color-success-light); } .icon-red { background:var(--color-error-light); } .icon-purple { background:var(--color-purple-light); }
     .card-title { font-size:var(--text-base); font-weight:700; color:var(--color-text); margin-bottom:2px; }
     .card-subtitle { font-size:var(--text-sm); color:var(--color-text-muted); }
+    .architecture-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--space-4); margin-bottom:var(--space-6); }
+    .architecture-grid .card { margin-bottom:0; }
+    .source-chip-row { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-bottom:var(--space-3); }
+    .source-chip { display:inline-flex; align-items:center; padding:2px 8px; border-radius:var(--radius-pill); background:var(--color-surface-offset); border:1px solid var(--color-border); color:var(--color-text-muted); font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; }
+    .decision-status { display:inline-flex; align-items:center; padding:2px 8px; border-radius:var(--radius-pill); font-size:var(--text-xs); font-weight:600; white-space:nowrap; }
+    .decision-status.in-conflict { background:var(--color-error-light); color:var(--color-error); }
+    .decision-status.clarified, .decision-status.actionable { background:var(--color-success-light); color:var(--color-success); }
+    .decision-status.open { background:var(--color-warning-light); color:var(--color-warning); }
+    .conflict-card { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-xl); box-shadow:var(--shadow-sm); overflow:hidden; margin-bottom:var(--space-5); }
+    .conflict-card-header { display:flex; justify-content:space-between; align-items:flex-start; gap:var(--space-4); padding:var(--space-5) var(--space-6); border-bottom:1px solid var(--color-divider); }
+    .conflict-card-title { font-size:var(--text-base); font-weight:700; color:var(--color-text); }
+    .conflict-columns { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+    .conflict-col { padding:var(--space-5) var(--space-6); border-right:1px solid var(--color-divider); }
+    .conflict-col:last-child { border-right:none; }
+    .conflict-col-label { font-size:var(--text-xs); font-weight:700; color:var(--color-text-faint); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:var(--space-2); }
+    .conflict-col p { color:var(--color-text-muted); font-size:var(--text-sm); }
+    .conflict-implication { background:var(--color-surface-offset); border-top:1px solid var(--color-divider); padding:var(--space-4) var(--space-6); font-size:var(--text-sm); color:var(--color-text-muted); }
+    .conflict-implication strong { color:var(--color-text); }
     /* CALLOUTS */
     .callout { border-radius:var(--radius-lg); padding:var(--space-4) var(--space-5); margin-bottom:var(--space-4); display:flex; gap:var(--space-3); align-items:flex-start; }
     .callout-icon { font-size:1.2rem; flex-shrink:0; line-height:1.5; }
@@ -629,6 +647,8 @@
     .reflection-textarea { width:100%; min-height:90px; background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:var(--space-3) var(--space-4); font-family:var(--font-body); font-size:var(--text-sm); color:var(--color-text); resize:vertical; transition:border-color var(--transition); outline:none; }
     .reflection-textarea:focus { border-color:var(--color-primary); }
     .reflection-textarea::placeholder { color:var(--color-text-faint); }
+    .copy-question-btn { margin-left:auto; flex-shrink:0; align-self:flex-start; background:var(--color-primary-light); color:var(--color-primary); border:1px solid color-mix(in srgb,var(--color-primary) 35%,transparent); border-radius:var(--radius-pill); padding:3px 10px; font-size:var(--text-xs); font-weight:700; }
+    .copy-question-btn:hover { background:var(--color-primary); color:white; }
     /* FLOW DIAGRAM */
     .flow-diagram { display:flex; align-items:flex-start; gap:var(--space-2); flex-wrap:wrap; margin:var(--space-4) 0; }
     .flow-step { background:var(--color-surface-2); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:var(--space-3) var(--space-4); font-size:var(--text-sm); font-weight:600; color:var(--color-text); display:flex; align-items:center; gap:var(--space-2); }
@@ -694,6 +714,7 @@
     .ws-card:focus-visible, .story-card:focus-visible, .checkpoint-item:focus-visible, .quiz-opt:focus-visible { outline:2px solid var(--color-primary); outline-offset:2px; border-radius:var(--radius-xl); }
     /* PRINT */
     @media print { .site-header, .sidebar, .theme-toggle, .story-filter-row, .story-external-link { display:none !important; } .main-layout { display:block; padding:0; } .section { display:block !important; margin-bottom:2rem; } .story-detail-panel { display:block !important; } .expand-body { max-height:none !important; padding:var(--space-4) var(--space-5) !important; } body { font-size:12px; color:#000; background:#fff; } }
+    @media (max-width: 767px) { .architecture-grid, .conflict-columns { grid-template-columns:1fr; } .conflict-col { border-right:none; border-bottom:1px solid var(--color-divider); } .conflict-col:last-child { border-bottom:none; } .conflict-card-header { flex-direction:column; } }
   </style>
 </head>
 <body>
@@ -714,9 +735,11 @@
 
     <nav class="header-nav" aria-label="Primary navigation">
       <button class="nav-btn active" data-section="overview">Overview</button>
+      <button class="nav-btn" data-section="architecture">Architecture</button>
       <button class="nav-btn" data-section="concepts">Concepts</button>
       <button class="nav-btn" data-section="workstreams">Workstreams</button>
       <button class="nav-btn" data-section="technical">Technical</button>
+      <button class="nav-btn" data-section="conflicts">Conflicts</button>
       <button class="nav-btn" data-section="risks">Risks</button>
       <button class="nav-btn" data-section="questions">Questions</button>
       <button class="nav-btn" data-section="stories">Stories</button>
@@ -747,6 +770,10 @@
         <span class="sidebar-dot" aria-hidden="true"></span>
         Overview
       </button>
+      <button class="sidebar-link" data-section="architecture">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        System Architecture
+      </button>
       <button class="sidebar-link" data-section="concepts">
         <span class="sidebar-dot" aria-hidden="true"></span>
         Key Concepts
@@ -758,6 +785,10 @@
       <button class="sidebar-link" data-section="technical">
         <span class="sidebar-dot" aria-hidden="true"></span>
         Technical Logic
+      </button>
+      <button class="sidebar-link" data-section="conflicts">
+        <span class="sidebar-dot" aria-hidden="true"></span>
+        Conflicts &amp; Decisions
       </button>
       <button class="sidebar-link" data-section="risks">
         <span class="sidebar-dot" aria-hidden="true"></span>
@@ -778,7 +809,7 @@
 
       <div style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--color-divider);">
         <div style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:var(--space-2);">Study Progress</div>
-        <div id="sidebar-progress-label" style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2);">0 of 12 checkpoints</div>
+        <div id="sidebar-progress-label" style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2);">0 of 15 checkpoints</div>
         <div style="height:4px;background:var(--color-surface-dynamic);border-radius:var(--radius-pill);overflow:hidden;">
           <div id="sidebar-progress" style="height:100%;width:0%;background:var(--color-primary);border-radius:var(--radius-pill);transition:width 0.3s ease;"></div>
         </div>
@@ -799,7 +830,7 @@
             <span class="tag tag-orange">Price Book</span>
             <span class="tag tag-green">Entitlement API</span>
             <span class="tag tag-red">7 Workstreams</span>
-            <span class="tag tag-purple">14 Open Questions</span>
+            <span class="tag tag-purple">12 Open Questions</span>
           </div>
         </div>
 
@@ -833,6 +864,144 @@
 
         <div class="callout callout-purple"><div class="callout-icon">📅</div><div class="callout-body"><div class="callout-title">Timeline: April 14–28, 2026</div><div class="callout-text"><strong>Apr 14</strong> — Janna organized the initial LOE/shadow estimate meeting for 8 priority items<br><strong>Apr 21</strong> — Brian proposed focused follow-up call (Price Book, Cancel, Alternate Email, Intake)<br><strong>Apr 22</strong> — BRD documents sent to Srilatha<br><strong>Apr 23</strong> — Brian pasted full BRD text directly into email to bypass SharePoint friction<br><strong>Apr 24</strong> — Reworked Price Book FRD (Feature 959113) sent; "unique ID" concept introduced<br><strong>Apr 26</strong> — Srilatha raised three architectural concerns: partner filtering feasibility, Price Book/Partner independence, and grouping by <code>discountType</code><br><strong>Apr 28</strong> — Brian replied: SKU must remain visible, user needs exact <code>discountPercentage</code> for bulk adjustments, and future unique IDs must auto-inherit price adjustments</div></div></div>
 
+      </section>
+
+      <section id="section-architecture" class="section">
+        <div class="page-hero">
+          <div class="hero-eyebrow">Platform Model First</div>
+          <h1 class="hero-title">How the GWS flow actually works across Apptium / ION</h1>
+          <p class="hero-subtitle">Marketplace, SIM, Price Book, and Billing/Reporting are separate modules with different responsibilities and data sources.</p>
+        </div>
+
+        <h2 class="section-heading">Four Module System Map</h2>
+        <div class="architecture-grid">
+          <div class="card">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+              <span class="source-chip">Full Transcript</span>
+            </div>
+            <div class="card-header">
+              <div class="card-icon icon-blue">🛒</div>
+              <div>
+                <div class="card-title">Marketplace</div>
+                <div class="card-subtitle">Discovery, eligibility, cart, and purchase initiation</div>
+              </div>
+            </div>
+            <ul class="styled">
+              <li><strong>Purpose:</strong> product discovery, eligibility, cart, purchase initiation.</li>
+              <li><strong>Google-specific note:</strong> static catalog was removed; eligibility is fetched dynamically by domain in the single-tile model.</li>
+              <li><strong>Boundary:</strong> does not own final billing truth.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+            </div>
+            <div class="card-header">
+              <div class="card-icon icon-green">🔄</div>
+              <div>
+                <div class="card-title">SIM</div>
+                <div class="card-subtitle">Subscription state and provider sync</div>
+              </div>
+            </div>
+            <ul class="styled">
+              <li><strong>Purpose:</strong> subscription/entitlement management and provider sync.</li>
+              <li>Displays provider-synced subscriptions under linked customers.</li>
+              <li>Can surface subscriptions not purchased through marketplace if linked to the account.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="source-chip-row">
+              <span class="source-chip">Full Transcript</span>
+            </div>
+            <div class="card-header">
+              <div class="card-icon icon-orange">📚</div>
+              <div>
+                <div class="card-title">Price Book</div>
+                <div class="card-subtitle">Layered pricing configuration</div>
+              </div>
+            </div>
+            <ul class="styled">
+              <li><strong>Purpose:</strong> pricing configuration source built from provider pricing inputs.</li>
+              <li>Assigns pricing to entities/accounts, not normally to entitlements.</li>
+              <li>Child price books are layered configurations, not full cloned datasets.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+              <span class="source-chip">FRD 959440</span>
+            </div>
+            <div class="card-header">
+              <div class="card-icon icon-red">📊</div>
+              <div>
+                <div class="card-title">Billing / Reporting</div>
+                <div class="card-subtitle">Report production and rating logic</div>
+              </div>
+            </div>
+            <ul class="styled">
+              <li><strong>Purpose:</strong> uses provider data plus price-book assignment logic to produce reports.</li>
+              <li>Independent from purchase channel; outside purchases can still appear if linked.</li>
+              <li>Includes the <code>COMMITMENT_CANCEL_ITEM</code> rating issue.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Data Movement</h2>
+        <div class="source-chip-row">
+          <span class="source-chip">Transcript</span>
+          <span class="source-chip">Full Transcript</span>
+        </div>
+        <div class="flow-diagram" aria-label="GWS data movement across modules">
+          <div class="flow-step highlight">Domain / Customer</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Eligibility</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Purchase / Registration</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Provider Sync</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step highlight">SIM</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Billing Import</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">Price Book Application</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step highlight">Report</div>
+        </div>
+        <div class="callout callout-purple">
+          <div class="callout-icon">↔</div>
+          <div class="callout-body">
+            <div class="callout-title">Special offers can enter later</div>
+            <div class="callout-text">Google special offers can appear later through provider sync or billing even if they were not visible during the initial marketplace selection.</div>
+          </div>
+        </div>
+
+        <h2 class="section-heading">Why this matters</h2>
+        <div class="callout callout-blue">
+          <div class="callout-icon">1</div>
+          <div class="callout-body">
+            <div class="callout-title">Marketplace is not enough context</div>
+            <div class="callout-text">The pricing problem cannot be understood from marketplace screens alone.</div>
+          </div>
+        </div>
+        <div class="callout callout-orange">
+          <div class="callout-icon">2</div>
+          <div class="callout-body">
+            <div class="callout-title">Downstream systems see more</div>
+            <div class="callout-text">Billing and SIM can see things that marketplace never sold.</div>
+          </div>
+        </div>
+        <div class="callout callout-red">
+          <div class="callout-icon">3</div>
+          <div class="callout-body">
+            <div class="callout-title">One object model is a risky shortcut</div>
+            <div class="callout-text">Any fix that treats these modules as one unified object model risks breaking the actual architecture.</div>
+          </div>
+        </div>
       </section>
 
       <section id="section-concepts" class="section">
@@ -977,6 +1146,70 @@ Example:
           </div>
         </div>
 
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>📚 Sub-Price Book as Configuration, Not Copy</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+              <span class="source-chip">Full Transcript</span>
+            </div>
+            <p>The clarified model is one master price book with child price books acting as layered pricing definitions. A child price book is more like "2% on top of parent" than a fully duplicated dataset.</p>
+            <p style="margin-top:var(--space-3);">That matters because reseller-specific filtering of entitlement rows does not fit naturally if the child layer is configuration over a parent, not a separate copy of every underlying price record.</p>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🤝 RABF (Rep-Assisted Buy Flow)</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+              <span class="source-chip">Full Transcript</span>
+            </div>
+            <p><strong>RABF</strong> refers to special discounted offers created through Google sales flows. These offers may not appear in standard marketplace eligibility, especially when the marketplace is only showing dynamically eligible options for a domain.</p>
+            <p style="margin-top:var(--space-3);">They can still appear later in SIM or billing when the customer is linked. Today these are handled through special price book assignment at the cloud-account level, which is why marketplace visibility is not the same as platform support.</p>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🧭 4-Module Independence Model</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+            </div>
+            <p>The revised model separates <strong>Marketplace</strong>, <strong>SIM</strong>, <strong>Price Book</strong>, and <strong>Billing/Reporting</strong> into connected systems with different responsibilities.</p>
+            <ul class="styled" style="margin-top:var(--space-3);">
+              <li><strong>Marketplace</strong> handles discovery, eligibility, cart, and purchase initiation.</li>
+              <li><strong>SIM</strong> manages subscription and entitlement state synced from the provider.</li>
+              <li><strong>Price Book</strong> stores layered pricing configuration and account/entity assignment logic.</li>
+              <li><strong>Billing/Reporting</strong> uses provider data plus price-book assignment logic to produce report output.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>🔐 Entitlement-Key Privacy Conflict</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+              <span class="source-chip">Original Spec</span>
+            </div>
+            <p>The proposed pricing key moves from <code>offerId + periodPhase</code> to <code>offerId + entitlement + periodPhase</code>. That may solve the uniqueness problem because the entitlement carries customer-specific subscription context.</p>
+            <p style="margin-top:var(--space-3);">The conflict is visibility. If entitlement-level or customer-level data becomes part of price-book rows without a redesigned access model, reseller views may expose information they should not see. The key may be technically useful while still being unsafe inside classic price-book visibility.</p>
+          </div>
+        </div>
+
       </section>
 
       <section id="section-workstreams" class="section">
@@ -1003,7 +1236,7 @@ Example:
             <div class="ws-name">Price Book Refactor</div>
             <div class="ws-desc">Rebuild the MSRP Price Book to support entitlement-level pricing, reseller data isolation, and discount-based grouping.</div>
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
-              <span class="ws-status status-progress">⏳ Feasibility Pending</span>
+              <span class="ws-status status-hold">In Conflict</span>
               <button onclick="event.stopPropagation();showSection('stories',null);setTimeout(()=>showStory('s1'),100);" class="story-link-btn">📄 BRD Story 1</button>
             </div>
           </div>
@@ -1011,14 +1244,14 @@ Example:
             <div class="ws-number">WS 2 · Task 959111</div>
             <div class="ws-name">Unique ID / Entitlement Pricing</div>
             <div class="ws-desc">Introduce a unique identifier at the entitlement level for day-granularity pricing across all subscription change types.</div>
-            <span class="ws-status status-progress">⏳ In Progress</span>
+            <span class="ws-status status-progress">Open</span>
           </div>
           <div class="ws-card" onclick="expandWS('ws3')">
             <div class="ws-number">WS 3 · Task 959443</div>
             <div class="ws-name">Alternate Email Restore</div>
             <div class="ws-desc">Restore <code>Customer.alternateEmail</code> in the GWS buy flow (Register + Transfer + Cloud Providers flows).</div>
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
-              <span class="ws-status status-progress">⏳ Awaiting Intake</span>
+              <span class="ws-status status-complete">Clarified</span>
               <button onclick="event.stopPropagation();showSection('stories',null);setTimeout(()=>showStory('s2'),100);" class="story-link-btn">📄 FRD Story 2</button>
             </div>
           </div>
@@ -1027,7 +1260,7 @@ Example:
             <div class="ws-name">Cancel / Billing Fix</div>
             <div class="ws-desc">Fix billing end-date and credit calculation for <code>COMMITMENT_CANCEL_ITEM</code> events on annual GWS plans.</div>
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2);">
-              <span class="ws-status status-progress">⏳ In Progress (AWG)</span>
+              <span class="ws-status status-complete">Actionable</span>
               <button onclick="event.stopPropagation();showSection('stories',null);setTimeout(()=>showStory('s3'),100);" class="story-link-btn">📄 FRD Story 3</button>
             </div>
           </div>
@@ -1041,7 +1274,7 @@ Example:
             <div class="ws-number">WS 6 · Task 959443</div>
             <div class="ws-name">Marketplace Link Button Removal</div>
             <div class="ws-desc">Remove the non-functional "Link" button from the Marketplace UI that confuses resellers (they don't have PSC access).</div>
-            <span class="ws-status status-progress">⏳ In Progress</span>
+            <span class="ws-status status-complete">Actionable</span>
           </div>
           <div class="ws-card" onclick="expandWS('ws7')">
             <div class="ws-number">WS 7 · All Items</div>
@@ -1055,12 +1288,25 @@ Example:
 
         <div id="ws1" class="card" style="display:none">
           <div class="card-header"><div class="card-icon icon-orange">📚</div><div><div class="card-title">WS 1: Price Book Refactor (Feature 959113)</div><div class="card-subtitle">The architecturally most complex workstream</div></div></div>
+          <div class="source-chip-row">
+            <span class="source-chip">Original Spec</span>
+            <span class="source-chip">Transcript</span>
+            <span class="ws-status status-hold" style="margin:0;">In Conflict</span>
+          </div>
+          <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);">The original problem is pricing uniqueness: the same Google offer can behave differently by customer, discount arrangement, and period structure, so offer-level price lookup is not enough.</p>
           <div class="subsection-heading" style="margin-top:0;">Master Price Book must expose:</div>
           <ul class="styled">
             <li>Reseller name, Google Cloud Identity ID / Channel Partner ID</li>
             <li>End-customer domain, Google Customer ID, country, currency, billing account</li>
             <li>SKU/offer/plan details, price phases, discount values/types, effective price, pricing tiers</li>
             <li>Bulk adjustments grouped by same <code>discountPercentage</code>; also supports single-line adjustments</li>
+          </ul>
+          <div class="subsection-heading">Architecture clarification</div>
+          <ul class="styled">
+            <li>Transcript clarification: entitlements were not originally intended as direct price-book association targets.</li>
+            <li>In the original model, price books are assigned to members/accounts, not directly to entitlements.</li>
+            <li>Entitlement-based keying may solve uniqueness, but it breaks visibility boundaries and child price-book assumptions if added inside the existing price-book layer.</li>
+            <li>The proposed “filtering per reseller” response does not align neatly with a one-master-price-book architecture where child price books are layered configurations, not full copies.</li>
           </ul>
           <div class="subsection-heading">Reseller Price Book must hide:</div>
           <ul class="styled">
@@ -1076,7 +1322,14 @@ Example:
 
         <div id="ws2" class="card" style="display:none">
           <div class="card-header"><div class="card-icon icon-purple">🔢</div><div><div class="card-title">WS 2: Unique ID / Entitlement-Based Pricing (Task 959111)</div><div class="card-subtitle">New identifier enabling day-granularity pricing</div></div></div>
+          <div class="source-chip-row">
+            <span class="source-chip">Original Spec</span>
+            <span class="source-chip">Transcript</span>
+            <span class="ws-status status-progress" style="margin:0;">Open</span>
+          </div>
           <ul class="styled">
+            <li>The current fixed assumption, <code>offer ID + period phase</code>, is insufficient for Google because the same offer can resolve differently by customer or commercial arrangement.</li>
+            <li>Proposed expanded key: <code>offer ID + entitlement + period phase</code>.</li>
             <li>Maps to a specific end-customer's entitlement + offer pricing, tracked from start through price-phase transitions</li>
             <li>Without pricePhases: flat discount applies for full offer life</li>
             <li>With pricePhases: system identifies which phase is active per calendar day using <code>firstPeriod</code> values</li>
@@ -1086,46 +1339,61 @@ Example:
           </ul>
           <div class="callout callout-orange" style="margin-top:var(--space-4);">
             <div class="callout-icon">⚠️</div>
-            <div class="callout-body"><div class="callout-title">Key Constraint</div><div class="callout-text">During the buy flow, no entitlement exists yet. Show MSRP + disclaimer until entitlement is created. Exact pricing resolved post-creation.</div></div>
+            <div class="callout-body"><div class="callout-title">Decision Still Open</div><div class="callout-text">The entitlement key is a proposed direction, not a finalized architecture. Grouping/category approaches for discount buckets remain exploratory and have not been approved as the implementation model.</div></div>
           </div>
         </div>
 
         <div id="ws3" class="card" style="display:none">
           <div class="card-header"><div class="card-icon icon-green">📧</div><div><div class="card-title">WS 3: Alternate Email — Customer.alternateEmail (Task 959443)</div><div class="card-subtitle">Restore a required field removed in Feature 755664 (Jan 23, 2026)</div></div></div>
+          <div class="source-chip-row">
+            <span class="source-chip">FRD 959443</span>
+            <span class="ws-status status-complete" style="margin:0;">Clarified</span>
+            <span class="ws-status status-progress" style="margin:0;">Verification Needed</span>
+          </div>
+          <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);">Alternate email was removed in the redesigned buy flow and became a blocker for MSP/reseller scenarios where provider welcome/provisioning email must not go to the wrong party.</p>
           <ol class="styled">
-            <li><strong>Register flow:</strong> Mandatory field in the Register popup. Pre-populated from ION DB if known. User must use Cancel or Confirm to exit — clicking elsewhere is blocked.</li>
-            <li><strong>Transfer flow:</strong> Same rules. Popup title changes to "Transfer Confirmation."</li>
+            <li><strong>Register flow:</strong> Capture, edit, persist, and prepopulate <code>alternateEmail</code> when known. The field is mandatory.</li>
+            <li><strong>Transfer flow:</strong> Must also support <code>alternateEmail</code> update; existing customer transfer can use PATCH.</li>
             <li><strong>Cloud Providers section:</strong> View / Edit / Discard / Update at any time outside the buy flow.</li>
+            <li><strong>Verification:</strong> Use GET Customer with <code>readMask</code> to confirm <code>Customer.alternateEmail</code> is returned.</li>
+            <li><strong>Boundary:</strong> Do not use generic ION Admin Contact email as <code>Customer.alternateEmail</code>.</li>
           </ol>
           <div class="callout callout-red" style="margin-top:var(--space-4);">
             <div class="callout-icon">🚨</div>
-            <div class="callout-body"><div class="callout-title">Critical: readMask Required + Remove Link Button</div><div class="callout-text">GET Customer API must include readMask or the field is silently omitted. No error — just missing data. Also: remove the Link button from Marketplace Plans entirely.</div></div>
+            <div class="callout-body"><div class="callout-title">Needs Verification</div><div class="callout-text"><code>cloudIdentityInfo.alternateEmail</code> behavior may still need confirmation; do not assume it updates or returns identically to <code>Customer.alternateEmail</code> until engineering verifies the actual API path.</div></div>
           </div>
         </div>
 
         <div id="ws4" class="card" style="display:none">
           <div class="card-header"><div class="card-icon icon-red">❌</div><div><div class="card-title">WS 4: Cancel / COMMITMENT_CANCEL_ITEM Billing Fix (Feature 959440)</div><div class="card-subtitle">Correct end-date and credit calculation for annual cancellations</div></div></div>
-          <div class="formula-box"><span class="formula-label">Billing End Date Formula</span>end date = createTime (subscription start) + 1 year
-(Do NOT use BigQuery's value — it is incorrect)
+          <div class="source-chip-row">
+            <span class="source-chip">FRD 959440</span>
+            <span class="ws-status status-complete" style="margin:0;">Actionable</span>
+            <span class="ws-status status-progress" style="margin:0;">Data Correction Open</span>
+          </div>
+          <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);">This workstream affects <code>COMMITMENT_CANCEL_ITEM</code> customer cost calculation for cancel-line billing output.</p>
+          <div class="formula-box"><span class="formula-label">Customer Cost Formula</span>Discount Factor = 1 - Price Adjust Value
+Customer Cost = Seller Cost / Discount Factor
 
-<span class="formula-label">Credit Calculation</span>Discount Factor    = 1 − Price Adjust Value
-SaaS Customer Cost = Seller Cost ÷ Discount Factor
-
-Example: Seller Cost = −493.4, Adjust = −29.167%
-→ Factor = 1 − (−0.29167) = 1.29167
-→ Customer Cost = −493.4 ÷ 1.29167 = −697.78</div>
+Example:
+-493.4 / (1 + (-29.167 / 100)) = -697.78</div>
           <div class="callout callout-orange" style="margin-top:var(--space-4);">
             <div class="callout-icon">⚠️</div>
-            <div class="callout-body"><div class="callout-title">Open Question</div><div class="callout-text">If a subscription was renewed or SKU-changed before cancellation, which createTime is the start date: original PAID_SUBSCRIPTION_STARTED or the most recent RENEWED/SKU_CHANGED?</div></div>
+            <div class="callout-body"><div class="callout-title">Data Correction Still Incomplete</div><div class="callout-text">BigQuery end-date correction logic for cancel lines is still incomplete. Affected validation use cases include Spain, UK, and France billing periods.</div></div>
           </div>
         </div>
 
         <div id="ws5" class="card" style="display:none">
           <div class="card-header"><div class="card-icon icon-blue">🔄</div><div><div class="card-title">WS 5: Entitlement Change Tracking (Task 959444)</div><div class="card-subtitle">Build history of all entitlement events into ION/SSIM</div></div></div>
+          <div class="source-chip-row">
+            <span class="source-chip">Transcript</span>
+            <span class="ws-status status-progress" style="margin:0;">Open</span>
+          </div>
           <ul class="styled">
             <li>Calls <code>accounts.customers.entitlements.listEntitlementChanges</code> API</li>
             <li>Key fields per change object: <code>changeType</code>, <code>createTime</code>, <code>parameters</code> (contains <code>order_id</code>, <code>previous_num_units</code>, <code>num_units</code>), <code>offer</code></li>
             <li>No BRD required — this is a backend data-plumbing workstream</li>
+            <li>Entitlement-change visibility matters because SIM and provider sync can surface changes independent of marketplace purchase flow.</li>
           </ul>
           <div class="callout callout-orange" style="margin-top:var(--space-4);">
             <div class="callout-icon">⚠️</div>
@@ -1135,20 +1403,35 @@ Example: Seller Cost = −493.4, Adjust = −29.167%
 
         <div id="ws6" class="card" style="display:none">
           <div class="card-header"><div class="card-icon icon-orange">🔗</div><div><div class="card-title">WS 6: Marketplace Link Button Removal (Task 959443)</div><div class="card-subtitle">Remove a non-functional UI element causing reseller confusion</div></div></div>
-          <p style="color:var(--color-text-muted);">The "Link" button in the Marketplace Plans UI is non-functional for resellers because they don't have PSC (Partner Sales Console) access. Remove it entirely from the UI. No backend changes required. Conditional hide/show based on partner role.</p>
+          <div class="source-chip-row">
+            <span class="source-chip">FRD 959443</span>
+            <span class="ws-status status-complete" style="margin:0;">Actionable</span>
+          </div>
+          <p style="color:var(--color-text-muted);">Remove the Link button from <strong>Marketplace &gt; Product Details &gt; Plans</strong>. Resellers do not have PSC access and do not know the Google Customer ID needed to complete that linking path.</p>
+          <ul class="styled" style="margin-top:var(--space-4);">
+            <li>The Marketplace path should not present reseller users with an action they cannot realistically complete.</li>
+            <li>Linking/admin behavior can remain available in Cloud Providers or Admin Console areas for operations and sales users.</li>
+          </ul>
           <div class="callout callout-green" style="margin-top:var(--space-4);">
             <div class="callout-icon">✅</div>
-            <div class="callout-body"><div class="callout-title">Low Complexity</div><div class="callout-text">Note: this task shares ADO ID 959443 with the Alternate Email workstream — they are separate items.</div></div>
+            <div class="callout-body"><div class="callout-title">First-Class UX Correction</div><div class="callout-text">This task shares ADO ID 959443 with Alternate Email, but it is a separate marketplace UX correction.</div></div>
           </div>
         </div>
 
         <div id="ws7" class="card" style="display:none">
           <div class="card-header"><div class="card-icon icon-orange">📋</div><div><div class="card-title">WS 7: Intake, LOE &amp; Shadow Estimates (All Items)</div><div class="card-subtitle">Move all 6 active items through the formal TD SYNNEX intake cycle</div></div></div>
+          <div class="source-chip-row">
+            <span class="source-chip">Transcript</span>
+            <span class="source-chip">FRD 959440</span>
+            <span class="ws-status status-progress" style="margin:0;">Open</span>
+          </div>
           <p style="color:var(--color-text-muted);">All 6 active work items must pass through TD SYNNEX's formal intake cycle before Apptium can begin development. This requires documented LOE estimates, shadow cost estimates for internal budgeting, and sign-off from Melanie (intake gatekeeper).</p>
           <ul class="styled" style="margin-top:var(--space-4);">
             <li>Items awaiting LOE: Price Book Refactor (WS1), Unique ID (WS2), Alternate Email (WS3), Cancel Billing Fix (WS4), Entitlement Change Tracking (WS5), Link Button Removal (WS6)</li>
             <li>Janna Wassberg coordinates all LOE/shadow estimate meeting scheduling</li>
             <li>No development work begins until intake is formally approved by Melanie</li>
+            <li>LOE must consider architecture, provider API behavior, rating logic, and privacy/visibility implications.</li>
+            <li>NearProd is required for some cancel-line validation; Shadow is insufficient for those billing cases.</li>
           </ul>
         </div>
 
@@ -1161,21 +1444,27 @@ Example: Seller Cost = −493.4, Adjust = −29.167%
           <h1 class="hero-title">Technical Logic &amp; API Reference</h1>
           <p class="hero-subtitle">Field-level API documentation, pricing phase resolution logic, and scenario walkthroughs for the GWS entitlement and billing integration.</p>
           <div class="hero-tags">
-            <span class="tag tag-blue">8 API Fields</span>
-            <span class="tag tag-orange">4 Pricing Scenarios</span>
-            <span class="tag tag-green">3 API Methods</span>
+            <span class="tag tag-blue">12 API Fields</span>
+            <span class="tag tag-orange">6 Pricing Scenarios</span>
+            <span class="tag tag-green">5 API Methods</span>
           </div>
         </div>
 
         <h2 class="section-heading">Technical Logic &amp; API Reference</h2>
 
         <h3 class="subsection-heading" style="margin-top:0;">Key API Fields</h3>
+        <div class="source-chip-row">
+          <span class="source-chip">Transcript</span>
+          <span class="source-chip">FRD 959443</span>
+          <span class="source-chip">FRD 959440</span>
+        </div>
         <table class="stakeholder-table">
           <thead>
             <tr><th>Field</th><th>Location</th><th>Purpose &amp; Notes</th></tr>
           </thead>
           <tbody>
             <tr><td><code>Customer.alternateEmail</code></td><td>Google Customer object</td><td>Secondary admin email; required for GWS creation. <strong>Removed in Jan 2026 — needs restoration.</strong></td></tr>
+            <tr><td><code>cloudIdentityInfo.alternateEmail</code></td><td>Cloud Identity info</td><td>Related alternate email field whose patch/read behavior still needs verification before UI assumptions are locked.</td></tr>
             <tr><td><code>pricePhases</code></td><td>Offer price object</td><td>Array of time-bound price periods with effectivePrice &amp; discount breakdown</td></tr>
             <tr><td><code>discountPercentage</code></td><td><code>priceByResources.price.discountComponents</code></td><td>Numeric discount rate (e.g., .15); used for bulk grouping &amp; price adjustment</td></tr>
             <tr><td><code>discountType</code></td><td>Same as above</td><td>Type qualifier: <code>RESELLER_MARGIN</code>, <code>SALES_DISCOUNT</code>, etc.</td></tr>
@@ -1183,18 +1472,23 @@ Example: Seller Cost = −493.4, Adjust = −29.167%
             <tr><td><code>discount</code></td><td><code>priceByResources.pricePhases.price.discount</code></td><td>Absolute discount amount within a phase</td></tr>
             <tr><td><code>createTime</code></td><td>Entitlement / change event</td><td>ISO 8601 timestamp; used as subscription start date for billing calculations</td></tr>
             <tr><td><code>readMask</code></td><td>GET Customer API parameter</td><td><strong>Must be set</strong> or <code>Customer.alternateEmail</code> will be silently omitted from response</td></tr>
+            <tr><td><code>Offer ID</code></td><td>Google offer / catalog data</td><td>Identifies the commercial offer, but is not unique enough by itself for Google customer-specific pricing.</td></tr>
+            <tr><td><code>Entitlement ID</code></td><td>Google entitlement</td><td>Identifies the purchased subscription context; proposed as part of the expanded pricing key.</td></tr>
+            <tr><td><code>Charge Type</code></td><td>Billing import / SaaS report</td><td><code>COMMITMENT_CANCEL_ITEM</code> lines require corrected customer cost calculation.</td></tr>
           </tbody>
         </table>
 
         <h3 class="subsection-heading">End-to-End Pricing Scenarios</h3>
 
         <div class="card">
-          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 1 — No pricePhases (Flat Pricing)</div>
-          <p style="color:var(--color-text-muted);">A single <code>discountPercentage</code> and <code>discountType</code> apply for the full life of the offer ID under that entitlement. Simple case — Price Book displays these flat values.</p>
+          <div class="source-chip-row"><span class="source-chip">Original Spec</span></div>
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 1 — Flat price / normal catalog assumption</div>
+          <p style="color:var(--color-text-muted);">A normal catalog assumes one stable offer-level price can be shown and rated consistently. This is the simple case the existing fixed lookup model handles best.</p>
         </div>
 
         <div class="card">
-          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 2 — With pricePhases (Time-Bound Pricing)</div>
+          <div class="source-chip-row"><span class="source-chip">Transcript</span></div>
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 2 — Time-bound price phase</div>
           <p style="color:var(--color-text-muted);">Each phase has its own <code>effectivePrice</code>, <code>discount</code>, <code>discountPercentage</code>, and <code>discountType</code>. ION determines which phase is active using <code>firstPeriod</code> values and <code>createTime</code>.</p>
           <div class="formula-box"><span class="formula-label">Phase Resolution Logic</span>Active Phase = first phase where:
   (today − createTime in days) &lt; phase.firstPeriod
@@ -1208,14 +1502,53 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
         </div>
 
         <div class="card">
-          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 3 — Seat-Tier Resolution</div>
+          <div class="source-chip-row"><span class="source-chip">Original Spec</span></div>
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 3 — Seat-tier scenario</div>
           <p style="color:var(--color-text-muted);">When seat count changes cross a tier boundary (e.g., Tier 1 = 1–300 seats, Tier 2 = &gt;300 seats), ION must re-evaluate the applicable pricing tier. A move from 300 to 301 seats triggers a tier change and must apply Tier 2 pricing.</p>
         </div>
 
         <div class="card">
-          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 4 — Buy Flow Gap</div>
+          <div class="source-chip-row"><span class="source-chip">Transcript</span></div>
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 4 — Buy-flow gap</div>
           <p style="color:var(--color-text-muted);">No entitlement exists at purchase time. Current recommendation: show MSRP + disclaimer. Resolve exact pricing post-entitlement creation. Downstream reconciliation path not yet documented.</p>
         </div>
+
+        <div class="card">
+          <div class="source-chip-row"><span class="source-chip">Full Transcript</span></div>
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 5 — Same offer, different customer pricing</div>
+          <p style="color:var(--color-text-muted);">Two customers can share the same offer ID while having different discount arrangements, period structures, or customer-specific commercial context. A fixed key fails because <code>offer ID + period phase</code> cannot distinguish which customer's pricing rules should apply.</p>
+        </div>
+
+        <div class="card">
+          <div class="source-chip-row"><span class="source-chip">Transcript</span></div>
+          <div class="card-title" style="margin-bottom:var(--space-3);">Scenario 6 — RABF scenario</div>
+          <p style="color:var(--color-text-muted);">A rep-assisted special offer may be absent from the standard eligibility flow, but still appear later through SIM or billing once the customer is linked. This reinforces that marketplace visibility and billing visibility are not the same system truth.</p>
+        </div>
+
+        <div class="card">
+          <div class="source-chip-row">
+            <span class="source-chip">Full Transcript</span>
+            <span class="source-chip">Open</span>
+          </div>
+          <div class="card-title" style="margin-bottom:var(--space-3);">Technical Logic Card — Why a fixed key fails</div>
+          <ul class="styled">
+            <li>Same offer ID.</li>
+            <li>Different customers.</li>
+            <li>Different discount arrangements or period structures.</li>
+            <li>Result: a fixed key can return the wrong price because it lacks customer/entitlement context.</li>
+          </ul>
+        </div>
+
+        <h3 class="subsection-heading">Formula / Logic Panels</h3>
+        <div class="formula-box"><span class="formula-label">Cancel Credit Logic</span>Discount Factor = 1 - Price Adjust Value
+Customer Cost = Seller Cost / Discount Factor
+Example: -493.4 / (1 + (-29.167 / 100)) = -697.78</div>
+
+        <div class="formula-box"><span class="formula-label">Price Book Layering Concept</span>Master Price Book MSRP = 100
+ISV Cost = 80
+Reseller Cost Book = 95
+End Customer Price = 98
+Reporting applies assigned price book per entity/account level</div>
 
         <h3 class="subsection-heading">API Methods Reference</h3>
 
@@ -1225,6 +1558,9 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
             <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">FRD 959443</span>
+            </div>
             <p>Retrieves the Google Customer object. <strong>Critical:</strong> <code>Customer.alternateEmail</code> is only returned if <code>readMask</code> explicitly includes it. Any code path calling GET Customer without <code>readMask</code> will silently receive no alternate email value.</p>
             <div class="callout callout-red" style="margin-top:var(--space-3);">
               <div class="callout-icon">🚨</div>
@@ -1235,11 +1571,15 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
 
         <div class="expand-block">
           <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
-            <span>PATCH Customer</span>
+            <span>PATCH Customer for alternateEmail</span>
             <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="expand-body">
-            <p>Updates <code>Customer.alternateEmail</code> for an existing customer. Used during the Transfer flow after the user enters a domain and clicks Continue. The popup title must change from "Link &amp; Transfer Confirmation" to "Transfer Confirmation" when this field is involved.</p>
+            <div class="source-chip-row">
+              <span class="source-chip">FRD 959443</span>
+            </div>
+            <p>Updates <code>Customer.alternateEmail</code> for an existing customer. Used during Transfer or existing-customer update flows when the provisioning contact must be corrected or captured.</p>
+            <p style="margin-top:var(--space-3);">Do not treat generic ION Admin Contact email as the source for this field; the alternate email is a provider provisioning target.</p>
           </div>
         </div>
 
@@ -1249,23 +1589,163 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
             <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">Transcript</span>
+            </div>
             <p>Returns the full chronological history of entitlement events as a JSON array. Key fields per change: <code>changeType</code>, <code>createTime</code>, <code>parameters</code> (contains <code>order_id</code>, <code>previous_num_units</code>, <code>num_units</code>), <code>offer</code>.</p>
             <p style="margin-top:var(--space-3);">Open design decisions: polling frequency (on demand / nightly / event-driven) and storage format (raw JSON, normalized tables, or both) are not yet decided.</p>
           </div>
         </div>
 
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>Create/register customer payload note</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">FRD 959443</span>
+            </div>
+            <p>Register/customer creation flows must capture <code>alternateEmail</code>, persist it, and pass the appropriate provider customer field during creation. The UI should prepopulate the value when it is already known and require confirmation before continuing.</p>
+          </div>
+        </div>
+
+        <div class="expand-block">
+          <button class="expand-trigger" aria-expanded="false" onclick="toggleExpand(this)">
+            <span>provisionCloudIdentity / customer creation explanation</span>
+            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="source-chip-row">
+              <span class="source-chip">FRD 959443</span>
+              <span class="source-chip">Conceptual</span>
+            </div>
+            <p><strong>Conceptual:</strong> the exact payload is not fully specified in the current source set. The important design point is that customer creation/provisioning must keep the provider alternate email distinct from generic ION contact fields and verify returned values with the correct read path.</p>
+          </div>
+        </div>
+
+      </section>
+
+      <section id="section-conflicts" class="section">
+        <div class="page-hero">
+          <div class="hero-eyebrow">Reconciliation Layer</div>
+          <h1 class="hero-title">Where the documents agree — and where they do not</h1>
+          <p class="hero-subtitle">This section reconciles transcript clarifications, BRD intent, and FRD implementation details.</p>
+        </div>
+
+        <h2 class="section-heading">Conflicts &amp; Decisions</h2>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Price book association model</div>
+            <span class="decision-status in-conflict">in conflict</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">BRD</span><span class="source-chip">Original Spec</span></div>
+              <div class="conflict-col-label">What one source says</div>
+              <p>BRD/problem framing implies movement toward entitlement-level pricing keys.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Transcript</span></div>
+              <div class="conflict-col-label">What another source clarifies</div>
+              <p>Transcript clarification says price books were not originally modeled as entitlement-attached objects.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> the fix may require a new layer or visibility model, not just a larger composite key.</div>
+        </div>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Reseller filtering idea</div>
+            <span class="decision-status open">open</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">BRD</span><span class="source-chip">Original Spec</span></div>
+              <div class="conflict-col-label">What one source says</div>
+              <p>Filtering sounds like a possible answer.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Full Transcript</span></div>
+              <div class="conflict-col-label">What another source clarifies</div>
+              <p>Transcript says price books rely on one master book with layered child configurations, not isolated copies.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> naive filtering does not naturally fit current architecture.</div>
+        </div>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Marketplace vs billing truth</div>
+            <span class="decision-status clarified">clarified</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Original Spec</span></div>
+              <div class="conflict-col-label">What one source says</div>
+              <p>Marketplace flow implies visibility starts at selection/purchase.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Transcript</span><span class="source-chip">Full Transcript</span></div>
+              <div class="conflict-col-label">What another source clarifies</div>
+              <p>Billing/reporting can include linked subscriptions purchased outside marketplace.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> marketplace visibility is not the same as billing visibility.</div>
+        </div>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Alternate email source of truth</div>
+            <span class="decision-status actionable">actionable</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">Historical Behavior</span></div>
+              <div class="conflict-col-label">What one source says</div>
+              <p>Historical behavior used generic ION contact email.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">FRD 959443</span></div>
+              <div class="conflict-col-label">What another source clarifies</div>
+              <p>FRD requires dedicated alternateEmail capture/update behavior.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> UI must distinguish provisioning contact from generic customer contact.</div>
+        </div>
+
+        <div class="conflict-card">
+          <div class="conflict-card-header">
+            <div class="conflict-card-title">Cancel-line problem scope</div>
+            <span class="decision-status open">open</span>
+          </div>
+          <div class="conflict-columns">
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">FRD 959440</span></div>
+              <div class="conflict-col-label">What one source says</div>
+              <p>Problem can appear to be only a wrong customer-cost formula.</p>
+            </div>
+            <div class="conflict-col">
+              <div class="source-chip-row"><span class="source-chip">FRD 959440 Appendix</span></div>
+              <div class="conflict-col-label">What another source clarifies</div>
+              <p>FRD appendix shows end-date derivation/data-correction issues too.</p>
+            </div>
+          </div>
+          <div class="conflict-implication"><strong>Implication for design:</strong> both rating logic and source-data logic may need changes.</div>
+        </div>
       </section>
 
       <section id="section-risks" class="section">
         <div class="page-hero">
           <p class="hero-eyebrow">Risk Register · April 2026</p>
           <h1 class="hero-title">Risks &amp; Open Questions</h1>
-          <p class="hero-subtitle">Known risks, key dependencies, and the 14 unresolved questions that must be answered before any workstream can ship.</p>
+          <p class="hero-subtitle">Known risks, key dependencies, and grouped open questions shaped by the clarified architecture and FRD findings.</p>
           <div class="hero-tags">
-            <span class="tag tag-red">3 High Risks</span>
+            <span class="tag tag-red">4 High Risks</span>
             <span class="tag tag-orange">4 Medium Risks</span>
             <span class="tag tag-green">1 Low Risk</span>
-            <span class="tag tag-blue">14 Open Questions</span>
+            <span class="tag tag-blue">12 Open Questions</span>
           </div>
         </div>
 
@@ -1275,52 +1755,58 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
           <!-- HIGH -->
           <div class="risk-card high">
             <div class="risk-label">High</div>
-            <h3 class="risk-title">Price Book overwrite on every sync</h3>
-            <p class="risk-desc">If ION writes the master price book on each GCP sync cycle, reseller overrides are silently erased. No guard exists today.</p>
+            <h3 class="risk-title">Entitlement-level keying exposes customer data</h3>
+            <p class="risk-desc">If entitlement IDs or related identifiers become visible in price-book layers without a new access model, resellers could see customer-level data across the hierarchy.</p>
           </div>
 
           <div class="risk-card high">
             <div class="risk-label">High</div>
-            <h3 class="risk-title">alternateEmail lost on PATCH</h3>
-            <p class="risk-desc">Any PATCH to Customer that omits <code>alternateEmail</code> in <code>readMask</code> will clear the field — breaking entitlement lookup silently downstream.</p>
+            <h3 class="risk-title">alternateEmail remains conflated with admin contact</h3>
+            <p class="risk-desc">MSP flows will keep sending welcome or provisioning messages to the wrong party if generic ION contact email is treated as <code>Customer.alternateEmail</code>.</p>
           </div>
 
           <div class="risk-card high">
             <div class="risk-label">High</div>
-            <h3 class="risk-title">Unique ID gap at transfer time</h3>
-            <p class="risk-desc">When a subscription transfers from Direct to Reseller, the entitlement ID changes. ION has no reconciliation step — billing continuity breaks for that seat window.</p>
+            <h3 class="risk-title">COMMITMENT_CANCEL_ITEM customer cost remains wrong</h3>
+            <p class="risk-desc">If the cancel credit formula is not corrected, downstream credits remain financially incorrect for commitment cancellation line items.</p>
+          </div>
+
+          <div class="risk-card high">
+            <div class="risk-label">High</div>
+            <h3 class="risk-title">Architecture misunderstood as a single flow</h3>
+            <p class="risk-desc">Teams may design fixes only in Marketplace or UI while the real issue spans SIM, Price Book, Billing/Reporting, provider sync, and visibility boundaries.</p>
           </div>
 
           <!-- MEDIUM -->
           <div class="risk-card medium">
             <div class="risk-label">Medium</div>
-            <h3 class="risk-title">listEntitlementChanges pagination not implemented</h3>
-            <p class="risk-desc">The API returns a <code>nextPageToken</code> for large result sets. ION currently ignores it — change events beyond page 1 are silently dropped.</p>
+            <h3 class="risk-title">RABF remains under-explained</h3>
+            <p class="risk-desc">Users may think missing marketplace eligibility means missing subscription support, even though RABF offers can appear later through SIM or billing.</p>
           </div>
 
           <div class="risk-card medium">
             <div class="risk-label">Medium</div>
-            <h3 class="risk-title">discountType ambiguity (PERCENTAGE vs AMOUNT)</h3>
-            <p class="risk-desc">ION passes <code>discountPercentage</code> regardless of <code>discountType</code>. If Google returns <code>AMOUNT</code>-type discounts, the stored value is misinterpreted.</p>
+            <h3 class="risk-title">Link button confusion persists</h3>
+            <p class="risk-desc">Resellers may still be shown a path they cannot complete because they do not have PSC access or the Google Customer ID needed for that flow.</p>
           </div>
 
           <div class="risk-card medium">
             <div class="risk-label">Medium</div>
-            <h3 class="risk-title">Buy flow bypasses reseller price book</h3>
-            <p class="risk-desc">Customers who self-provision via Google's native buy flow see Google list price, not reseller pricing. No mechanism exists to intercept or correct this post-purchase.</p>
+            <h3 class="risk-title">BigQuery cancel-line end-date logic remains partial</h3>
+            <p class="risk-desc">Even if the rating formula is corrected, billing interpretation can remain wrong if cancel-line source data and end-date derivation are not corrected.</p>
           </div>
 
           <div class="risk-card medium">
             <div class="risk-label">Medium</div>
-            <h3 class="risk-title">Billing end date formula edge cases</h3>
-            <p class="risk-desc">The <code>COMMITMENT_CANCEL_ITEM</code> billing end date formula (<em>start + committed months − 1 day</em>) has not been validated against partial-month commitments or mid-cycle seat changes.</p>
+            <h3 class="risk-title">Overconfidence in the expanded pricing key</h3>
+            <p class="risk-desc"><code>offer + entitlement + period phase</code> may look sufficient technically while creating larger privacy, visibility, and price-book inheritance problems.</p>
           </div>
 
           <!-- LOW -->
           <div class="risk-card low">
             <div class="risk-label">Low</div>
-            <h3 class="risk-title">Marketplace link button UX regression</h3>
-            <p class="risk-desc">Removing the Marketplace link button (WS6) may confuse admins who bookmarked that navigation path. Low risk because the button links out of ION entirely — removal is straightforward.</p>
+            <h3 class="risk-title">Documentation drift</h3>
+            <p class="risk-desc">The page may lag new clarifications unless source labels, conflict cards, and open questions are kept current after architecture and engineering updates.</p>
           </div>
 
         </div><!-- /.risk-grid -->
@@ -1334,127 +1820,65 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
           </div>
         </div>
         <ul class="styled">
-          <li><strong>Google Cloud Channel API access</strong> — Production credentials and quota limits must be confirmed with Google TAM before WS2 and WS5 can be fully tested.</li>
-          <li><strong>Apptium schema approval</strong> — The Price Book Refactor (WS1) requires schema sign-off from the Apptium engineering team (Srilatha / Varun) before any migration script is written.</li>
-          <li><strong>EU Ops runbook update</strong> — WS3 (Alternate Email Restore) requires the EU Operations team to update their provisioning runbook so the field is set on every new customer record.</li>
-          <li><strong>ADO story grooming</strong> — Stories 959443 and 959440 need acceptance criteria finalized in ADO before dev can start; BRD/FRD drafts are still open (DRI: Brian Young).</li>
-          <li><strong>Rick Kapani API spec review</strong> — WS5 (listEntitlementChanges) implementation details are pending Rick's review of the proposed polling interval and field mapping.</li>
+          <li><strong>Google Channel Services API alternateEmail behavior</strong> — Engineering must confirm how <code>Customer.alternateEmail</code> and <code>cloudIdentityInfo.alternateEmail</code> behave across create, patch, and readMask flows.</li>
+          <li><strong>BigQuery import data quality and end-date correction logic</strong> — Cancel-line validation depends on imported data quality and clear end-date derivation rules for <code>COMMITMENT_CANCEL_ITEM</code>.</li>
+          <li><strong>Engineering decision on price-book visibility strategy</strong> — If entitlement-level uniqueness is introduced, the platform needs a decision on how visibility, inheritance, and reseller access will work.</li>
         </ul>
 
-        <h2 class="section-heading">14 Open Questions</h2>
+        <h2 class="section-heading">Grouped Open Questions</h2>
 
-        <!-- Q1–4: Price Book Architecture -->
         <div class="expand-block">
           <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
-            <span>Q1–4 · Price Book Architecture</span>
+            <span>Architecture / Pricing</span>
             <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="expand-body">
-            <ol start="1">
-              <li>
-                <strong>Should master and reseller price books live in the same DB table with a discriminator column, or in separate tables?</strong><br>
-                <em>Context:</em> Separate tables make the sync overwrite problem impossible by design; a single table with a flag is simpler to query but requires careful write guards.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>Who is the authoritative owner of the reseller price book — ION or a human operator?</strong><br>
-                <em>Context:</em> If ION owns it, we need a UI for reseller margin entry. If a human operator owns it, we need a protected write path that the sync job cannot touch.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>What is the expected cadence of GCP price sync, and can ION batch-defer reseller recalculation until after the sync window?</strong><br>
-                <em>Context:</em> If sync happens nightly, we can run a post-sync reseller reconciliation job. If sync is real-time, we need row-level locking or an event-driven approach.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>Do pricePhases arrays ever contain more than one phase in practice for GWS SKUs?</strong><br>
-                <em>Context:</em> The API supports multi-phase pricing, but if GWS SKUs always return a single phase, we can simplify the data model significantly.
-              </li>
+            <ol class="styled">
+              <li>Is the future solution expected to introduce a new pricing lookup layer outside classic price-book storage, or will price books themselves be reworked?</li>
+              <li>If entitlement is added to pricing keys, what exact visibility model prevents reseller leakage of other customer records?</li>
+              <li>Is there an approved alternative grouping/category model for discounts that avoids storing every entitlement as a visible pricing row?</li>
+              <li>How should RABF pricing be represented in the long-term model: cloud-account assignment only, or a formalized object in price-book logic?</li>
             </ol>
           </div>
         </div>
 
-        <!-- Q5–6: Unique ID Modeling -->
         <div class="expand-block">
           <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
-            <span>Q5–6 · Unique ID Modeling</span>
+            <span>Alternate Email</span>
             <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="expand-body">
-            <ol start="5">
-              <li>
-                <strong>Should ION store a mapping table of old entitlement ID → new entitlement ID to handle transfer reconciliation, or rely on the customer's alternateEmail as the durable key?</strong><br>
-                <em>Context:</em> The entitlement ID changes on transfer but the customer domain (via alternateEmail) does not. A mapping table adds complexity; using alternateEmail as the key requires it to be reliably present.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>Is there a Google API event or webhook that fires when an entitlement transfers, or must ION poll and detect the ID change?</strong><br>
-                <em>Context:</em> If a transfer event exists in listEntitlementChanges, WS5 can handle this passively. If not, WS2 needs active polling logic with a diff algorithm.
-              </li>
+            <ol class="styled" start="5">
+              <li>Does PATCH update both <code>Customer.alternateEmail</code> and <code>cloudIdentityInfo.alternateEmail</code>, or only one field in practice?</li>
+              <li>What exact UI location outside Marketplace should support ongoing <code>alternateEmail</code> edits?</li>
+              <li>Are there validation rules beyond “must not equal current ION Customer Contact email”?</li>
             </ol>
           </div>
         </div>
 
-        <!-- Q7–9: Alternate Email -->
         <div class="expand-block">
           <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
-            <span>Q7–9 · Alternate Email</span>
+            <span>Billing / Cancel Logic</span>
             <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="expand-body">
-            <ol start="7">
-              <li>
-                <strong>In the Transfer flow, does the Google API preserve the existing alternateEmail from the previous reseller, or is it cleared and must be re-set by ION?</strong><br>
-                <em>Context:</em> If Google clears it, ION must set it as the first call after confirming a transfer — any delay means a window where entitlement lookup fails.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>For the "Outside Marketplace" flow (customer exists in Google but not in ION), how does the operator discover the customer's domain to populate alternateEmail?</strong><br>
-                <em>Context:</em> This is a pure UX/ops question. The answer drives the design of the manual entry screen in the ION portal.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>Is alternateEmail validated by Google (format check, MX record, domain ownership) or accepted as any string?</strong><br>
-                <em>Context:</em> If Google validates it, ION must surface API errors meaningfully. If not, ION needs its own validation to prevent garbage data from being stored.
-              </li>
+            <ol class="styled" start="8">
+              <li>Is the rating fix enough by itself, or must BigQuery end-date correction logic ship in the same release for <code>COMMITMENT_CANCEL_ITEM</code>?</li>
+              <li>How should cancel-line end dates be derived compared with <code>TERM_START</code> or <code>SEATS</code> usage types?</li>
+              <li>What regression data set will be used across Spain, UK, and France to validate the formula and end-date behavior?</li>
             </ol>
           </div>
         </div>
 
-        <!-- Q10–11: Cancel / Billing -->
         <div class="expand-block">
           <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
-            <span>Q10–11 · Cancel / Billing</span>
+            <span>Delivery / Ownership</span>
             <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="expand-body">
-            <ol start="10">
-              <li>
-                <strong>Has the billing end date formula (<em>commitment start + committed months − 1 day</em>) been validated against Google's own cancellation invoice for a real GWS subscription?</strong><br>
-                <em>Context:</em> If there's a discrepancy, ION will overbill or underbill for the commitment window. This needs a real test transaction, not just a formula review.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>What is the correct credit calculation when a customer cancels mid-commitment and has already been invoiced for the full commitment period?</strong><br>
-                <em>Context:</em> The spec mentions a credit, but the formula for proration (daily rate × remaining days vs. monthly chunks) has not been specified.
-              </li>
-            </ol>
-          </div>
-        </div>
-
-        <!-- Q12–14: Entitlement Tracking -->
-        <div class="expand-block">
-          <button class="expand-trigger" onclick="toggleExpand(this)" aria-expanded="false">
-            <span>Q12–14 · Entitlement Tracking</span>
-            <svg class="expand-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="expand-body">
-            <ol start="12">
-              <li>
-                <strong>What is the recommended polling interval for listEntitlementChanges — and does Google impose a rate limit that would constrain a near-real-time implementation?</strong><br>
-                <em>Context:</em> Rick Kapani is the DRI for this answer. The polling interval directly determines the maximum delay between a seat change and ION's billing update.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>Should ION store the raw listEntitlementChanges payload for audit purposes, or only the derived delta (seats before → seats after)?</strong><br>
-                <em>Context:</em> Storing the raw payload enables full replay but adds storage cost. Storing only the delta is leaner but loses context if the interpretation logic changes later.
-              </li>
-              <li style="margin-top:var(--space-4)">
-                <strong>Is there a defined SLA between a seat change event and when ION must reflect it in billing — and does that SLA differ for increases vs. decreases?</strong><br>
-                <em>Context:</em> Seat increases that are billed late undercharge the customer; seat decreases that are billed late overcharge them. The risk profile differs, and the SLA may need to differ too.
-              </li>
+            <ol class="styled" start="11">
+              <li>Which team owns the final decision on entitlement-level pricing architecture: product, architecture, or engineering?</li>
+              <li>Which items are truly in the current delivery scope versus recorded for future architecture work?</li>
             </ol>
           </div>
         </div>
@@ -1465,63 +1889,85 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
         <div class="page-hero">
           <p class="hero-eyebrow">Deep Questions · April 2026</p>
           <h1 class="hero-title">Questions for Deeper Learning</h1>
-          <p class="hero-subtitle">These aren't quiz questions — they're designed to build genuine intuition. Write your answers, even rough ones.</p>
+          <p class="hero-subtitle">Reflection prompts and stakeholder questions for architecture, implementation, and meeting prep.</p>
           <div class="hero-tags">
-            <span class="tag tag-blue">8 Reflection Questions</span>
+            <span class="tag tag-blue">5 Reflection Questions</span>
+            <span class="tag tag-orange">3 Srilatha Questions</span>
+            <span class="tag tag-green">4 Varun Questions</span>
             <span class="tag tag-purple">Add Your Own</span>
           </div>
         </div>
 
-        <h2 class="section-heading">Questions to Ask Yourself for Deeper Learning</h2>
-        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6);">These aren't quiz questions — they're designed to build genuine intuition. Write your answers, even rough ones.</p>
+        <h2 class="section-heading">Reflection Questions</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6);">Use these to check whether the revised architecture model is actually clicking.</p>
 
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">1</span>Why can't ION simply copy the Price Book model it uses for other vendors and apply it to GWS?</div>
-          <div class="reflection-hint">Think about what makes GWS pricing different: entitlements, price phases, seat tiers, reseller isolation requirements.</div>
+          <div class="reflection-q"><span class="q-num">1</span>Why does the Google pricing issue break the original offer ID + period phase assumption?</div>
+          <div class="reflection-hint">Think about customer-specific arrangements, entitlements, and price phases.</div>
           <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
         </div>
 
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">2</span>If you were Brian Young, how would you explain the "Unique ID" concept to a skeptical engineer who says "we can just use the product SKU"?</div>
-          <div class="reflection-hint">The SKU doesn't capture entitlement context, price phases, or customer-specific discounts. How is the Unique ID different?</div>
+          <div class="reflection-q"><span class="q-num">2</span>Why is assigning price books to entities/accounts different from assigning them to entitlements?</div>
+          <div class="reflection-hint">Focus on ownership, visibility, and the existing price-book inheritance model.</div>
           <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
         </div>
 
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">3</span>Srilatha suggested grouping by <code>discountType</code>. Brian insists on <code>discountPercentage</code>. Both have valid reasons. Who do you think is right, and why?</div>
-          <div class="reflection-hint">Consider: What does a user actually need to do when bulk-adjusting prices? What problems arise with each approach?</div>
+          <div class="reflection-q"><span class="q-num">3</span>Why does RABF prove that marketplace visibility is not the same as billing visibility?</div>
+          <div class="reflection-hint">Compare what appears during eligibility with what can surface later through SIM or billing.</div>
           <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
         </div>
 
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">4</span>The <code>readMask</code> omission is called a "silent data-loss risk." Why is silent failure potentially more dangerous than an explicit error?</div>
-          <div class="reflection-hint">Think about how engineers typically debug issues. What makes silent failures harder to detect and trace?</div>
+          <div class="reflection-q"><span class="q-num">4</span>Why is alternateEmail a provisioning concern rather than a generic customer-profile field?</div>
+          <div class="reflection-hint">Think about who should receive provider setup messages and what the API field represents.</div>
           <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
         </div>
 
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">5</span>Epic 891299 (Period Phase Changes) is on hold because 959022 hasn't cleared UAT. What does this tell you about how dependencies cascade in large software delivery projects?</div>
-          <div class="reflection-hint">Think about critical path, dependency chains, and the compounding effect of one blocked item on adjacent work.</div>
+          <div class="reflection-q"><span class="q-num">5</span>Why is the cancel-line issue partly a rating problem and partly a source-data/end-date problem?</div>
+          <div class="reflection-hint">Separate the customer-cost formula from the imported billing data used to interpret cancel lines.</div>
           <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
         </div>
 
+        <h2 class="section-heading">Questions for Srilatha</h2>
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">6</span>The document shows Brian pasting full BRD text directly into an email (April 23) to bypass SharePoint friction. What does this tell you about the relationship between process and actual work getting done?</div>
-          <div class="reflection-hint">What friction in collaboration processes leads to workarounds like this?</div>
-          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+          <div class="reflection-q"><span class="q-num">6</span><span id="srilatha-q1">What is the intended long-term home for entitlement-specific pricing if price books are the wrong abstraction?</span><button class="copy-question-btn" onclick="copyQuestion('srilatha-q1')" aria-label="Copy question for Srilatha 1">Copy</button></div>
+          <div class="reflection-hint">Use this when the conversation shifts from problem framing to architecture ownership.</div>
         </div>
 
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">7</span>The "buy flow gap" is a chicken-and-egg problem: you need an entitlement to price correctly, but an entitlement doesn't exist until after purchase. What other software systems have you seen with a similar pre/post state problem?</div>
-          <div class="reflection-hint">Think about payment processing, reservation systems, or workflows where the record is created after the action is committed.</div>
-          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+          <div class="reflection-q"><span class="q-num">7</span><span id="srilatha-q2">If engineering tries to keep entitlement-level pricing inside price books, what visibility model would she consider acceptable?</span><button class="copy-question-btn" onclick="copyQuestion('srilatha-q2')" aria-label="Copy question for Srilatha 2">Copy</button></div>
+          <div class="reflection-hint">This targets the reseller leakage and hierarchy-boundary concern directly.</div>
         </div>
 
         <div class="reflection-card">
-          <div class="reflection-q"><span class="q-num">8</span>What single question, if answered, would unblock the most downstream work? How would you justify that prioritization to stakeholders?</div>
-          <div class="reflection-hint">Review the dependencies table. Which open question, when resolved, removes the most blockers at once?</div>
-          <textarea class="reflection-textarea" placeholder="Write your thinking here..."></textarea>
+          <div class="reflection-q"><span class="q-num">8</span><span id="srilatha-q3">Does she see the grouping/category approach as viable, or was it only a discussion artifact?</span><button class="copy-question-btn" onclick="copyQuestion('srilatha-q3')" aria-label="Copy question for Srilatha 3">Copy</button></div>
+          <div class="reflection-hint">Useful for separating approved direction from ideas raised during architecture review.</div>
         </div>
+
+        <h2 class="section-heading">Questions for Varun</h2>
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">9</span><span id="varun-q1">What has actually been implemented already for alternateEmail and cancel-line correction versus what is still on paper?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q1')" aria-label="Copy question for Varun 1">Copy</button></div>
+          <div class="reflection-hint">Use this to separate delivery facts from drafted requirements.</div>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">10</span><span id="varun-q2">What existing objects/tables/services would be most impacted by moving from offer-level to entitlement-level price identity?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q2')" aria-label="Copy question for Varun 2">Copy</button></div>
+          <div class="reflection-hint">This is the implementation blast-radius question.</div>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">11</span><span id="varun-q3">Can he confirm whether cloudIdentityInfo.alternateEmail is persisted/returned after patch in the current implementation path?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q3')" aria-label="Copy question for Varun 3">Copy</button></div>
+          <div class="reflection-hint">This is the practical verification point for the alternateEmail UI assumption.</div>
+        </div>
+
+        <div class="reflection-card">
+          <div class="reflection-q"><span class="q-num">12</span><span id="varun-q4">What is the lowest-risk way to expose special pricing without breaking current price-book inheritance?</span><button class="copy-question-btn" onclick="copyQuestion('varun-q4')" aria-label="Copy question for Varun 4">Copy</button></div>
+          <div class="reflection-hint">Use this when discussing implementation options around RABF and customer-specific pricing.</div>
+        </div>
+        <div id="copy-question-status" aria-live="polite" style="font-size:var(--text-sm);color:var(--color-success);min-height:1.4em;margin-top:calc(-1 * var(--space-2));margin-bottom:var(--space-4);"></div>
 
         <div style="margin-top:var(--space-8);">
           <h3 class="subsection-heading" style="margin-top:0;">➕ Add Your Own Questions</h3>
@@ -1569,9 +2015,9 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
           <div class="stat-divider"></div>
           <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">FRD</div></div>
           <div class="stat-divider"></div>
-          <div class="stat-item"><div class="stat-num">3</div><div class="stat-lbl">In Progress</div></div>
+          <div class="stat-item"><div class="stat-num">2</div><div class="stat-lbl">Actionable</div></div>
           <div class="stat-divider"></div>
-          <div class="stat-item"><div class="stat-num">0</div><div class="stat-lbl">Blocked</div></div>
+          <div class="stat-item"><div class="stat-num">1</div><div class="stat-lbl">In Conflict</div></div>
           <div class="stat-divider"></div>
           <div class="stat-item"><div class="stat-num">B. Young</div><div class="stat-lbl">DRI</div></div>
         </div>
@@ -1581,23 +2027,26 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
           <button class="story-filter-btn active" onclick="filterStories('all',this)">All Stories</button>
           <button class="story-filter-btn" onclick="filterStories('brd',this)">BRD</button>
           <button class="story-filter-btn" onclick="filterStories('frd',this)">FRD</button>
+          <button class="story-filter-btn" onclick="filterStories('architecture',this)">Architecture</button>
           <button class="story-filter-btn" onclick="filterStories('pricebook',this)">Price Book</button>
           <button class="story-filter-btn" onclick="filterStories('billing',this)">Billing</button>
           <button class="story-filter-btn" onclick="filterStories('ux',this)">UX / Buy Flow</button>
+          <button class="story-filter-btn" onclick="filterStories('conflict',this)">In Conflict</button>
+          <button class="story-filter-btn" onclick="filterStories('actionable',this)">Actionable</button>
         </div>
 
         <div class="story-list" id="story-list">
 
-          <div class="story-card" id="story-card-s1" data-tags="brd pricebook" onclick="toggleStory('s1')">
+          <div class="story-card" id="story-card-s1" data-tags="brd architecture pricebook conflict" onclick="toggleStory('s1')">
             <div class="story-card-header">
               <span class="story-type-badge badge-brd">BRD</span>
               <div class="story-card-meta">
                 <div class="story-card-id">#959113 / #959111 · GWS-story-1</div>
                 <div class="story-card-title">Differentiate End Customer Pricing — Stabilize Price Book</div>
-                <div class="story-card-tags"><span class="story-tag">Price Book</span><span class="story-tag">Unique ID</span><span class="story-tag">SSIM</span><span class="story-tag">All Regions</span></div>
+                <div class="story-card-tags"><span class="story-tag">Price Book</span><span class="story-tag">Architecture</span><span class="story-tag">In Conflict</span><span class="story-tag">All Regions</span></div>
               </div>
               <div class="story-card-right">
-                <span class="ws-status status-progress" style="margin:0;">⏳ In Progress</span>
+                <span class="ws-status status-hold" style="margin:0;">In Conflict</span>
                 <a href="https://dev.azure.com/techdatacorp/NextGen%20Cloud/_workitems/edit/959113" target="_blank" rel="noopener" class="story-external-link" onclick="event.stopPropagation()">↗ ADO 959113</a>
                 <span class="story-chevron">▼</span>
               </div>
@@ -1606,7 +2055,7 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
               <div class="story-detail-grid">
                 <div class="story-detail-field"><div class="story-detail-label">Doc Type</div><div class="story-detail-value">Business Requirements Document (BRD)</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Doc Version</div><div class="story-detail-value">v3.0 — Rework after TPM meeting (24 Apr 2026)</div></div>
-                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value">⏳ In Progress — Awaiting feasibility sign-off</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value"><span class="ws-status status-hold" style="margin:0;">Architecture under clarification</span></div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Modules</div><div class="story-detail-value">Price Book, Price Book Updater, Vendor Import Job, SSIM</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Regions</div><div class="story-detail-value">All</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Linked Items</div><div class="story-detail-value"><a href="https://dev.azure.com/techdatacorp/NextGen%20Cloud/_workitems/edit/959111" target="_blank" rel="noopener">#959111 SSIM price showing zero</a></div></div>
@@ -1622,19 +2071,20 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
               </div>
               <div class="story-section-label">Summary</div>
               <div class="story-body-text">
-                <p>Google now uses the same Offer ID for multiple end customers, but each customer can have different <code>pricePhases</code> and different prices. The current ION Price Book can't distinguish between these customers — when SSIM looks up pricing it either returns <code>0</code> or overwrites data incorrectly.</p>
-                <p>This BRD proposes introducing a <strong>Unique Identifier</strong> at the entitlement level to allow accurate per-customer, per-phase pricing with <strong>day-level granularity</strong>. A Master Price Book (ISV) and a filtered Reseller Price Book would be provided. Key constraint: SKU must remain clearly identifiable by the user alongside any new Unique ID fields.</p>
+                <p>The core problem is pricing uniqueness: the same Google offer can have different pricing by customer, commercial arrangement, and period structure. A lookup that only understands offer and phase can return the wrong value.</p>
+                <p>The proposed key direction is <code>offer + entitlement + period phase</code>. Entitlements are unique for purchases, but the transcript clarification says they were not the original direct association target for price books.</p>
               </div>
               <div class="story-section-label">Business Justification</div>
               <div class="story-body-text">
-                <p>Offer IDs for RABF and standard offers are used across multiple partners and end-customers with varying costs — ION cannot correctly identify the current price for existing subscriptions. The most manual task for TD Synnex Operations is the Price Book price adjust / assignment, which this change directly reduces.</p>
+                <p>Offer IDs for RABF and standard offers are used across multiple partners and end-customers with varying costs. ION cannot correctly identify the current price for existing subscriptions unless the pricing model understands customer-specific subscription context.</p>
               </div>
-              <div class="story-section-label">Open Design Questions (from Apr 26–28 email)</div>
+              <div class="story-section-label">Current Architecture Conflict</div>
               <div class="story-body-text">
                 <ul>
-                  <li><strong>Filtering:</strong> Should offer+entitlement entries for other partners be hidden/filtered on load? Needs SME feasibility discussion.</li>
-                  <li><strong>Grouping key:</strong> Srilatha proposes <code>discountType</code>; Brian requires visible <code>discountPercentage</code> (e.g., <code>.15</code>) for bulk adjustments. Hybrid approach not yet decided.</li>
-                  <li><strong>Auto-inheritance:</strong> New Unique IDs added later with matching <code>discountPercentage</code> must automatically inherit the existing price adjustment.</li>
+                  <li><strong>Proposed direction:</strong> expand price identity to <code>offer + entitlement + period phase</code>.</li>
+                  <li><strong>Clarification:</strong> price books are assigned to members/accounts in the original model, not directly to entitlements.</li>
+                  <li><strong>Architectural objection:</strong> entitlement rows inside visible price-book data can create reseller visibility and privacy leakage.</li>
+                  <li><strong>Open issue:</strong> filtering per reseller may not fit the one-master-price-book plus layered child configuration model.</li>
                 </ul>
               </div>
               <div class="story-section-label">Acceptance Criteria</div>
@@ -1651,16 +2101,16 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
             </div>
           </div>
 
-          <div class="story-card" id="story-card-s2" data-tags="frd ux" onclick="toggleStory('s2')">
+          <div class="story-card" id="story-card-s2" data-tags="frd ux actionable" onclick="toggleStory('s2')">
             <div class="story-card-header">
               <span class="story-type-badge badge-frd">FRD</span>
               <div class="story-card-meta">
                 <div class="story-card-id">#959443 · GWS-story-2</div>
                 <div class="story-card-title">Customer Creation / Marketplace Alternate Email</div>
-                <div class="story-card-tags"><span class="story-tag">Buy Flow</span><span class="story-tag">UX</span><span class="story-tag">Customer Creation</span><span class="story-tag">GWS/CI/CE</span></div>
+                <div class="story-card-tags"><span class="story-tag">Buy Flow</span><span class="story-tag">UX</span><span class="story-tag">Actionable</span><span class="story-tag">GWS/CI/CE</span></div>
               </div>
               <div class="story-card-right">
-                <span class="ws-status status-progress" style="margin:0;">⏳ Awaiting Intake</span>
+                <span class="ws-status status-complete" style="margin:0;">Clarified and Actionable</span>
                 <span class="story-chevron">▼</span>
               </div>
             </div>
@@ -1668,7 +2118,7 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
               <div class="story-detail-grid">
                 <div class="story-detail-field"><div class="story-detail-label">Doc Type</div><div class="story-detail-value">Functional Requirements Document (FRD)</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Doc Version</div><div class="story-detail-value">v4.0 — BRD Light (17 Apr 2026)</div></div>
-                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value">⏳ Awaiting intake</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value"><span class="ws-status status-complete" style="margin:0;">Clarified and actionable</span></div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Trigger</div><div class="story-detail-value">Blocker from EU Google Champion team meeting (09 Mar 2026)</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Modules</div><div class="story-detail-value">Cart, Order, Subscription — Admin Console, WLSF</div></div>
               </div>
@@ -1682,17 +2132,18 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
               </div>
               <div class="story-section-label">Summary</div>
               <div class="story-body-text">
-                <p>The <code>alternateEmail</code> field was <strong>removed</strong> from the buy flow when Feature 755664 (Buy Flow Redesign) shipped on 23 Jan 2026. MSPs need this field to direct Welcome Emails to their own domain instead of the end customer's domain.</p>
-                <p>Currently ION incorrectly maps the ION Customer Contact Email to <code>Customer.alternateEmail</code>, causing two issues: (1) end customers receive the Welcome email instead of resellers, and (2) the unique email constraint blocks MSPs from reusing a single reseller email across multiple customer registrations.</p>
+                <p>The <code>alternateEmail</code> field was removed from the redesigned buy flow, creating a blocker for MSP/reseller scenarios. MSPs need this field to direct Google welcome and provisioning messages to the reseller/provisioning contact, not automatically to the end customer.</p>
+                <p>Do not use generic ION Admin Contact Email as <code>Customer.alternateEmail</code>. The alternate email is a provider provisioning target and must be captured, stored, and updated as its own field.</p>
               </div>
               <div class="story-section-label">Key Functional Requirements</div>
               <div class="story-body-text">
                 <ul>
-                  <li><strong>Register flow:</strong> Mandatory <code>alternateEmail</code> field with pre-population if known; user must use Cancel or Confirm to exit</li>
-                  <li><strong>Transfer flow:</strong> Same field; title renamed from "Link &amp; Transfer Confirmation" to "Transfer Confirmation"</li>
+                  <li><strong>Register flow:</strong> capture, edit, persist, and prepopulate <code>alternateEmail</code> when known.</li>
+                  <li><strong>Transfer flow:</strong> support <code>alternateEmail</code> update for existing customer transfer.</li>
                   <li><strong>Cloud Providers section:</strong> View / Edit / Discard / Update for <code>alternateEmail</code> at any time outside buy flow</li>
-                  <li><strong>Link button:</strong> Remove from Marketplace Plans UI entirely</li>
-                  <li><strong>readMask:</strong> Must be included in GET Customer calls to surface <code>alternateEmail</code></li>
+                  <li><strong>PATCH:</strong> existing customer transfer can use PATCH to update <code>Customer.alternateEmail</code>.</li>
+                  <li><strong>GET + readMask:</strong> verification can use GET Customer with <code>readMask</code> so <code>alternateEmail</code> is returned.</li>
+                  <li><strong>Link button:</strong> remove from Marketplace &gt; Product Details &gt; Plans because resellers lack PSC access and Google Customer ID.</li>
                 </ul>
               </div>
               <div class="story-section-label">Acceptance Criteria</div>
@@ -1712,16 +2163,16 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
             </div>
           </div>
 
-          <div class="story-card" id="story-card-s3" data-tags="frd billing" onclick="toggleStory('s3')">
+          <div class="story-card" id="story-card-s3" data-tags="frd billing actionable" onclick="toggleStory('s3')">
             <div class="story-card-header">
               <span class="story-type-badge badge-frd">FRD</span>
               <div class="story-card-meta">
                 <div class="story-card-id">#959440 · GWS-story-3</div>
                 <div class="story-card-title">Cancel Line — Billing End Date &amp; COMMITMENT_CANCEL_ITEM Fix</div>
-                <div class="story-card-tags"><span class="story-tag">SaaS Report</span><span class="story-tag">Billing</span><span class="story-tag">BigQuery</span><span class="story-tag">All Regions</span></div>
+                <div class="story-card-tags"><span class="story-tag">SaaS Report</span><span class="story-tag">Billing</span><span class="story-tag">Actionable</span><span class="story-tag">BigQuery</span></div>
               </div>
               <div class="story-card-right">
-                <span class="ws-status status-progress" style="margin:0;">⏳ In Progress (AWG)</span>
+                <span class="ws-status status-progress" style="margin:0;">Actionable with Dependency</span>
                 <a href="https://dev.azure.com/techdatacorp/NextGen%20Cloud/_workitems/edit/959440" target="_blank" rel="noopener" class="story-external-link" onclick="event.stopPropagation()">↗ ADO 959440</a>
                 <span class="story-chevron">▼</span>
               </div>
@@ -1730,7 +2181,7 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
               <div class="story-detail-grid">
                 <div class="story-detail-field"><div class="story-detail-label">Doc Type</div><div class="story-detail-value">Functional Requirements Document (FRD)</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Doc Version</div><div class="story-detail-value">v2.0 — Logic update (20 Apr 2026)</div></div>
-                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value">⏳ In Progress — AWG assigned</div></div>
+                <div class="story-detail-field"><div class="story-detail-label">Status</div><div class="story-detail-value"><span class="ws-status status-progress" style="margin:0;">Actionable with dependency</span></div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Testing Env</div><div class="story-detail-value">NearProd only — Shadow cannot be used</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Data Source</div><div class="story-detail-value">Google Workspace BigQuery import job (required)</div></div>
                 <div class="story-detail-field"><div class="story-detail-label">Modules</div><div class="story-detail-value">SaaS Report rating engine</div></div>
@@ -1743,16 +2194,17 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
               <div class="story-section-label">Summary</div>
               <div class="story-body-text">
                 <p>When a GWS subscription on an annual commitment plan is cancelled mid-term, the SaaS Report creates a <code>COMMITMENT_CANCEL_ITEM</code> line. The existing rating engine incorrectly calculates <code>Customer Cost</code> — resellers are not receiving the correct credit amount.</p>
-                <p>Two compounding bugs: (1) BigQuery provides an incorrect billing end date for cancels, and (2) the rating logic used for <code>TERM_START</code> / <code>SEATS</code> usage types does not apply correctly to cancel lines.</p>
+                <p>Wrong output example: Seller Cost <code>-493.4</code> with Price Adjust Value <code>-29.167%</code> should produce Customer Cost <code>-697.78</code>, not the current incorrect output.</p>
+                <p>Appendix note: BigQuery end-date derivation and data-correction logic for cancel lines is also incomplete, so the fix depends on both rating logic and source-data behavior.</p>
               </div>
               <div class="story-section-label">The Fix — Formula</div>
               <div class="story-body-text">
                 <ul>
-                  <li><em>Discount Factor</em> = 1 − Price Adjust Value</li>
-                  <li><strong>Customer Cost = Seller Cost ÷ Discount Factor</strong></li>
-                  <li>Example: −493.4 ÷ (1 + (−29.167 ÷ 100)) = <strong>−697.78</strong> (correct credit)</li>
+                  <li><em>Discount Factor</em> = 1 - Price Adjust Value</li>
+                  <li><strong>Customer Cost = Seller Cost / Discount Factor</strong></li>
+                  <li>Example: <code>-493.4 / (1 + (-29.167 / 100)) = -697.78</code></li>
                 </ul>
-                <p style="margin-top:var(--space-3);">Known test cases: Spain (Sep, Dec 2025), UK (Oct, Dec 2025), France (Sep, Nov 2025).</p>
+                <p style="margin-top:var(--space-3);">Affected countries and billing periods include Spain, UK, and France cases from the FRD validation set.</p>
               </div>
               <div class="story-section-label">Acceptance Criteria</div>
               <div class="ac-item">SaaS line items with charge type COMMITMENT_CANCEL_ITEM use the defined formula to calculate Customer Cost</div>
@@ -1776,8 +2228,8 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
           <h1 class="hero-title">Study Guide</h1>
           <p class="hero-subtitle">Track your readiness, test your understanding, and build a durable mental model of the GWS onboarding project.</p>
           <div class="hero-tags">
-            <span class="tag tag-green">12 Checkpoints</span>
-            <span class="tag tag-blue">5-Question Quiz</span>
+            <span class="tag tag-green">15 Checkpoints</span>
+            <span class="tag tag-blue">6-Question Quiz</span>
             <span class="tag tag-orange">6 Study Tips</span>
           </div>
         </div>
@@ -1795,70 +2247,82 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
           <div class="progress-section">
             <div class="progress-header">
               <span class="progress-label">Overall Progress</span>
-              <span class="progress-count" id="progress-label-main">0 of 12</span>
+              <span class="progress-count" id="progress-label-main">0 of 15</span>
             </div>
             <div class="progress-bar-track">
               <div class="progress-bar-fill" id="progress-bar-main" style="width:0%"></div>
             </div>
           </div>
 
-          <div class="phase-label">Phase 1 — Foundation</div>
+          <div class="phase-label">Foundation</div>
           <div class="checkpoint-list">
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I can explain what the Apptium/ION platform does and why GWS is being onboarded into it</div>
+              <div class="checkpoint-text">Understand domain ↔ customer ↔ entitlement relationship</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I understand what a "Price Book" is and why the existing one can't handle GWS without refactoring</div>
+              <div class="checkpoint-text">Understand the 4-module architecture</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I can name the two key stakeholder organizations and the primary person from each</div>
+              <div class="checkpoint-text">Understand how price books are layered</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I understand why <code>Customer.alternateEmail</code> matters and what happens when it's missing</div>
+              <div class="checkpoint-text">Understand dynamic eligibility / single-tile model</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">Understand why billing can include purchases made outside marketplace</div>
             </div>
           </div>
 
-          <div class="phase-label">Phase 2 — Core Technical Concepts</div>
+          <div class="phase-label">Core Technical</div>
           <div class="checkpoint-list">
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I can explain what a GWS "entitlement" is and why it's the source of truth for pricing</div>
+              <div class="checkpoint-text">Understand the fixed-key pricing assumption and why it breaks</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I can explain price phases and how ION determines which phase is active on a given day</div>
+              <div class="checkpoint-text">Understand the entitlement-key proposal and its privacy problem</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I understand the cancellation billing formula and why <code>createTime</code> selection matters</div>
+              <div class="checkpoint-text">Understand <code>alternateEmail</code> create / patch / readMask flow</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I know the three Google API methods used and what each is responsible for</div>
+              <div class="checkpoint-text">Understand RABF behavior and cloud-account-level handling</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">Understand cancel credit formula and end-date issue</div>
             </div>
           </div>
 
-          <div class="phase-label">Phase 3 — Risks &amp; Open Questions</div>
+          <div class="phase-label">Decisions &amp; Risks</div>
           <div class="checkpoint-list">
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I can describe the "reseller data isolation" architectural risk and why it's hard to solve</div>
+              <div class="checkpoint-text">Identify open architecture decisions</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I understand the <code>discountPercentage</code> vs. <code>discountType</code> dispute and the consequences of the wrong decision</div>
+              <div class="checkpoint-text">Identify current UX corrections required</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I can name the top 3 blockers preventing delivery progress right now</div>
+              <div class="checkpoint-text">Identify billing validation dependencies</div>
             </div>
             <div class="checkpoint-item" onclick="toggleCheck(this)">
               <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
-              <div class="checkpoint-text">I've worked through at least 3 of the 8 deep reflection questions in the Questions section</div>
+              <div class="checkpoint-text">Identify what is clarified vs still unresolved</div>
+            </div>
+            <div class="checkpoint-item" onclick="toggleCheck(this)">
+              <div class="checkpoint-cb"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2,6 5,9 10,3"/></svg></div>
+              <div class="checkpoint-text">Prepare questions for Srilatha and Varun</div>
             </div>
           </div>
         </div>
@@ -1867,58 +2331,69 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
         <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);">Test your understanding. No scores saved — this is for your own insight.</p>
 
         <div class="quiz-card" id="q1">
-          <div class="quiz-q">1. ION is generating the wrong billing credit for a cancelled annual GWS commitment. The most likely cause is:</div>
+          <div class="quiz-q">1. Which module owns subscription state synced from the provider?</div>
           <div class="quiz-options">
-            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">A</div>The wrong SKU name was used in the Price Book</div>
-            <div class="quiz-opt" onclick="answerQuiz('q1',this,true)"><div class="opt-letter">B</div>ION is using BigQuery's end-date value instead of calculating createTime + 1 year itself</div>
-            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">C</div>The readMask parameter was omitted from the GET Customer call</div>
-            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">D</div>The reseller Price Book is showing admin-only fields</div>
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">A</div>Marketplace</div>
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,true)"><div class="opt-letter">B</div>SIM</div>
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">C</div>Price Book</div>
+            <div class="quiz-opt" onclick="answerQuiz('q1',this,false)"><div class="opt-letter">D</div>Story Tracker</div>
           </div>
           <div class="quiz-feedback" id="q1-feedback"></div>
         </div>
 
         <div class="quiz-card" id="q2">
-          <div class="quiz-q">2. A reseller reports they can see another company's discount percentages in their Price Book view. This is most directly caused by:</div>
+          <div class="quiz-q">2. Why does the same offer ID fail as a unique pricing key for Google?</div>
           <div class="quiz-options">
-            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">A</div>A bug in the listEntitlementChanges API call</div>
-            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">B</div>The Customer.alternateEmail field not being persisted in ION DB</div>
-            <div class="quiz-opt" onclick="answerQuiz('q2',this,true)"><div class="opt-letter">C</div>Price Books are currently partner-agnostic with no per-reseller filtering mechanism</div>
-            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">D</div>The Marketplace Link button is routing to the wrong customer context</div>
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">A</div>Offer IDs are never returned by Google</div>
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,true)"><div class="opt-letter">B</div>The same offer can have different customer pricing, discounts, or period structures</div>
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">C</div>Offer IDs only apply to Cloud Identity</div>
+            <div class="quiz-opt" onclick="answerQuiz('q2',this,false)"><div class="opt-letter">D</div>Offer IDs are only used in the Link button flow</div>
           </div>
           <div class="quiz-feedback" id="q2-feedback"></div>
         </div>
 
         <div class="quiz-card" id="q3">
-          <div class="quiz-q">3. During a GWS purchase, the Price Book cannot show entitlement-based pricing. The recommended approach is:</div>
+          <div class="quiz-q">3. Why is entitlement-level pricing dangerous inside classic price-book visibility?</div>
           <div class="quiz-options">
-            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">A</div>Block the purchase until an entitlement ID is pre-generated</div>
-            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">B</div>Use the previous customer's pricing as a fallback</div>
-            <div class="quiz-opt" onclick="answerQuiz('q3',this,true)"><div class="opt-letter">C</div>Show MSRP + a disclaimer; resolve exact entitlement-based pricing after purchase</div>
-            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">D</div>Use the discountType grouping to estimate the nearest applicable price</div>
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">A</div>It prevents price phases from existing</div>
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">B</div>It removes the need for provider sync</div>
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,true)"><div class="opt-letter">C</div>It can expose entitlement/customer-level data through reseller-visible price-book rows</div>
+            <div class="quiz-opt" onclick="answerQuiz('q3',this,false)"><div class="opt-letter">D</div>It forces all prices to become MSRP</div>
           </div>
           <div class="quiz-feedback" id="q3-feedback"></div>
         </div>
 
         <div class="quiz-card" id="q4">
-          <div class="quiz-q">4. Why is the readMask omission considered a "silent" risk?</div>
+          <div class="quiz-q">4. In which flows must alternateEmail be explicitly captured or updated?</div>
           <div class="quiz-options">
-            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">A</div>It triggers a 500 error that is logged but not surfaced to the UI</div>
-            <div class="quiz-opt" onclick="answerQuiz('q4',this,true)"><div class="opt-letter">B</div>The API returns a 200 success but simply omits the field — no error is raised</div>
-            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">C</div>It causes the entire GET Customer response to return null</div>
-            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">D</div>It only affects the Register flow, not Transfer or Cloud Providers</div>
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">A</div>Only billing import</div>
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,true)"><div class="opt-letter">B</div>Register and Transfer flows</div>
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">C</div>Only story filtering</div>
+            <div class="quiz-opt" onclick="answerQuiz('q4',this,false)"><div class="opt-letter">D</div>Only the Risks section</div>
           </div>
           <div class="quiz-feedback" id="q4-feedback"></div>
         </div>
 
         <div class="quiz-card" id="q5">
-          <div class="quiz-q">5. A subscription was created on Jan 1. Phase 1 covers days 1–365 at 30% discount. Phase 2 covers days 366–730 at 20% discount. Today is day 400. Which phase applies?</div>
+          <div class="quiz-q">5. What formula should be used for <code>COMMITMENT_CANCEL_ITEM</code> Customer Cost?</div>
           <div class="quiz-options">
-            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">A</div>Phase 1 — because the subscription is still in its first year by calendar month</div>
-            <div class="quiz-opt" onclick="answerQuiz('q5',this,true)"><div class="opt-letter">B</div>Phase 2 — day 400 exceeds the 365-day firstPeriod of Phase 1</div>
-            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">C</div>Phase 1 — BigQuery determines the active phase, not ION</div>
-            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">D</div>Neither — a proration blending both phases must be applied</div>
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">A</div>Customer Cost = Seller Cost + Price Adjust Value</div>
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">B</div>Customer Cost = MSRP - Discount</div>
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,true)"><div class="opt-letter">C</div>Customer Cost = Seller Cost / (1 - Price Adjust Value)</div>
+            <div class="quiz-opt" onclick="answerQuiz('q5',this,false)"><div class="opt-letter">D</div>Customer Cost = BigQuery End Date / Seat Count</div>
           </div>
           <div class="quiz-feedback" id="q5-feedback"></div>
+        </div>
+
+        <div class="quiz-card" id="q6">
+          <div class="quiz-q">6. Why can billing show subscriptions not bought through marketplace?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="answerQuiz('q6',this,false)"><div class="opt-letter">A</div>Marketplace creates all billing rows manually</div>
+            <div class="quiz-opt" onclick="answerQuiz('q6',this,true)"><div class="opt-letter">B</div>Provider sync and billing imports can include linked subscriptions independent of purchase channel</div>
+            <div class="quiz-opt" onclick="answerQuiz('q6',this,false)"><div class="opt-letter">C</div>Billing ignores customer links</div>
+            <div class="quiz-opt" onclick="answerQuiz('q6',this,false)"><div class="opt-letter">D</div>RABF disables SIM</div>
+          </div>
+          <div class="quiz-feedback" id="q6-feedback"></div>
         </div>
 
         <h3 class="subsection-heading" style="margin-top:var(--space-8);">How to Use This Document Over Time</h3>
@@ -1926,43 +2401,43 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
           <div class="how-step">
             <div class="how-num">1</div>
             <div class="how-body">
-              <div class="how-title">Start with Overview, then Concepts</div>
-              <div class="how-desc">Read the Overview first to understand the goal and cast of characters. Then expand every block in Concepts. Each concept directly underpins the workstreams.</div>
+              <div class="how-title">Start in Architecture</div>
+              <div class="how-desc">Begin with system boundaries before reading proposed fixes.</div>
             </div>
           </div>
           <div class="how-step">
             <div class="how-num">2</div>
             <div class="how-body">
-              <div class="how-title">Use Workstreams as a Reference Map</div>
-              <div class="how-desc">When someone mentions a feature number (e.g., 959113), jump to Workstreams and expand that card. It gives you the full objective, requirements, and constraints in one place.</div>
+              <div class="how-title">Then Concepts</div>
+              <div class="how-desc">Use Concepts after you can explain Marketplace, SIM, Price Book, and Billing/Reporting in your own words.</div>
             </div>
           </div>
           <div class="how-step">
             <div class="how-num">3</div>
             <div class="how-body">
-              <div class="how-title">Keep Technical Open During API Discussions</div>
-              <div class="how-desc">In meetings involving billing logic, pricing formulas, or API calls, keep the Technical section open. The Key Fields table and formula boxes are quick lookups.</div>
+              <div class="how-title">Then Conflicts</div>
+              <div class="how-desc">Use Conflicts before any design or implementation discussion so source disagreements stay visible.</div>
             </div>
           </div>
           <div class="how-step">
             <div class="how-num">4</div>
             <div class="how-body">
-              <div class="how-title">Revisit Risks When a Decision Is Made</div>
-              <div class="how-desc">Each time one of the 14 open questions gets resolved, re-read the Risks section. Some risks reduce; others may surface new concerns.</div>
+              <div class="how-title">Then Stories</div>
+              <div class="how-desc">Use Stories when discussing delivery scope, ADO alignment, and acceptance criteria.</div>
             </div>
           </div>
           <div class="how-step">
             <div class="how-num">5</div>
             <div class="how-body">
-              <div class="how-title">Use Questions for Meeting Prep</div>
-              <div class="how-desc">Before any stakeholder meeting, skim the 8 reflection questions. They help you move from "what happened" thinking to "why does this matter" thinking.</div>
+              <div class="how-title">Then Questions</div>
+              <div class="how-desc">Use Questions during syncs with Srilatha or Varun.</div>
             </div>
           </div>
           <div class="how-step">
             <div class="how-num">6</div>
             <div class="how-body">
-              <div class="how-title">Use Checkpoints to Gauge Readiness</div>
-              <div class="how-desc">Before attending a technical review or contributing to a BRD discussion, run through the 12 checkpoints. If you can't honestly check one, return to that section before the meeting.</div>
+              <div class="how-title">Revisit Risks</div>
+              <div class="how-desc">Revisit Risks after engineering updates to keep assumptions fresh.</div>
             </div>
           </div>
         </div>
@@ -1991,7 +2466,7 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
       document.getElementById('section-'+id).classList.add('active');
       document.querySelectorAll('.header-nav .nav-btn').forEach(b=>b.classList.remove('active'));
       document.querySelectorAll('.sidebar-link').forEach(b=>b.classList.remove('active'));
-      const map={overview:0,concepts:1,workstreams:2,technical:3,risks:4,questions:5,stories:6,study:7};
+      const map={overview:0,architecture:1,concepts:2,workstreams:3,technical:4,conflicts:5,risks:6,questions:7,stories:8,study:9};
       if(fromSidebar){
         if(btn)btn.classList.add('active');
         const nb=document.querySelectorAll('.header-nav .nav-btn');
@@ -2021,11 +2496,12 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
 
     // ===== QUIZ =====
     const quizAnswers={
-      q1:"B: ION is using BigQuery's end-date value instead of calculating createTime + 1 year itself.",
-      q2:"C: Price Books are currently partner-agnostic with no per-reseller filtering mechanism.",
-      q3:"C: Show MSRP + a disclaimer; resolve exact entitlement-based pricing after purchase.",
-      q4:"B: The API returns a 200 success but simply omits the field — no error is raised.",
-      q5:"B: Day 400 exceeds the 365-day firstPeriod of Phase 1, so Phase 2 (20%) is active."
+      q1:"B: SIM owns subscription and entitlement state synced from the provider.",
+      q2:"B: The same offer can have different customer pricing, discounts, or period structures.",
+      q3:"C: It can expose entitlement/customer-level data through reseller-visible price-book rows.",
+      q4:"B: Register and Transfer flows must explicitly capture or update alternateEmail.",
+      q5:"C: Customer Cost = Seller Cost / (1 - Price Adjust Value).",
+      q6:"B: Provider sync and billing imports can include linked subscriptions independent of purchase channel."
     };
     function answerQuiz(qId,optEl,isCorrect){
       const card=document.getElementById(qId);
@@ -2063,7 +2539,24 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
     }
 
     // ===== CUSTOM QUESTIONS =====
-    let customQCount=8;
+    const baseQuestionCount=12;
+    let customQCount=baseQuestionCount;
+    function copyQuestion(id){
+      const el=document.getElementById(id);
+      const status=document.getElementById('copy-question-status');
+      if(!el)return;
+      const text=el.textContent.trim();
+      const done=()=>{if(status){status.textContent='Question copied.';setTimeout(()=>{status.textContent='';},2000);}};
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(()=>{if(status)status.textContent='Copy failed. Select the question text manually.';});
+      } else {
+        const ta=document.createElement('textarea');
+        ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy');done();}catch(e){if(status)status.textContent='Copy failed. Select the question text manually.';}
+        ta.remove();
+      }
+    }
     function addCustomQuestion(){
       const qi=document.getElementById('new-q-text'),hi=document.getElementById('new-q-hint');
       const qt=qi.value.trim(),qh=hi.value.trim();
@@ -2086,14 +2579,14 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
     }
     function renumberCustomQs(){
       const cards=document.querySelectorAll('#custom-questions-list .reflection-card');
-      cards.forEach((c,i)=>{const n=c.querySelector('.q-num');if(n)n.textContent=9+i;});
-      customQCount=8+cards.length;
+      cards.forEach((c,i)=>{const n=c.querySelector('.q-num');if(n)n.textContent=baseQuestionCount+1+i;});
+      customQCount=baseQuestionCount+cards.length;
     }
     function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
     // ===== CHECKPOINTS =====
     let checkedCount=0;
-    const totalCheckpoints=12;
+    const totalCheckpoints=15;
     function toggleCheck(item){
       const isChecked=item.classList.toggle('checked');
       checkedCount+=isChecked?1:-1;
@@ -2107,7 +2600,7 @@ If today is day 1097 → Phase 3 applies (10% discount)</div>
     // ===== KEYBOARD NAVIGATION =====
     document.addEventListener('keydown',e=>{
       if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
-      const sections=['overview','concepts','workstreams','technical','risks','questions','stories','study'];
+      const sections=['overview','architecture','concepts','workstreams','technical','conflicts','risks','questions','stories','study'];
       const active=document.querySelector('.section.active');
       if(!active)return;
       const idx=sections.findIndex(s=>active.id==='section-'+s);
